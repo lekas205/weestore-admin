@@ -5,3 +5,8 @@
 * {
   font-family: "Space Grotesk", sans-serif;
 }
+
+.v-main {
+  min-height: 100vh;
+  background: #EFEEEEFC;
+}
