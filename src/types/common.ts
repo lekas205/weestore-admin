@@ -15,3 +15,19 @@ export interface ToastPayload {
   | 'bottom'
   | 'bottom-left'
 }
+
+export type SidebarLink = {
+  id: number;
+  title: string;
+  link: string | null;
+  isActive: boolean;
+  icon: string;
+  activeIcon: string;
+  customClass: string,
+  subLinks?: {
+    id: number;
+    title: string;
+    link: string;
+    isActive: boolean;
+  }[]
+}

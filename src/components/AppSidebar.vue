@@ -7,16 +7,43 @@
       </div>
     </template>
     <div class="sidebar">
-      <div class="sidebar-link-container">
+      <div>
         <div
           v-for="(item, idx) in sidebarLinks"
           :key="idx"
-          class="sidebar-link"
-          :class="{'active': item.isActive, [item.customClass]: true}"
+          class="sidebar-link-wrapper"
+          :class="{[item.customClass]: true}"
         >
-          <img v-if="item.isActive" :src="item.activeIcon" alt="">
-          <img v-else :src="item.icon" alt="">
-          <h2 class="tw-text-xl">{{ item.name }}</h2>
+          <div
+            class="sidebar-link"
+            :class="{'active': item.isActive}"
+            @click="handleSidebarNavigation(item.id)"
+          >
+            <img v-if="item.isActive" :src="item.activeIcon" alt="" />
+            <img v-else :src="item.icon" alt="">
+            <h2 class="tw-text-xl">{{ item.title }}</h2>
+            <div v-if="item.subLinks?.length" class="ml-auto">
+              <ChevronDown v-if="item.isActive" />
+              <ChevronRight v-else />
+            </div>
+          </div>
+          <div
+            v-if="item.subLinks?.length && item.isActive"
+            class="sidebar-sub-link"
+          >
+            <div
+              v-for="(sub, idx) in item.subLinks"
+              :key="idx"
+              class="sub-link"
+              :class="{'active': sub.isActive}"
+              @click="handleSublinkNavigation(item.id, sub.id)"
+            >
+              <Minus class="mr-2" />
+              <p class="tw-text-lg">
+                {{ sub.title }}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
       <div class="sidebar-logout-container">
@@ -51,14 +78,19 @@ import PaymentsIconActive from '@/assets/images/svg/payments-icon-active.svg'
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { ChevronRight, ChevronDown, Minus } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores'
 import { ROUTES } from '@/constants'
+import { SidebarLink } from '@/types'
 import AppButton from '@/components/AppButton.vue'
 
+const router = useRouter();
 const authStore = useAuthStore();
-const sidebarLinks = ref([
+const activeLinkId = ref(0);
+const sidebarLinks = ref<SidebarLink[]>([
   {
-    name: 'Dashboard',
+    id: 0,
+    title: 'Dashboard',
     link: ROUTES.dashboard.path,
     isActive: true,
     icon: DashboardIcon,
@@ -66,62 +98,119 @@ const sidebarLinks = ref([
     customClass: '',
   },
   {
-    name: 'Stock',
+    id: 1,
+    title: 'Stock',
     link: null,
     isActive: false,
     icon: StockIcon,
     activeIcon:StockIconActive,
     customClass: '',
+    subLinks: [
+      {
+        id: 0,
+        title: 'Products',
+        link: '',
+        isActive: false,
+      },
+      {
+        id: 1,
+        title: 'Category',
+        link: '',
+        isActive: false,
+      },
+      {
+        id: 2,
+        title: 'Warehouse',
+        link: '',
+        isActive: false,
+      }
+    ]
   },
   {
-    name: 'Orders',
-    link: ROUTES.orders.path,
+    id: 2,
+    title: 'Orders',
+    link: null,
     isActive: false,
     icon: OrdersIcon,
     activeIcon: OrdersIconActive,
     customClass: '',
   },
   {
-    name: 'Customers',
-    link: ROUTES.customer.path,
+    id: 3,
+    title: 'Customers',
+    link: null,
     isActive: false,
     icon: CustomersIcon,
     activeIcon: CustomersIconActive,
     customClass: '',
   },
   {
-    name: 'Shipment',
-    link: ROUTES.shipment.path,
+    id: 4,
+    title: 'Shipment',
+    link: null,
     isActive: false,
     icon: ShipmentIcon,
     activeIcon: ShipmentIconActive,
     customClass: '',
   },
   {
-    name: 'Wallets',
-    link: ROUTES.wallet.path,
+    id: 5,
+    title: 'Wallets',
+    link: null,
     isActive: false,
     icon: WalletsIcon,
     activeIcon: WalletsIconActive,
     customClass: '',
   },
   {
-    name: 'Credits',
-    link: ROUTES.credit.path,
+    id: 6,
+    title: 'Credits',
+    link: null,
     isActive: false,
     icon: CreditsIcon,
     activeIcon: CreditsIconActive,
     customClass: '',
   },
   {
-    name: 'Payments',
-    link: ROUTES.payment.path,
+    id: 7,
+    title: 'Payments',
+    link: null,
     isActive: false,
     icon: PaymentsIcon,
     activeIcon: PaymentsIconActive,
-    customClass: 'payments-link'
+    customClass: ''
   },
 ]);
+
+function handleSidebarNavigation(id: number): void {
+  const clickedLink = sidebarLinks.value[id];
+  if (clickedLink.isActive) return;
+
+  sidebarLinks.value.forEach((item) => {
+    item.isActive = item.id === id;
+    if (item.subLinks && item.subLinks.length > 0) {
+      item.subLinks.forEach(subLink => subLink.isActive = false)
+    }
+  })
+
+  if (clickedLink.link) {
+    router.push({ name: clickedLink.link });
+  }
+}
+
+function handleSublinkNavigation(id: number, subId: number) {
+  const clickedLink = sidebarLinks.value[id];
+
+  if (clickedLink.subLinks && clickedLink.subLinks.length > 0) {
+    const clickedSubLink = clickedLink.subLinks[subId];
+    if (clickedSubLink.isActive === true ) return;
+
+    clickedLink.subLinks.forEach(subLink => subLink.isActive = subLink.id == subId);
+    if (clickedSubLink.link) {
+      router.push({ name: clickedSubLink.link });
+    }
+  }
+}
 
 </script>
 
@@ -147,19 +236,22 @@ const sidebarLinks = ref([
   min-height: 100%;
 }
 
+.sidebar-link-wrapper {
+  max-width: 85%;
+  margin: auto;
+}
+
 .sidebar-link {
   color: white;
-  margin-right: auto;
-  margin-left: auto;
-  padding: 0.85rem;
-  padding-left: 2rem;
-  margin-bottom: 0.5rem;
   display: flex;
+  align-items: center;
+  padding: 0.85rem;
   cursor: pointer;
 
   img {
     margin-right: 0.5rem;
-    width: 12%;
+    width: 2rem;
+    height: 2rem;
   }
 }
 
@@ -169,10 +261,34 @@ const sidebarLinks = ref([
  border-radius: 11px;
 }
 
-.payments-link {
-  padding-left: 1.5rem;
-  img {
-    width: 22%;
-  }
+.sidebar-sub-link {
+  background-color: white;
+  border-radius: 10px;
+  color: #FE0000;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-top: 0.5rem; 
+}
+
+.sidebar-sub-link.active {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-top: 0.5rem; 
+  height: auto;
+  visibility: visible;
+}
+
+.sub-link {
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  cursor: pointer;
+}
+
+.sub-link.active {
+  border-top: 1px solid red;
+  border-bottom: 1px solid red;
+  background: #D9D9D9CC;
 }
 </style>
