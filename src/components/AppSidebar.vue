@@ -109,22 +109,22 @@ const sidebarLinks = ref<SidebarLink[]>([
     subLinks: [
       {
         id: 0,
-        title: 'Products',
-        link: '',
-        isActive: false,
-      },
-      {
-        id: 1,
         title: 'Category',
         link: ROUTES.category.name,
         isActive: false,
       },
       {
-        id: 2,
+        id: 1,
         title: 'Warehouse',
-        link: '',
+        link: ROUTES.warehouse.name,
         isActive: false,
-      }
+      },
+      {
+        id: 2,
+        title: 'Products',
+        link: ROUTES.product.name,
+        isActive: false,
+      },
     ]
   },
   {

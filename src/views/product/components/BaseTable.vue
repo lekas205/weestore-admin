@@ -4,7 +4,7 @@
       <div class="search-container">
         <div class="search-input">
           <input
-            placeholder="Search by Category Name"
+            :placeholder="searchLabel"
             type="text"
           />
         </div>
@@ -19,7 +19,7 @@
         </button>
         <button class="table-btn green-btn" @click="$emit('newItem')">
           <Plus class="mr-2" />
-          Add Category
+          {{ createText }}
         </button>
       </div>
     </div>
@@ -28,7 +28,19 @@
 </template>
 
 <script setup lang="ts">
+import { defineProps } from 'vue'
 import { Trash2, Plus } from 'lucide-vue-next'
+
+const props = defineProps({
+  searchLabel: {
+    type: String,
+    default: ''
+  },
+  createText: {
+    type: String,
+    required: true
+  }
+})
 
 </script>
 
@@ -53,8 +65,9 @@ import { Trash2, Plus } from 'lucide-vue-next'
 }
 
 .action-container {
-  flex: 0 0 30%;
+  flex: 0 0 40%;
   display: flex;
+  justify-content: flex-end;
 }
 
 .search-input {

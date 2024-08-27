@@ -5,30 +5,34 @@
         <div class="title-container">
           <X class="tw-cursor-pointer" color="red" @click="closeModal" />
           <div class="title">
-            <p class="tw-text-3xl tw-font-medium">Add Category</p>
+            <p class="tw-text-3xl tw-font-medium">Create Warehouse</p>
           </div>
         </div>
         <div class="pa-5">
           <form class="create-form" @submit.prevent="handleFormSubmit">
             <div class="mb-5">
-              <label for="category-name" class="input-label">Name of Category</label>
-              <AppInput id="category-name" label="Name of Category" type="text" :disabled="isLoading" />
+              <label for="warehouse-name" class="input-label">Name of Warehouse</label>
+              <AppInput id="warehouse-name" label="Name of Warehouse" type="text" :disabled="isLoading" />
             </div>
             <div class="mb-5">
-              <label for="description" class="input-label">Description</label>
-              <AppInput id="description" label="Description" type="text" :disabled="isLoading" />
+              <label for="state-name" class="input-label">State</label>
+              <AppInput id="state-name" label="State" type="text" :disabled="isLoading" />
             </div>
             <div class="mb-5">
-              <label for="app-images" class="input-label">Category Image</label>
-              <AppFileUpload
-                :startUpload="startFileUpload"
-                @uploadFailed="handleFileUploadFailed"
-                @uploaded="createCategory"
-              />
+              <label for="manager-name" class="input-label">Warehouse Manager</label>
+              <AppInput id="manager-name" label="Manager Name" type="text" :disabled="isLoading" />
+            </div>
+            <div class="mb-5">
+              <label for="phone-number" class="input-label">Warehouse Manager Phone Number</label>
+              <AppInput id="phone-number" label="Phone Number" type="text" :disabled="isLoading" />
+            </div>
+            <div class="mb-5">
+              <label for="address" class="input-label">Warehouse Address</label>
+              <AppInput id="address" label="Address" type="text" :disabled="isLoading" />
             </div>
             <div class="btn-container">
               <AppButton class="mr-3" type="submit" :loading="isLoading" :disabled="isLoading">
-                Add Category
+                Create
               </AppButton>
 
               <AppButton @click="closeModal" :disabled="isLoading">
@@ -46,9 +50,7 @@
 import { ref, defineProps, defineEmits } from 'vue'
 import { X } from 'lucide-vue-next'
 import AppInput from '@/components/AppInput.vue'
-import AppFileUpload from '@/components/AppFileUpload.vue'
 import AppButton from '@/components/AppButton.vue'
-import { openToastNotification } from '@/utils'
 
 const emit = defineEmits(['close']);
 const props = defineProps({
@@ -58,7 +60,6 @@ const props = defineProps({
   }
 });
 const isLoading = ref<boolean>(false);
-const startFileUpload = ref<boolean>(false);
 
 function closeModal() {
   if (isLoading.value === true) return;
@@ -66,20 +67,8 @@ function closeModal() {
 }
 
 function handleFormSubmit() {
-  isLoading.value = true;
-  startFileUpload.value = true;
-  // closeModal();
-}
-
-function handleFileUploadFailed() {
-  isLoading.value = false;
-  startFileUpload.value = false;
-}
-
-function createCategory(images: string[]) {
-  isLoading.value = false;
-  startFileUpload.value = false;
-  console.log(images)
+  // isLoading.value = true;
+  closeModal();
 }
 
 </script>

@@ -4,7 +4,7 @@
       <v-col cols="12" md="3">
         <div class="summary-card">
           <p class="mb-2">
-            Product Category
+            Number of Warehouse
           </p>
           <p class="tw-text-xl tw-font-medium">
             70
@@ -13,8 +13,8 @@
       </v-col>
     </v-row>
     <BaseTable
-      search-label="Search by Category Name"
-      create-text="Add Category"
+      search-label="Search by Warehouse Name"
+      create-text="Create Warehouse"
       @newItem="openCreateModal = true"
     >
       <v-data-table
@@ -44,7 +44,6 @@
         <template v-slot:item.action="{ item }">
           <div class="table-action">
             <SquarePen @click="openEditModal = true" class="mr-3 tw-cursor-pointer" />
-            <Trash2 @click="openDeleteModal = true" class="tw-cursor-pointer" />
           </div>
         </template>
         <template v-slot:bottom>
@@ -67,20 +66,17 @@
         </template>
       </v-data-table>
     </BaseTable>
-    <CreateCategory :open-modal="openCreateModal" @close="openCreateModal = false" />
-    <EditCategory :open-modal="openEditModal" @close="openEditModal = false" />
-    <DeleteCategory :open-modal="openDeleteModal" @close="openDeleteModal = false" />
+    <CreateWarehouse :open-modal="openCreateModal" @close="openCreateModal = false" />
+    <EditWarehouse :open-modal="openEditModal" @close="openEditModal = false" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Trash2, SquarePen, ZoomIn } from 'lucide-vue-next'
-import LoginImage from '@/assets/images/png/login-image.png'
+import { SquarePen, ZoomIn } from 'lucide-vue-next'
 import BaseTable from './components/BaseTable.vue'
-import CreateCategory from './components/modals/CreateCategory.vue'
-import EditCategory from './components/modals/EditCategory.vue'
-import DeleteCategory from './components/modals/DeleteCategory.vue'
+import CreateWarehouse from './components/modals/CreateWarehouse.vue'
+import EditWarehouse from './components/modals/EditWarehouse.vue'
 
 const isLoading = ref(false);
 const openCreateModal = ref(false);
@@ -92,47 +88,42 @@ const pagination = ref({
 })
 const headers = ref([
   {
-    title: "ID",
+    title: "NAME OF WAREHOUSE",
     align: "start",
-    key: "id",
+    key: "name",
   },
-  { title: "ICON", key: "icon" },
-  { title: "NAME", key: "product" },
-  { title: "DESCRIPTION", key: "description" },
-  { title: "PUBLISHED", key: "isPublished" },
+  { title: "STATE", key: "state" },
+  { title: "MANAGER NAME", key: "manager" },
+  { title: "PHONE NUMBER", key: "phone" },
   { title: "VIEW", key: "view", align: 'center' },
   { title: "ACTION", key: "action", align: 'center' },
 ])
 
 const items = ref<any[]>([
   {
-    id: '1D44',
-    icon: LoginImage,
-    product: 'Men',
-    description: 'Men Product',
-    isPublished: false,
+    name: 'Mercy Store',
+    state: 'Lagos',
+    manager: 'Alex Joshua',
+    phone: '09138208161',
   },
   {
-    id: '1D44',
-    icon: LoginImage,
-    product: 'Men',
-    description: 'Men Product',
-    isPublished: false,
+    name: 'Mercy Store',
+    state: 'Lagos',
+    manager: 'Alex Joshua',
+    phone: '09138208161',
   },
   {
-    id: '1D44',
-    icon: LoginImage,
-    product: 'Men',
-    description: 'Men Product',
-    isPublished: false,
+    name: 'Mercy Store',
+    state: 'Lagos',
+    manager: 'Alex Joshua',
+    phone: '09138208161',
   },
   {
-    id: '1D44',
-    icon: LoginImage,
-    product: 'Men',
-    description: 'Men Product',
-    isPublished: false,
-  }
+    name: 'Mercy Store',
+    state: 'Lagos',
+    manager: 'Alex Joshua',
+    phone: '09138208161',
+  },
 ]);
 
 // function open(params:type) {}
