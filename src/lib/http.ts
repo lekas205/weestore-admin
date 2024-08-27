@@ -2,7 +2,7 @@ import axios from 'axios'
 import { SAVED_AUTH_TOKEN_KEY } from '@/constants'
 
 const http = axios.create({
-  baseURL: import.meta.env.VITE_VUE_APP_API_BASE,
+  baseURL: import.meta.env.VITE_API_URL_BASE,
   headers: {
     'Content-Type': 'application/json',
   },

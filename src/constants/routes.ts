@@ -15,17 +15,17 @@ export const ROUTES = {
     requiresAuth: true,
     title: 'Dashboard Overview'
   },
-  warehouse: {
-    path: '/warehouse',
-    name: 'Warehouse',
-    requiresAuth: true,
-    title: 'Warehouse'
-  },
   category: {
     path: '/category',
     name: 'Category',
     requiresAuth: true,
     title: 'Category'
+  },
+  warehouse: {
+    path: '/warehouse',
+    name: 'Warehouse',
+    requiresAuth: true,
+    title: 'Warehouse'
   },
   product: {
     path: '/product',

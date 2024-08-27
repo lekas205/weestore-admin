@@ -76,8 +76,8 @@ import CreditsIconActive from '@/assets/images/svg/credits-icon-active.svg'
 import PaymentsIcon from '@/assets/images/svg/payments-icon.svg'
 import PaymentsIconActive from '@/assets/images/svg/payments-icon-active.svg'
 
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onBeforeMount } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { ChevronRight, ChevronDown, Minus } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores'
 import { ROUTES } from '@/constants'
@@ -85,13 +85,14 @@ import { SidebarLink } from '@/types'
 import AppButton from '@/components/AppButton.vue'
 
 const router = useRouter();
+const route = useRoute();
 const authStore = useAuthStore();
 const activeLinkId = ref(0);
 const sidebarLinks = ref<SidebarLink[]>([
   {
     id: 0,
     title: 'Dashboard',
-    link: ROUTES.dashboard.path,
+    link: ROUTES.dashboard.name,
     isActive: true,
     icon: DashboardIcon,
     activeIcon: DashboardIconActive,
@@ -115,7 +116,7 @@ const sidebarLinks = ref<SidebarLink[]>([
       {
         id: 1,
         title: 'Category',
-        link: '',
+        link: ROUTES.category.name,
         isActive: false,
       },
       {
@@ -181,6 +182,30 @@ const sidebarLinks = ref<SidebarLink[]>([
     customClass: ''
   },
 ]);
+
+onBeforeMount(() => {
+  // console.log(route.name)
+
+  sidebarLinks.value.forEach(navLink => {
+    if (navLink.link == route.name) {
+      navLink.isActive = true;
+    }
+    else if (navLink.subLinks?.length) {
+      navLink.subLinks.forEach(subLink => {
+        if (subLink.link == route.name) {
+          subLink.isActive = true;
+          navLink.isActive = true;
+        }
+        else {
+          subLink.isActive = false;
+        }
+      })
+    }
+    else {
+      navLink.isActive = false;
+    }
+  })
+})
 
 function handleSidebarNavigation(id: number): void {
   const clickedLink = sidebarLinks.value[id];

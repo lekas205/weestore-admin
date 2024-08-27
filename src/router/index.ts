@@ -2,12 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { SAVED_AUTH_TOKEN_KEY, ROUTES } from '@/constants'
 import authRoutes from './auth.routes'
 import dashboardRoutes from './dashboard.routes'
+import productRoutes from './product.routes'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     ...authRoutes,
     ...dashboardRoutes,
+    ...productRoutes,
   ]
 })
 

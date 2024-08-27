@@ -1,22 +1,22 @@
 <template>
-    <v-row>
-      <v-col
-        v-for="(item, idx) in summaryData"
-        :key="idx"
-        cols="12"
-        md="4"
-      >
-        <div class="summary-card" :class="item.class">
-          <img class="mb-2" :src="item.icon" alt="" />
-          <p class="mb-2">
-            {{ item.title }}
-          </p>
-          <p class="tw-text-xl tw-font-medium">
-            {{ item.amount }}
-          </p>
-        </div>
-      </v-col>
-    </v-row>
+  <v-row>
+    <v-col
+      v-for="(item, idx) in summaryData"
+      :key="idx"
+      cols="12"
+      md="4"
+    >
+      <div class="summary-card" :class="item.class">
+        <img class="mb-2" :src="item.icon" alt="" />
+        <p class="mb-2">
+          {{ item.title }}
+        </p>
+        <p class="tw-text-xl tw-font-medium">
+          {{ item.amount }}
+        </p>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script setup lang="ts">
