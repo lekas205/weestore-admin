@@ -1,6 +1,7 @@
 import { PRIVATE, ROUTES } from '@/constants'
 import Category from '@/views/product/Category.vue'
 import Warehouse from '@/views/product/Warehouse.vue'
+import Product from '@/views/product/Product.vue'
 
 export const productRoutes = [
   {
@@ -26,7 +27,7 @@ export const productRoutes = [
   {
     path: ROUTES.product.path,
     name: ROUTES.product.name,
-    component: Category,
+    component: Product,
     meta: {
       layout: PRIVATE,
       title: ROUTES.product.title,

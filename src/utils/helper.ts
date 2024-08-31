@@ -11,3 +11,12 @@ export function openToastNotification({ message, duration, variant, position }: 
     position: position ?? 'top-right'
   });
 }
+
+export function formatAsMoney(amount: number, currency = true): string {
+  try {
+    const formattedAmount = new Intl.NumberFormat().format(amount);
+    return currency ? `₦${formattedAmount}` : formattedAmount;
+  } catch (error) {
+    return currency ? `0.00` : `0`;
+  }
+}

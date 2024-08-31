@@ -2,24 +2,28 @@
   <div class="table-container">
     <div class="table-top">
       <div class="search-container">
-        <div class="search-input">
+        <div v-if="searchLabelText" class="search-input">
           <input
-            :placeholder="searchLabel"
+            :placeholder="searchLabelText"
             type="text"
           />
         </div>
-        <button class="table-btn search-btn">
+        <button
+          v-if="searchLabelText"
+          class="table-btn search-btn"
+          @click="$emit('search')"
+        >
           Search
         </button>
       </div>
       <div class="action-container">
-        <button class="table-btn red-btn mr-2">
-          <Trash2 class="mr-2" />
-          Delete
-        </button>
-        <button class="table-btn green-btn" @click="$emit('newItem')">
+        <button
+          v-if="createBtnText"
+          class="table-btn green-btn"
+          @click="$emit('create')"
+        >
           <Plus class="mr-2" />
-          {{ createText }}
+          {{ createBtnText }}
         </button>
       </div>
     </div>
@@ -28,19 +32,18 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
-import { Trash2, Plus } from 'lucide-vue-next'
+import { Plus } from 'lucide-vue-next'
 
-const props = defineProps({
-  searchLabel: {
+defineProps({
+  searchLabelText: {
     type: String,
-    default: ''
+    required: false,
   },
-  createText: {
+  createBtnText: {
     type: String,
-    required: true
+    required: false,
   }
-})
+});
 
 </script>
 
@@ -87,34 +90,5 @@ const props = defineProps({
     outline: 2px solid transparent;
     outline-offset: 2px;
   }
-}
-
-.table-btn {
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-right: 1rem;
-  padding-left: 1rem;
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
-
-.search-btn {
-  color: black;
-  border: 1px solid rgba(0, 0, 0, 0.26);
-}
-
-.red-btn {
-  background-color: #FE0000;
-  color: white;
-  border: none;
-}
-
-.green-btn {
-  background-color: rgba(29, 207, 36, 0.88);
-  color: white;
-  border: none;
 }
 </style>
