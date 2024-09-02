@@ -1,13 +1,30 @@
-export type ApiResponseDto<T = any> = {
-  statusCode: number,
-  message: string,
-  payload: T
+import { z } from "zod"
+import { QueryFilterSchema } from '@/schemas'
+
+export type ApiResponseDto<T = { message: string }> = {
+  statusCode: number;
+  message: string;
+  payload: T;
+}
+
+export type ApiPagination<T = any[]> = {
+  paging: Pagination;
+  rows: T;
+}
+
+export type QueryFilter = z.infer<typeof QueryFilterSchema>;
+
+export interface Pagination {
+  total: number;
+  currentPageTotal: number;
+  currentPageNo: number;
+  totalNoPages: number;
 }
 
 export interface ToastPayload {
   message: string;
   duration?: number;
-  variant?: 'success' | 'info' | 'error' | 'warning' | 'default',
+  variant?: 'success' | 'info' | 'error' | 'warning' | 'default';
   position?:  'top-right'
   | 'top'
   | 'top-left'
@@ -23,7 +40,7 @@ export type SidebarLink = {
   isActive: boolean;
   icon: string;
   activeIcon: string;
-  customClass: string,
+  customClass: string;
   subLinks?: {
     id: number;
     title: string;
@@ -31,3 +48,9 @@ export type SidebarLink = {
     isActive: boolean;
   }[]
 }
+
+export type CustomFormData = Record<string, {
+  value: any,
+  errorMessage: string | null,
+  clear?: () => void
+}>;

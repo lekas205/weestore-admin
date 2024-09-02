@@ -22,6 +22,7 @@
         ref="input"
         name="image"
         accept="image/*"
+        :disabled="disabled"
         @change="saveFileToLocal"
       />
     </div>
@@ -32,7 +33,7 @@
     </div>
     <v-row v-if="files.length > 0" class="image-preview">
       <v-col v-for="(file, idx) in files" :key="idx" cols="3">
-        <CircleX v-if="startUpload === false" class="remove-img" @click="removeFile(idx)" />
+        <CircleX v-if="disabled === false" class="remove-img" @click="removeFile(idx)" />
         <v-card class="my-2" elevation="2" rounded>
           <v-img
             :src="file.src"
@@ -56,7 +57,7 @@ interface CustomFile extends File {
   src?: string;
 }
 
-const emit = defineEmits(['uploaded', 'uploadFailed']);
+const emit = defineEmits(['uploaded', 'uploadFailed', 'savedFile']);
 
 const props = defineProps({
   maxFileSize: {
@@ -70,6 +71,10 @@ const props = defineProps({
   startUpload: {
     type: Boolean,
     default: false,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   }
 });
 
@@ -77,22 +82,22 @@ const files = ref<CustomFile[]>([]);
 const input = ref<HTMLInputElement | null>(null);
 const errMessages = ref<string[]>([]);
 
-watch(() => props.startUpload, (newValue) => {
-  if (newValue !== true) return;
+// watch(() => props.startUpload, (newValue) => {
+//   if (newValue !== true) return;
 
-  const fileIsAdded = files.value.length > 0;
-  const hasNoImageError = !errMessages.value.includes('Please provide an image');
+//   const fileIsAdded = files.value.length > 0;
+//   const hasNoImageError = !errMessages.value.includes('Please provide an image');
 
-  if (!fileIsAdded) {
-    if (hasNoImageError) errMessages.value.push('Please provide an image');
-    emit('uploadFailed');
-    return;
-  }
-  console.log(newValue)
-  console.log('calling upload')
-  // handleFileUpload();
-  emit('uploaded', [])
-})
+//   if (!fileIsAdded) {
+//     if (hasNoImageError) errMessages.value.push('Please provide an image');
+//     emit('uploadFailed');
+//     return;
+//   }
+//   console.log(newValue)
+//   console.log('calling upload')
+//   // handleFileUpload();
+//   emit('uploaded', [])
+// })
 
 function saveFileToLocal(event: any): void {
   const file: File = event.target.files[0];
@@ -106,6 +111,8 @@ function saveFileToLocal(event: any): void {
     if (!props.allowMultipleFiles && input.value) {
       input.value.disabled = true;
     }
+
+    emit('savedFile', files.value);
   }
 
   if (input.value) {
@@ -129,6 +136,7 @@ function removeFile(idx: number) {
   if (!props.allowMultipleFiles && input.value) {
     input.value.disabled = false;
   }
+  emit('savedFile', files.value);
 }
 
 function validateFile(file: File): boolean {

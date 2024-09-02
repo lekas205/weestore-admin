@@ -12,14 +12,14 @@
           </div>
         </div>
         <div class="action-container">
-          <button class="table-btn green-btn" @click="$emit('newItem')">
+          <button class="table-btn green-btn" @click="openCreateModal = true">
             <Plus class="mr-2" />
             Add Product
           </button>
         </div>
       </div>
 
-      <v-tabs-window v-model="tab" class="mt-6">
+      <v-tabs-window v-model="tab">
         <v-tabs-window-item>
           <ProductInfoTable></ProductInfoTable>
         </v-tabs-window-item>
@@ -27,33 +27,56 @@
         <v-tabs-window-item>
           Two
         </v-tabs-window-item>
-
-        <v-tabs-window-item>
-          Three
-        </v-tabs-window-item>
       </v-tabs-window>
-
-
     </div>
-
+    <CreateProduct
+      :open-modal="openCreateModal"
+      @close="openCreateModal = false"
+      :states="states"
+      :categories="categories"
+    />
   </div>
+  <AppPageLoader v-if="isLoading" /> 
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
+<script suspense setup lang="ts">
+import { onBeforeMount, ref, } from 'vue'
 import { Plus } from 'lucide-vue-next'
 import ProductSummary from './components/cards/ProductSummary.vue'
 import ProductInfoTable from './components/tables/ProductInformationTable.vue'
+import CreateProduct from './components/modals/CreateProduct.vue'
+import AppPageLoader from '@/components/AppPageLoader.vue'
+import { useCategoryStore, useWarehouseStore } from '@/stores'
+import { Category } from '@/types'
 
+const isLoading = ref(false);
+const categoryStore = useCategoryStore();
+const warehouseStore = useWarehouseStore();
 const tab = ref<any>(0);
-
 const productSummary = ref({
   totalSales: 3000,
   valueOfQtyInStock: 3000000,
   quantityInStock: 7000,
   quantityOutOfStock: 30000,
 });
+const openCreateModal = ref(false);
+const categories = ref<Category[]>([]);
+const states = ref([]);
 
+(async function loadData() {
+  isLoading.value = true;
+  try {
+    const result = await categoryStore.fetchAllCategories();
+    states.value = await warehouseStore.fetchStates();
+
+    if (result) {
+      categories.value = result.rows || [];
+    }
+  } catch (error) {
+   console.log(error) 
+  }
+  isLoading.value = false;
+})()
 </script>
 
 <style scoped lang="scss">
@@ -86,5 +109,4 @@ const productSummary = ref({
     color: black;
   }
 }
-
 </style>

@@ -6,7 +6,7 @@ import { LoginDto, LoginResDto } from '@/types'
 import { handleStoreRequestError } from '@/utils'
 
 export const useAuthStore = defineStore('auth', {
-  state: () => ({ count: 0 }),
+  state: () => ({ count: 0, loader: false }),
 
   getters: {
     doubleCount: (state) => state.count * 2,
@@ -15,6 +15,10 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     increaseCount() {
       this.count++;
+    },
+
+    toggleLoader(): void {
+      this.loader = !this.loader;
     },
 
     async login(payload: LoginDto): Promise<boolean> {

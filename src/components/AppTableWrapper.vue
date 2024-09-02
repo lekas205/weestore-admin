@@ -49,7 +49,7 @@ defineProps({
 
 <style lang="scss" scoped>
 .table-container {
-  margin-top: 3rem;
+  // margin-top: 3rem;
   padding: 1rem;
 }
 
