@@ -25,8 +25,7 @@
             <app-input
               v-model="formData.password"
               label="Password"
-              type="text"
-              is-password
+              type="password"
               @blur="validatePassword"
               @input="validatePassword"
             />

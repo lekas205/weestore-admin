@@ -4,7 +4,7 @@
     <AppHeader></AppHeader>
     <v-main>
       <slot />
-      <!-- <AppPageLoader v-if="authStore.loader" /> -->
+      <AppPageLoader v-if="authStore.loader" />
     </v-main>
   </div>
 </template>

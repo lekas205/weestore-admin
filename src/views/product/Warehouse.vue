@@ -1,21 +1,16 @@
 <template>
   <div class="product-page-container">
-    <v-row class="bg-white">
-      <v-col cols="12" md="3">
-        <div class="product-summary card-blue">
-          <p class="mb-2">
-            Number of Warehouse
-          </p>
-          <p class="tw-text-xl tw-font-medium">
-            70
-          </p>
-        </div>
-      </v-col>
-    </v-row>
+    <div class="tw-flex bg-white mb-10 pa-5">
+      <v-row>
+        <v-col cols="12" md="3">
+          <StatCard title="Number of Warehouse" value="70" type="blue"/>
+        </v-col>
+      </v-row>
+    </div>
     <TableWrapper
       searchLabelText="Search By Warehouse Name"
       createBtnText="Create Warehouse"
-      @create="openCreateModal = true"
+      @create="createWarehouseModal = true"
     >
       <v-data-table
         :headers="headers"
@@ -25,17 +20,6 @@
         hide-default-footer
         class="elevation-1 custom-table"
       >
-        <template v-slot:item.icon="{ item }">
-          <div class="table-icon" :style="{'background-image': `url(${item.icon})`}"></div>
-        </template>
-        <template v-slot:item.isPublished="{ item }">
-          <v-switch
-            v-model="item.isPublished"
-            color="rgba(12, 174, 19, 1)"
-            inset
-            hide-details
-          ></v-switch>
-        </template>
         <template v-slot:item.view="{ item }">
           <div class="tw-flex tw-justify-center">
             <ZoomIn class="tw-cursor-pointer" />
@@ -43,77 +27,108 @@
         </template>
         <template v-slot:item.action="{ item }">
           <div class="tw-flex tw-justify-center">
-            <SquarePen
-              @click="openEditModal = true"
-              class="mr-3 tw-cursor-pointer"
-            />
+            <SquarePen @click="openEditModal(item)" class="mr-3 tw-cursor-pointer"/>
           </div>
         </template>
         <template v-slot:bottom>
-          <TableFooter />
+          <TableFooter v-bind="pagination" />
         </template>
       </v-data-table>
     </TableWrapper>
-    <CreateWarehouse :open-modal="openCreateModal" @close="openCreateModal = false" />
-    <EditWarehouse :open-modal="openEditModal" @close="openEditModal = false" />
+    <CreateWarehouse
+      :open-modal="createWarehouseModal"
+      @close="createWarehouseModal = false"
+      @completed="handleCreateCompleted()"
+    />
+    <EditWarehouse
+      :open-modal="editWarehouseModal"
+      @close="editWarehouseModal = false"
+      @completed="handleEditCompleted()"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { SquarePen, ZoomIn } from 'lucide-vue-next'
+import { useAuthStore, useWarehouseStore } from '@/stores';
+import { Warehouse } from '@/types';
+
+// ========= COMPONENTS =========== //
+import StatCard from './components/cards/ProductStatCard.vue'
 import TableWrapper from '@/components/AppTableWrapper.vue'
 import TableFooter from '@/components/AppTableFooter.vue'
 import CreateWarehouse from './components/modals/CreateWarehouse.vue'
 import EditWarehouse from './components/modals/EditWarehouse.vue'
 
+const authStore = useAuthStore();
+const warehouseStore = useWarehouseStore();
 const isLoading = ref(false);
-const openCreateModal = ref(false);
-const openEditModal = ref(false);
-const openDeleteModal = ref(false);
-const pagination = ref({
-  page: 1,
-  totalNoPages: 100,
-})
+const createWarehouseModal = ref(false);
+const editWarehouseModal = ref(false);
 const headers = ref<any[]>([
   {
     title: "NAME OF WAREHOUSE",
     align: "start",
-    key: "name",
+    key: "warehouse_name",
   },
-  { title: "STATE", key: "state" },
-  { title: "MANAGER NAME", key: "manager" },
+  { title: "STATE", key: "state.name" },
+  { title: "MANAGER NAME", key: "manager_name" },
   { title: "PHONE NUMBER", key: "phone" },
   { title: "VIEW", key: "view", align: 'center' },
   { title: "ACTION", key: "action", align: 'center' },
 ])
 
-const items = ref<any[]>([
-  {
-    name: 'Mercy Store',
-    state: 'Lagos',
-    manager: 'Alex Joshua',
-    phone: '09138208161',
-  },
-  {
-    name: 'Mercy Store',
-    state: 'Lagos',
-    manager: 'Alex Joshua',
-    phone: '09138208161',
-  },
-  {
-    name: 'Mercy Store',
-    state: 'Lagos',
-    manager: 'Alex Joshua',
-    phone: '09138208161',
-  },
-  {
-    name: 'Mercy Store',
-    state: 'Lagos',
-    manager: 'Alex Joshua',
-    phone: '09138208161',
-  },
-]);
+const items = computed<Warehouse[]>(() => {
+  return warehouseStore.warehouses;
+});
+
+const pagination = computed(() => {
+  return warehouseStore.warehousesPagination || {
+    total: 0,
+    currentPageTotal: 0,
+    currentPageNo: 1,
+    totalNoPages: 1
+  }
+})
+
+// =============== METHODS ================= //
+function openEditModal(item: Warehouse) {
+  const data = { ...item };
+  warehouseStore.selectedWarehouse = data;
+  editWarehouseModal.value = true;
+}
+
+function handleCreateCompleted() {
+  createWarehouseModal.value = false;
+  fetchWarehouse();
+}
+
+function handleEditCompleted() {
+  editWarehouseModal.value = false;
+  fetchWarehouse();
+}
+
+async function fetchWarehouse() {
+  isLoading.value = true;
+  try {
+    await warehouseStore.fetchAllWarehouses();
+  } catch (error) {
+    console.log(error);
+  }
+  isLoading.value = false;
+}
+
+(async function loadData() {
+  authStore.toggleLoader();
+  try {
+    await warehouseStore.fetchAllWarehouses();
+    await warehouseStore.fetchStates();
+  } catch (error) {
+    console.log(error)
+  }
+  authStore.toggleLoader();
+})()
 
 </script>
 

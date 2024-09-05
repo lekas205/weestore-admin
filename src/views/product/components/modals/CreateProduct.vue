@@ -172,7 +172,7 @@
             </v-col>
             <v-col cols="12" md="9">
               <div class="product-select">
-                <v-select
+                <v-combobox
                   v-model="formData.category.value"
                   label="Category"           
                   variant="outlined"
@@ -182,7 +182,7 @@
                   :items="categories"
                   :disabled="isLoading"
                   @update:model-value="validateFormData('category')"
-                ></v-select>
+                ></v-combobox>
               </div>
               <p class="error-text">{{ formData.category.errorMessage }}</p>
             </v-col>
@@ -396,7 +396,6 @@ async function validateFormData(field?: keyof CreateProductDto, proceedOnSuccess
 
 async function createProduct(payload: CreateProductDto) {
   isLoading.value = true;
-  console.log(payload);
   try {
     payload.price = payload.price.toString() as any;
     payload.quantity = payload.quantity.toString() as any;
@@ -413,9 +412,8 @@ async function createProduct(payload: CreateProductDto) {
       })
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-  // closeModal();
 }
 
 
@@ -429,14 +427,6 @@ async function createProduct(payload: CreateProductDto) {
 
 .title {
   margin-bottom: 2rem;
-}
-
-.error-text {
-  min-height: 22px;
-  color: red;
-  line-height: normal;
-  padding-inline: 12px;
-  padding-top: 0.25rem
 }
 
 .divider {
@@ -485,13 +475,6 @@ async function createProduct(payload: CreateProductDto) {
 
 .product-select {
   max-height: 60px;
-}
-
-
-
-.input-label {
-  font-weight: 500;
-  font-size: 1.2rem;
 }
 
 .btn-container {

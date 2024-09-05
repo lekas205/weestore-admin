@@ -2,15 +2,13 @@
   <div class="table-footer-wrapper">
     <div class="tw-flex tw-items-center">
       <p>
-        Showing 
-        {{ pagination.currentPage }}-{{ pagination.currentPage + 3 }} of 
-        {{ pagination.totalPages }}
+        Showing {{ currentPage }} of {{ totalNoPages }}
       </p>
     </div>
     <div>
       <v-pagination
-        v-model="pagination.currentPage"
-        :length="pagination.totalPages"
+        v-model="currentPage"
+        :length="totalNoPages"
         :total-visible="5"
       ></v-pagination>
     </div>
@@ -18,28 +16,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps({
-  page: {
+  total: {
     type: Number,
-    default: 1,
+    required: true,
+  },
+  currentPageTotal: {
+    type: Number,
+    required: true,
+  },
+  currentPageNo: {
+    type: Number,
+    required: true,
   },
   totalNoPages: {
     type: Number,
-    default: 20,
-  },
-  perPage: {
-    type: Number,
-    default: 20,
+    required: true,
   },
 })
 
-const pagination = ref({
-  currentPage: props.page,
-  totalPages: props.totalNoPages,
-  perPage: props.perPage,
-});
+const currentPage = computed(() => {
+  return props.currentPageNo;
+})
 
 </script>
 

@@ -9,40 +9,58 @@ import {
   FetchWarehouseByStateRes,
   QueryFilter,
   UpdateWarehouseDto,
+  Warehouse,
+  IState,
+  FetchSatesRes
 } from '@/types'
 import { handleStoreRequestError } from '@/utils'
 
 export const useWarehouseStore = defineStore('warehouse', {
-  state: () => ({}),
+  state: () => ({
+    warehouseData: {} as FetchAllWarehouseRes,
+    selectedWarehouse: {} as Warehouse,
+    states: [] as IState[]
+  }),
 
-  getters: {},
+  getters: {
+    warehouses: (state) => state.warehouseData.rows || [],
+    warehousesPagination: (state) => state.warehouseData.paging,
+  },
 
   actions: {
-    async createWarehouse(payload: CreateWarehouseDto) {
+    async createWarehouse(payload: CreateWarehouseDto): Promise<boolean> {
       try {
-        const { data } = await http.post<CreateWarehouseRes>(
+        await http.post<CreateWarehouseRes>(
           ENDPOINTS.WAREHOUSE,
           payload
         );
-        return data;
+        return true;
       } catch (error) {
         handleStoreRequestError(error);
       }
+
+      return false;
     },
-    async fetchAllWarehouses(params?: QueryFilter) {
+    async fetchAllWarehouses(params?: QueryFilter): Promise<FetchAllWarehouseRes | null> {
       try {
-        const { data } = await http.get<FetchAllWarehouseRes>(
+        const { data } = await http.get<ApiResponseDto<FetchAllWarehouseRes>>(
           ENDPOINTS.WAREHOUSE,
           { params }
         );
+        this.warehouseData = data.payload;
         return data.payload;
       } catch (error) {
         handleStoreRequestError(error);
       }
+
+      return  null;
     },
-    async fetchStates(): Promise<[]> {
+    async fetchStates(): Promise<IState[]> {
       try {
-        const { data } = await http.get(ENDPOINTS.GET_STATES);
+        const { data } = await http.get<FetchSatesRes>(
+          ENDPOINTS.GET_STATES
+        );
+        this.states = data.payload;
         return data.payload;
       } catch (error) {
         handleStoreRequestError(error);
@@ -52,7 +70,9 @@ export const useWarehouseStore = defineStore('warehouse', {
     },
     async fetchWarehouseByState(stateId: string) {
       try {
-        const { data } = await http.get<FetchWarehouseByStateRes>(ENDPOINTS.GET_WAREHOUSE_BY_STATE(stateId));
+        const { data } = await http.get<FetchWarehouseByStateRes>(
+          ENDPOINTS.GET_WAREHOUSE_BY_STATE(stateId)
+        );
         return data.payload;
       } catch (error) {
         handleStoreRequestError(error);
@@ -60,16 +80,21 @@ export const useWarehouseStore = defineStore('warehouse', {
 
       return [];
     },
-    async updateWarehouse(payload: UpdateWarehouseDto) {
+    async updateWarehouse(
+      payload: Omit<UpdateWarehouseDto, 'id'>,
+      id: string
+    ): Promise<boolean> {
       try {
-        const { data } = await http.patch<ApiResponseDto>(
-          ENDPOINTS.WAREHOUSE,
+        await http.patch<ApiResponseDto>(
+          ENDPOINTS.WAREHOUSE_BY_ID(id),
           payload
         );
-        return data;
+        return true;
       } catch (error) {
         handleStoreRequestError(error);
       }
+
+      return false;
     },
   }
 })

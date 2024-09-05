@@ -4,13 +4,25 @@ import { z } from 'zod'
 export const CreateCategorySchema = z.object({
   name: z.string({
     message: 'Category name is required'
+  })
+  .min(2, {
+    message: 'Category name is required'
   }),
   description: z.string({
     message: 'Description is required'
+  })
+  .min(2, {
+    message: 'Description is required'
   }),
-  icon: z.string({
-    message: 'Category image is required'
-  }),
+  icon: z
+    .array(
+      z.any(),
+      { message: 'Category Image is required'}
+    )
+    .min(1, { message: 'Category Image is required' })
+    .or(
+      z.string({ message: 'Category Image is required' })
+    ),
 })
 
 export const UpdateCategorySchema = CreateCategorySchema.extend({

@@ -3,10 +3,7 @@
     <div class="table-top">
       <div class="search-container">
         <div v-if="searchLabelText" class="search-input">
-          <input
-            :placeholder="searchLabelText"
-            type="text"
-          />
+          <AppInput :label="searchLabelText"/>
         </div>
         <button
           v-if="searchLabelText"
@@ -33,6 +30,9 @@
 
 <script setup lang="ts">
 import { Plus } from 'lucide-vue-next'
+import AppInput from '@/components/AppInput.vue'
+
+defineEmits(['create', 'search']);
 
 defineProps({
   searchLabelText: {
@@ -44,15 +44,9 @@ defineProps({
     required: false,
   }
 });
-
 </script>
 
 <style lang="scss" scoped>
-.table-container {
-  // margin-top: 3rem;
-  padding: 1rem;
-}
-
 .table-top {
   display: flex;
   justify-content: space-between;
@@ -74,21 +68,7 @@ defineProps({
 }
 
 .search-input {
-  border: 1px solid rgba(0, 0, 0, 0.26);
-  border-radius: 10px;
-  display: flex;
-  padding: 0.5rem;
   flex: 0 0 70%;
   margin-right: 1rem;
-
-  input {
-    max-width: 100%;
-    width: 100%;
-  }
-
-  input:focus {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-  }
 }
 </style>

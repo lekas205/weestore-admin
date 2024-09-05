@@ -29,7 +29,7 @@ export type Category = {
   productcategory: any[];
 }
 
-export type FetchAllCategoryRes = ApiResponseDto<ApiPagination<Category[]>>;
+export type FetchAllCategoryRes = ApiPagination<Category[]>;
 
 export type FetchCategoryByIdRes = ApiResponseDto<Category>;
 
@@ -45,6 +45,7 @@ export type Warehouse = {
   warehouse_name: string;
   address: string;
   city: string;
+  manager_name: string,
   postal_code: string | null;
   country: string | null;
   phone: string;
@@ -74,14 +75,16 @@ export interface IState {
   code: string;
 }
 
-export type FetchAllWarehouseRes = ApiResponseDto<ApiPagination<Warehouse[]>>;
+export type FetchAllWarehouseRes = ApiPagination<Warehouse[]>;
 
 export type UpdateWarehouseDto = z.infer<typeof UpdateWarehouseSchema>;
 
 export type FetchWarehouseByStateRes = ApiResponseDto<{
   name: string;
   id: string;
-}[]>
+}[]>;
+
+export type FetchSatesRes = ApiResponseDto<IState[]>;
 
 //============ PRODUCT =============//
 export type CreateProductDto = z.infer<typeof CreateProductSchema>;

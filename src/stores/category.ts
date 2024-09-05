@@ -3,6 +3,7 @@ import http from '@/lib/http'
 import { ENDPOINTS } from '@/constants'
 import {
   ApiResponseDto,
+  Category,
   CreateCategoryDto,
   CreateCategoryRes,
   FetchAllCategoryRes,
@@ -13,37 +14,48 @@ import {
 import { handleStoreRequestError, openToastNotification } from '@/utils'
 
 export const useCategoryStore = defineStore('category', {
-  state: () => ({}),
+  state: () => ({
+    categoriesData: {} as FetchAllCategoryRes,
+    selectedCategory: {} as Category,
+  }),
 
-  getters: {},
+  getters: {
+    categories: (state) => state.categoriesData.rows || [],
+    categoriesPagination: (state) => state.categoriesData.paging,
+  },
 
   actions: {
-    async createCategory(payload: CreateCategoryDto) {
+    async createCategory(payload: CreateCategoryDto): Promise<boolean> {
       try {
-        const { data } = await http.post<CreateCategoryRes>(
+        await http.post<CreateCategoryRes>(
           ENDPOINTS.CATEGORY,
           payload
         );
-        return data;
+        return true;
       } catch (error) {
         handleStoreRequestError(error);
       }
+
+      return false;
     },
-    async fetchAllCategories(params?: QueryFilter) {
+    async fetchAllCategories(params?: QueryFilter): Promise<Category[]> {
       try {
-        const { data } = await http.get<FetchAllCategoryRes>(
+        const { data } = await http.get<ApiResponseDto<FetchAllCategoryRes>>(
           ENDPOINTS.CATEGORY,
           { params }
         );
-        return data.payload;
+        this.categoriesData = data.payload;
+        return data.payload.rows;
       } catch (error) {
         handleStoreRequestError(error);
       }
+
+      return [];
     },
     async fetchCategoryById(id: string) {
       try {
         const { data } = await http.get<FetchCategoryByIdRes>(
-          ENDPOINTS.CATEGORIES_BY_ID(id)
+          ENDPOINTS.CATEGORY_BY_ID(id)
         );
         if (!data.payload.category_id) {
           openToastNotification({
@@ -59,26 +71,30 @@ export const useCategoryStore = defineStore('category', {
         handleStoreRequestError(error);
       }
     },
-    async updateCategory(payload: UpdateCategoryDto) {
+    async updateCategory(payload: Omit<UpdateCategoryDto, 'id'>, id: string): Promise<boolean> {
       try {
-        const { data } = await http.patch<ApiResponseDto>(
-          ENDPOINTS.CATEGORY,
+        await http.patch<ApiResponseDto>(
+          ENDPOINTS.CATEGORY_BY_ID(id),
           payload
         );
-        return data;
+        return true;
       } catch (error) {
         handleStoreRequestError(error);
       }
+
+      return false;
     },
-    async deleteCategory(id: string) {
+    async deleteCategory(id: string): Promise<boolean> {
       try {
-        const { data } = await http.delete<ApiResponseDto>(
-          ENDPOINTS.CATEGORIES_BY_ID(id)
+        await http.delete<ApiResponseDto>(
+          ENDPOINTS.CATEGORY_BY_ID(id)
         );
-        return data;
+        return true;
       } catch (error) {
         handleStoreRequestError(error);
       }
+
+      return false;
     }
   }
 })

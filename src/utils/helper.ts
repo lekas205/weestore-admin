@@ -38,6 +38,7 @@ export async function formValidator<T = any>(
 
   if (!validationResult.success) {
     const issues = validationResult.error.issues;
+    // console.log(issues)
 
     if (field) {
       const errorObj = issues.find(e => e.path.includes(field));
@@ -70,21 +71,22 @@ export async function formValidator<T = any>(
   return null;
 }
 
-export async function handleFileUpload(files: File[]): Promise<string[] | null> {
-  const uploadPayloads: PutObjectCommandInput[] = [];
+export async function handleFileUpload(files: File[]): Promise<string[] | null> {  
   const urls: string[] = [];
-  files.forEach(file => {
-    const timestampprefix = new Date().getTime();
-    const Key = `morebuy/${timestampprefix}_${file.name}`;
-    uploadPayloads.push({
-      Bucket: import.meta.env.VITE_AWS_S3_BUCKET,
-      Key,
-      Body: file,
-      ContentType: file.type,
-    })
-  });
 
   try {
+    const uploadPayloads: PutObjectCommandInput[] = [];
+    files.forEach(file => {
+      const timestampprefix = new Date().getTime();
+      const Key = `morebuy/${timestampprefix}_${file.name.split(' ').join('_')}`;
+      uploadPayloads.push({
+        Bucket: import.meta.env.VITE_AWS_S3_BUCKET,
+        Key,
+        Body: file,
+        ContentType: file.type,
+      })
+    });
+
     const bucket = new S3Client({
       credentials: {
         accessKeyId: import.meta.env.VITE_AWS_S3_ACCESS_KEY_ID,
@@ -104,9 +106,6 @@ export async function handleFileUpload(files: File[]): Promise<string[] | null> 
     }
   } catch (error) {
     console.log(error);
-    openToastNotification({
-      message: 'Error uploading Image(s)',
-    });
     return null;
   }
 

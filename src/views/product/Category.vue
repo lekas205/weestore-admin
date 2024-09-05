@@ -1,21 +1,16 @@
 <template>
   <div class="product-page-container">
-    <v-row class="bg-white">
-      <v-col cols="12" md="3">
-        <div class="product-summary card-blue">
-          <p class="mb-2">
-            Product Category
-          </p>
-          <p class="tw-text-xl tw-font-medium">
-            70
-          </p>
-        </div>
-      </v-col>
-    </v-row>
+    <div class="tw-flex bg-white mb-10 pa-5">
+      <v-row>
+        <v-col cols="12" md="3">
+          <StatCard title="Product Category" value="70" type="blue"/>
+        </v-col>
+      </v-row>
+    </div>
     <TableWrapper
       searchLabelText="Search by Category Name"
       createBtnText="Add Category"
-      @create="openCreateModal = true"
+      @create="createCategoryModal = true"
     >
       <v-data-table
         :headers="headers"
@@ -26,15 +21,7 @@
         class="elevation-1 custom-table"
       >
         <template v-slot:item.icon="{ item }">
-          <div class="table-image" :style="{'background-image': `url(${item.icon})`}"></div>
-        </template>
-        <template v-slot:item.isPublished="{ item }">
-          <v-switch
-            v-model="item.isPublished"
-            color="rgba(12, 174, 19, 1)"
-            inset
-            hide-details
-          ></v-switch>
+          <TableImage :url="item.icon" />
         </template>
         <template v-slot:item.view="{ item }">
           <div class="tw-flex tw-justify-center">
@@ -43,85 +30,129 @@
         </template>
         <template v-slot:item.action="{ item }">
           <div class="tw-flex tw-justify-center">
-            <SquarePen @click="openEditModal = true" class="mr-3 tw-cursor-pointer" />
-            <Trash2 @click="openDeleteModal = true" class="tw-cursor-pointer" />
+            <SquarePen @click="openEditModal(item)" class="mr-3 tw-cursor-pointer" />
+            <Trash2 @click="openDeleteModal(item)" class="tw-cursor-pointer" />
           </div>
         </template>
         <template v-slot:bottom>
-          <TableFooter />
+          <TableFooter v-bind="pagination" />
         </template>
       </v-data-table>
     </TableWrapper>
-    <CreateCategory :open-modal="openCreateModal" @close="openCreateModal = false" />
-    <EditCategory :open-modal="openEditModal" @close="openEditModal = false" />
-    <DeleteCategory :open-modal="openDeleteModal" @close="openDeleteModal = false" />
+    <CreateCategory
+      :open-modal="createCategoryModal"
+      @close="createCategoryModal = false"
+      @completed="handleCreateCompleted()"
+    />
+    <EditCategory
+      :open-modal="editCategoryModal"
+      @close="editCategoryModal = false"
+      @completed="handleEditCompleted()"
+    />
+    <DeleteCategory
+      :open-modal="deleteCategoryModal"
+      @close="deleteCategoryModal = false"
+      @completed="handleDeleteCompleted()"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Trash2, SquarePen, ZoomIn } from 'lucide-vue-next'
-import LoginImage from '@/assets/images/png/login-image.png'
+import { useAuthStore, useCategoryStore } from '@/stores';
+import { Category, Pagination } from '@/types';
+
+// ========= COMPONENTS =========== //
+import StatCard from './components/cards/ProductStatCard.vue'
 import TableWrapper from '@/components/AppTableWrapper.vue'
 import TableFooter from '@/components/AppTableFooter.vue'
+import TableImage from '@/components/AppTableImage.vue'
 import CreateCategory from './components/modals/CreateCategory.vue'
 import EditCategory from './components/modals/EditCategory.vue'
 import DeleteCategory from './components/modals/DeleteCategory.vue'
 
+const authStore = useAuthStore();
+const categoryStore = useCategoryStore();
 const isLoading = ref(false);
-const openCreateModal = ref(false);
-const openEditModal = ref(false);
-const openDeleteModal = ref(false);
-const pagination = ref({
-  page: 1,
-  totalNoPages: 100,
-})
+const createCategoryModal = ref(false);
+const editCategoryModal = ref(false);
+const deleteCategoryModal = ref(false);
 const headers = ref<any[]>([
   {
     title: "ID",
     align: "start",
-    key: "id",
+    key: "category_id",
   },
   { title: "ICON", key: "icon" },
-  { title: "NAME", key: "product" },
+  { title: "NAME", key: "category_name" },
   { title: "DESCRIPTION", key: "description" },
-  { title: "PUBLISHED", key: "isPublished" },
-  { title: "VIEW", key: "view", align: 'center' },
+  // { title: "PUBLISHED", key: "isPublished" },
+  // { title: "VIEW", key: "view", align: 'center' },
   { title: "ACTION", key: "action", align: 'center' },
 ])
 
-const items = ref<any[]>([
-  {
-    id: '1D44',
-    icon: LoginImage,
-    product: 'Men',
-    description: 'Men Product',
-    isPublished: false,
-  },
-  {
-    id: '1D44',
-    icon: LoginImage,
-    product: 'Men',
-    description: 'Men Product',
-    isPublished: false,
-  },
-  {
-    id: '1D44',
-    icon: LoginImage,
-    product: 'Men',
-    description: 'Men Product',
-    isPublished: false,
-  },
-  {
-    id: '1D44',
-    icon: LoginImage,
-    product: 'Men',
-    description: 'Men Product',
-    isPublished: false,
+const items = computed<Category[]>(() => {
+  return categoryStore.categories;
+});
+
+const pagination = computed<Pagination>(() => {
+  return categoryStore.categoriesPagination || {
+    total: 0,
+    currentPageTotal: 0,
+    currentPageNo: 1,
+    totalNoPages: 1
   }
-]);
+});
+
+// =============== METHODS ================= //
+function openEditModal(item: Category) {
+  const data = { ...item };
+  categoryStore.selectedCategory = data;
+  editCategoryModal.value = true;
+}
+
+function openDeleteModal(item: Category) {
+  const data = { ...item };
+  categoryStore.selectedCategory = data;
+  deleteCategoryModal.value = true;
+}
+
+function handleCreateCompleted() {
+  createCategoryModal.value = false;
+  fetchCategories();
+}
+
+function handleEditCompleted() {
+  editCategoryModal.value = false;
+  fetchCategories();
+}
+
+function handleDeleteCompleted() {
+  deleteCategoryModal.value = false;
+  fetchCategories();
+}
+
+async function fetchCategories() {
+  isLoading.value = true;
+  try {
+    await categoryStore.fetchAllCategories();
+  } catch (error) {
+    console.log(error);
+  }
+  isLoading.value = false;
+}
+
+(async function loadData() {
+  authStore.toggleLoader();
+  try {
+    await categoryStore.fetchAllCategories();
+  } catch (error) {
+    console.log(error)
+  }
+  authStore.toggleLoader();
+})()
 </script>
 
 <style lang="scss" scoped>
-
 </style>

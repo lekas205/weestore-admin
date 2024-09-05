@@ -25,7 +25,7 @@
         </v-tabs-window-item>
 
         <v-tabs-window-item>
-          Two
+          <ProductMetricsTable></ProductMetricsTable>
         </v-tabs-window-item>
       </v-tabs-window>
     </div>
@@ -40,14 +40,17 @@
 </template>
 
 <script suspense setup lang="ts">
-import { onBeforeMount, ref, } from 'vue'
+import { ref, } from 'vue'
 import { Plus } from 'lucide-vue-next'
+import { useCategoryStore, useWarehouseStore } from '@/stores'
+import { Category, IState } from '@/types'
+
+// ================ COMPONENTS ============== //
 import ProductSummary from './components/cards/ProductSummary.vue'
 import ProductInfoTable from './components/tables/ProductInformationTable.vue'
+import ProductMetricsTable from './components/tables/ProductMetricsTable.vue'
 import CreateProduct from './components/modals/CreateProduct.vue'
 import AppPageLoader from '@/components/AppPageLoader.vue'
-import { useCategoryStore, useWarehouseStore } from '@/stores'
-import { Category } from '@/types'
 
 const isLoading = ref(false);
 const categoryStore = useCategoryStore();
@@ -61,19 +64,15 @@ const productSummary = ref({
 });
 const openCreateModal = ref(false);
 const categories = ref<Category[]>([]);
-const states = ref([]);
+const states = ref<IState[]>([]);
 
 (async function loadData() {
   isLoading.value = true;
   try {
-    const result = await categoryStore.fetchAllCategories();
-    states.value = await warehouseStore.fetchStates();
-
-    if (result) {
-      categories.value = result.rows || [];
-    }
+    await categoryStore.fetchAllCategories();
+    await warehouseStore.fetchStates();
   } catch (error) {
-   console.log(error) 
+   console.log(error);
   }
   isLoading.value = false;
 })()
@@ -85,6 +84,7 @@ const states = ref([]);
   justify-content: space-between;
   background-color: white;
   padding: 1rem;
+  margin-bottom: 1rem;
 }
 
 .tab-container {

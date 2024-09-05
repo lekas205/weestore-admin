@@ -49,19 +49,14 @@
   }
 }
 
-.table-image {
-  border-radius: 50%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  width: 2.5rem;
-  height: 2.5rem;
-}
-
 .product-page-container {
   padding-left: 2rem;
   padding-right: 2rem;
   margin-top: 2rem;
+}
+
+.product-select {
+  max-height: 60px;
 }
 
 .product-summary {
@@ -88,4 +83,12 @@
     background: linear-gradient(0deg, #CFBB03, #CFBB03);
     box-shadow: 0px 4px 4px 0px rgba(207, 187, 3, 0.25);
   }
+}
+
+.error-text {
+  min-height: 22px;
+  color: red;
+  line-height: normal;
+  padding-inline: 12px;
+  padding-top: 0.25rem
 }

@@ -1,20 +1,5 @@
 <template>
   <div>
-    <!-- <div class="upload-container" v-bind="getRootProps()">
-      <input v-bind="getInputProps()" />
-      <div class="upload-content">
-        <div class="tw-flex tw-items-center tw-flex-col">
-          <CloudUpload />
-          <p class="mb-2">
-            {{ isDragActive ? 'Drop file here' : 'Drag and drop the file here' }}
-          </p>
-          <p class="mb-4">Or</p>
-          <div class="upload-btn" @click="open">
-            Browse here
-          </div>
-        </div>
-      </div>
-    </div> -->
     <div class="image-input">
       <input
         id="app-images"
@@ -22,21 +7,36 @@
         ref="input"
         name="image"
         accept="image/*"
-        :disabled="disabled"
+        :disabled="internalDisable"
         @change="saveFileToLocal"
       />
     </div>
-    <div class="error-wrapper" v-if="errMessages.length > 0">
-      <p v-for="(message, idx) in errMessages" :key="idx" class="pl-1 text-red-accent-2">
-        {{ message }}
-      </p>
-    </div>
-    <v-row v-if="files.length > 0" class="image-preview">
-      <v-col v-for="(file, idx) in files" :key="idx" cols="3">
+    <v-row v-if="internalExistingImages.length > 0 || files.length >0" class="image-preview">
+      <v-col
+        v-for="(file, idx) in files"
+        :key="idx"
+        cols="3"
+        class="tw-relative mt-7"
+      >
         <CircleX v-if="disabled === false" class="remove-img" @click="removeFile(idx)" />
         <v-card class="my-2" elevation="2" rounded>
           <v-img
             :src="file.src"
+            height="64"
+            cover
+          ></v-img>
+        </v-card>
+      </v-col>
+      <v-col
+        v-for="(url, idx) in internalExistingImages"
+        :key="idx"
+        cols="3"
+        class="tw-relative mt-7"
+      >
+        <CircleX v-if="disabled === false" class="remove-img" @click="removeExistingImage(idx)" />
+        <v-card class="my-2" elevation="2" rounded>
+          <v-img
+            :src="url"
             height="64"
             cover
           ></v-img>
@@ -47,57 +47,83 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, watch, defineEmits } from 'vue'
+import { ref, defineProps, computed, watch } from 'vue'
 import { CircleX } from 'lucide-vue-next'
 // import { useDropzone } from "vue3-dropzone";
-import { S3Client, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3"
-import { openToastNotification } from '@/utils'
+import { handleFileUpload, openToastNotification } from '@/utils'
 
 interface CustomFile extends File {
   src?: string;
 }
 
-const emit = defineEmits(['uploaded', 'uploadFailed', 'savedFile']);
+interface Props {
+  maxFileSize?: number;
+  allowMultipleFiles?: boolean;
+  disabled?: boolean;
+  startUpload?: boolean;
+  existingImages?: Array<string>;
+}
 
-const props = defineProps({
-  maxFileSize: {
-    type: Number,
-    default: 2000000,
-  },
-  allowMultipleFiles: {
-    type: Boolean,
-    default: false,
-  },
-  startUpload: {
-    type: Boolean,
-    default: false,
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  }
+const emit = defineEmits([
+  'uploadCompleted',
+  'savedFile',
+  'fileError',
+]);
+
+const props = withDefaults(defineProps<Props>(), {
+  maxFileSize: 2000000, // 2MB
+  allowMultipleFiles: false,
+  disabled: false,
+  startUpload: false,
+  existingImages: () => [] as Array<string>,
 });
 
-const files = ref<CustomFile[]>([]);
 const input = ref<HTMLInputElement | null>(null);
-const errMessages = ref<string[]>([]);
+const files = ref<CustomFile[]>([]);
+const internalExistingImages = ref<Array<string>>(props.existingImages);
 
-// watch(() => props.startUpload, (newValue) => {
-//   if (newValue !== true) return;
 
-//   const fileIsAdded = files.value.length > 0;
-//   const hasNoImageError = !errMessages.value.includes('Please provide an image');
+const internalDisable = computed(() => {
+  if (
+    !props.allowMultipleFiles && 
+    (files.value.length == 1 || props.existingImages.length == 1) 
+  ) {
+    return true;
+  }
+  else {
+    return props.disabled
+  }
+})
 
-//   if (!fileIsAdded) {
-//     if (hasNoImageError) errMessages.value.push('Please provide an image');
-//     emit('uploadFailed');
-//     return;
-//   }
-//   console.log(newValue)
-//   console.log('calling upload')
-//   // handleFileUpload();
-//   emit('uploaded', [])
-// })
+watch(() => props.startUpload, async (upload) => {
+  if (upload !== true) return;
+
+  const fileIsAdded = files.value.length > 0;
+
+  if (!fileIsAdded) {
+    console.log('no file uploaded')
+    emit('uploadCompleted', [...internalExistingImages.value]);
+  }
+  else {
+    console.log('calling upload');
+    console.log(internalExistingImages.value)
+    const urls = await handleFileUpload([...files.value]);
+    console.log(urls)
+    if (urls) {
+      emit('uploadCompleted', [
+        ...internalExistingImages.value,
+        ...urls,
+      ]);
+    }
+    else {
+    openToastNotification({
+      message: 'Error uploading Image(s)',
+    });
+      emit('uploadCompleted', null);
+      emit('fileError', 'Error uploading Image(s)');
+    }
+  }
+})
 
 function saveFileToLocal(event: any): void {
   const file: File = event.target.files[0];
@@ -111,8 +137,6 @@ function saveFileToLocal(event: any): void {
     if (!props.allowMultipleFiles && input.value) {
       input.value.disabled = true;
     }
-
-    emit('savedFile', files.value);
   }
 
   if (input.value) {
@@ -126,6 +150,9 @@ function handleFilePreview(file: File) {
   reader.onload = function(e) {
     file['src'] = e.target?.result as string;
     files.value.push(file);
+    emit('savedFile', [
+      ...files.value
+    ]);
   };
 
   reader.readAsDataURL(file);
@@ -136,128 +163,47 @@ function removeFile(idx: number) {
   if (!props.allowMultipleFiles && input.value) {
     input.value.disabled = false;
   }
-  emit('savedFile', files.value);
+
+  emit('savedFile', [
+    ...files.value
+  ]);
+}
+
+function removeExistingImage(idx: number) {
+  internalExistingImages.value.splice(idx, 1);
+  if (!props.allowMultipleFiles && input.value) {
+    input.value.disabled = false;
+  }
+
+  emit('savedFile', [
+    ...internalExistingImages.value
+  ]);
 }
 
 function validateFile(file: File): boolean {
   let isValid = true;
-  if (file.size > props.maxFileSize) {
-    errMessages.value.push('File is too large. Maximum file size is 2MB.');
+  const fileType = file.type;
+
+  if (!fileType.startsWith('image/')) {
+    emit('fileError', 'Please upload a valid image file.');
     isValid = false;
   }
-  
-  const fileType = file.type;
-  if (!fileType.startsWith('image/')) {
-    errMessages.value.push('Please upload a valid image file.');
+  else if (file.size > props.maxFileSize) {
+    emit('fileError', 'File is too large. Maximum file size is 2MB.');
     isValid = false;
   }
 
   if (isValid === true) {
-    errMessages.value = [];
+    emit('fileError', null);
   }
 
   return isValid;
 }
 
-async function handleFileUpload(): Promise<void> {
-  console.log('called')
-  const uploadPayloads: PutObjectCommandInput[] = [];
-  const urls: string[] = [];
-  const promises: any[] = [];
-  files.value.forEach(file => {
-    const timestampprefix = new Date().getTime();
-    const Key = `morebuy/${timestampprefix}_${file.name}`;
-    uploadPayloads.push({
-      Bucket: import.meta.env.VITE_AWS_S3_BUCKET,
-      Key,
-      Body: file,
-      ContentType: file.type,
-    })
-  });
 
-  try {
-    const bucket = new S3Client({
-      credentials: {
-        accessKeyId: import.meta.env.VITE_AWS_S3_ACCESS_KEY_ID,
-        secretAccessKey: import.meta.env.VITE_AWS_S3_SECRET_ACCESS_KEY,
-      },
-      region: import.meta.env.VITE_AWS_S3_REGION,
-    });
-
-    for (const payload of uploadPayloads) {
-      const command = new PutObjectCommand(payload);
-      try {
-        await bucket.send(command);
-        urls.push(`https://fajo-bc.s3.amazonaws.com/${payload.Key}`);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  } catch (error) {
-    console.log(error);
-    openToastNotification({
-      message: 'Error uploading payment proof',
-    });
-  }
-
-  emit('uploaded', urls);
-}
-
-// const dropZoneOptions = {
-//   onDrop,
-//   maxFiles: 1,
-//   multiple: false,
-//   maxSize: 10000000,
-//   noClick: true,
-//   accept: "image/*"
-// }
-
-// const {
-//   getRootProps,
-//   getInputProps,
-//   isDragActive,
-//   acceptedFiles,
-//   open,
-//   isFileDialogActive,
-//   ...rest
-// } = useDropzone(dropZoneOptions);
-
-// function onDrop(_acceptFiles: any[], rejectReasons: any[]) {
-//   // console.log(acceptFiles);
-//   console.log(rejectReasons);
-
-//   if (rejectReasons.length > 0) {
-//     handlFileError(rejectReasons[0]);
-//   }
-// }
 </script>
 
 <style lang="scss" scoped>
-.upload-container {
-  border: 1.8px dashed black;
-  border-radius: 8px;
-  width: 100%;
-}
-
-.upload-content {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-
-.upload-btn {
-  border: 1px solid #FE0000;
-  color: #FE0000;
-  padding: 0.25rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
 .image-input {
   display: flex;
   flex-direction: column;
@@ -275,29 +221,14 @@ async function handleFileUpload(): Promise<void> {
 }
 
 .image-preview {
-  margin-top: 20px;
-  position: relative;
-
-  .v-col {
-    position: relative;
-  }
 
   .remove-img {
     color: #FE0000;
     position: absolute;
     right: 0;
     z-index: 10;
-    top: -1px;
+    top: 0px;
     cursor: pointer;
-  }
-}
-
-.error-wrapper {
-  margin-top: 0.5rem;
-
-  p {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
   }
 }
 </style>

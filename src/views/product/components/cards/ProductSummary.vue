@@ -2,64 +2,50 @@
   <div>
     <v-row class="tw-justify-evenly">
       <v-col cols="12" md="3">
-        <div class="product-summary card-blue">
-          <p class="mb-2">
-            Quantity In Stock
-          </p>
-          <p class="tw-text-xl tw-font-medium">
-            {{ $formatAsMoney(quantityInStock, false) }}
-          </p>
-        </div>
+        <StatCard
+          title="Quantity In Stock"
+          :value="$formatAsMoney(quantityInStock, false)"
+          type="blue"
+        />
       </v-col>
       <v-col cols="12" md="3">
-        <div class="product-summary card-brown">
-          <p class="mb-2">
-            Quantity Out Of Stock
-          </p>
-          <p class="tw-text-xl tw-font-medium">
-            {{ $formatAsMoney(quantityOutOfStock, false) }}
-          </p>
-        </div>
+        <StatCard
+          title="Quantity Out Of Stock"
+          :value="$formatAsMoney(quantityOutOfStock, false)"
+          type="brown"
+        />
       </v-col>
     </v-row>
     <v-row class="tw-justify-between mt-n8">
       <v-col cols="12" md="3">
-        <div class="product-summary card-red">
-          <p class="mb-2">
-            Total Sales
-          </p>
-          <p class="tw-text-xl tw-font-medium">
-            {{ $formatAsMoney(totalSales, false) }}
-          </p>
-        </div>
+        <StatCard
+          title="Total Sales"
+          :value="$formatAsMoney(totalSales, false)"
+          type="red"
+        />
       </v-col>
       <v-col cols="12" md="3">
-        <div class="product-summary card-red">
-          <p class="mb-2">
-            Value Of Quantity In Stock
-          </p>
-          <p class="tw-text-xl tw-font-medium">
-            {{ $formatAsMoney(valueOfQtyInStock) }}
-          </p>
-        </div>
+        <StatCard
+          title="Value Of Quantity In Stock"
+          :value="$formatAsMoney(valueOfQtyInStock)"
+          type="red"
+        />
       </v-col>
       <v-col cols="12" md="3">
-        <div class="product-summary card-red">
-          <p class="mb-2">
-            Quantity Out Of Stock {{ $refs }}
-          </p>
-          <p class="tw-text-xl tw-font-medium">
-            {{ $formatAsMoney(quantityOutOfStock) }}
-          </p>
-        </div>
+        <StatCard
+          title="Quantity Out Of Stock"
+          :value="$formatAsMoney(quantityOutOfStock)"
+          type="red"
+        />
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script setup lang="ts">
+import StatCard from './ProductStatCard.vue'
 
-defineProps({
+const props = defineProps({
   totalSales: {
     type: Number,
     required: true,
