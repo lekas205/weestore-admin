@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { CircleX } from 'lucide-vue-next'
 // import { useDropzone } from "vue3-dropzone";
 import { handleFileUpload, openToastNotification } from '@/utils'

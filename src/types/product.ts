@@ -4,6 +4,7 @@ import {
   CreateProductSchema,
   CreateWarehouseSchema,
   UpdateCategorySchema,
+  UpdateProductSchema,
   UpdateWarehouseSchema
 } from '@/schemas'
 import { ApiPagination, ApiResponseDto } from './common';
@@ -79,10 +80,10 @@ export type FetchAllWarehouseRes = ApiPagination<Warehouse[]>;
 
 export type UpdateWarehouseDto = z.infer<typeof UpdateWarehouseSchema>;
 
-export type FetchWarehouseByStateRes = ApiResponseDto<{
+export type WarehouseByState = {
   name: string;
   id: string;
-}[]>;
+}[];
 
 export type FetchSatesRes = ApiResponseDto<IState[]>;
 
@@ -90,3 +91,29 @@ export type FetchSatesRes = ApiResponseDto<IState[]>;
 export type CreateProductDto = z.infer<typeof CreateProductSchema>;
 
 export type CreateProductRes = ApiResponseDto;
+
+export type UpdateProductDto = z.infer<typeof UpdateProductSchema>;
+
+export type Product = {
+  product_id: string,
+  warehouse_id: string,
+  state_id: string,
+  product_name: string,
+  description: string,
+  manufacturer: string,
+  published: boolean,
+  price: number,
+  stock_quantity: number,
+  quantity_bought: number,
+  stamp_user: string | null,
+  status: string,
+  warehouse_name: string,
+  category: string,
+  images: {
+    imageUrl: string,
+    isPrimary: boolean
+  }[],
+  sizes: string[],
+}
+
+export type FetchProductsRes = ApiResponseDto<ApiPagination<Product[]>>;

@@ -12,7 +12,7 @@
           </div>
         </div>
         <div class="action-container">
-          <button class="table-btn green-btn" @click="openCreateModal = true">
+          <button class="table-btn green-btn" @click="createProductModal = true">
             <Plus class="mr-2" />
             Add Product
           </button>
@@ -21,7 +21,10 @@
 
       <v-tabs-window v-model="tab">
         <v-tabs-window-item>
-          <ProductInfoTable></ProductInfoTable>
+          <ProductInfoTable
+            :referesh-data="refreshProductInfo"
+            @refresh-done="refreshProductInfo = false"
+          />
         </v-tabs-window-item>
 
         <v-tabs-window-item>
@@ -30,10 +33,9 @@
       </v-tabs-window>
     </div>
     <CreateProduct
-      :open-modal="openCreateModal"
-      @close="openCreateModal = false"
-      :states="states"
-      :categories="categories"
+      :open-modal="createProductModal"
+      @close="createProductModal = false"
+      @completed="handleCreateCompleted()"
     />
   </div>
   <AppPageLoader v-if="isLoading" /> 
@@ -43,7 +45,6 @@
 import { ref, } from 'vue'
 import { Plus } from 'lucide-vue-next'
 import { useCategoryStore, useWarehouseStore } from '@/stores'
-import { Category, IState } from '@/types'
 
 // ================ COMPONENTS ============== //
 import ProductSummary from './components/cards/ProductSummary.vue'
@@ -52,25 +53,34 @@ import ProductMetricsTable from './components/tables/ProductMetricsTable.vue'
 import CreateProduct from './components/modals/CreateProduct.vue'
 import AppPageLoader from '@/components/AppPageLoader.vue'
 
-const isLoading = ref(false);
 const categoryStore = useCategoryStore();
 const warehouseStore = useWarehouseStore();
+
+const isLoading = ref(false);
+const createProductModal = ref(false);
 const tab = ref<any>(0);
+const refreshProductInfo = ref(false);
 const productSummary = ref({
   totalSales: 3000,
   valueOfQtyInStock: 3000000,
   quantityInStock: 7000,
   quantityOutOfStock: 30000,
 });
-const openCreateModal = ref(false);
-const categories = ref<Category[]>([]);
-const states = ref<IState[]>([]);
 
-(async function loadData() {
+// ============= METHODS ============= //
+
+function handleCreateCompleted() {
+  createProductModal.value = false;
+  refreshProductInfo.value = true;
+}
+
+(async function() {
   isLoading.value = true;
   try {
-    await categoryStore.fetchAllCategories();
-    await warehouseStore.fetchStates();
+    await Promise.all([
+      categoryStore.fetchAllCategories(),
+      warehouseStore.fetchStates(),
+    ])
   } catch (error) {
    console.log(error);
   }

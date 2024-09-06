@@ -6,12 +6,12 @@ import {
   CreateWarehouseDto,
   CreateWarehouseRes,
   FetchAllWarehouseRes,
-  FetchWarehouseByStateRes,
   QueryFilter,
   UpdateWarehouseDto,
   Warehouse,
   IState,
-  FetchSatesRes
+  FetchSatesRes,
+  WarehouseByState
 } from '@/types'
 import { handleStoreRequestError } from '@/utils'
 
@@ -68,9 +68,9 @@ export const useWarehouseStore = defineStore('warehouse', {
 
       return [];
     },
-    async fetchWarehouseByState(stateId: string) {
+    async fetchWarehouseByState(stateId: string): Promise<WarehouseByState> {
       try {
-        const { data } = await http.get<FetchWarehouseByStateRes>(
+        const { data } = await http.get<ApiResponseDto<WarehouseByState>>(
           ENDPOINTS.GET_WAREHOUSE_BY_STATE(stateId)
         );
         return data.payload;

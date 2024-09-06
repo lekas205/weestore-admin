@@ -52,7 +52,10 @@
               <AppFileUpload
                 allowMultipleFiles
                 :disabled="isLoading"
+                :startUpload="startFileUpload"
                 @savedFile="handleSavedFile"
+                @fileError="handleFileError"
+                @upload-completed="handleFileUploadSuccess"
               />
               <p class="error-text">{{ formData.images.errorMessage }}</p>
             </v-col>
@@ -219,138 +222,157 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { CustomFormData, CreateProductDto, WarehouseByState } from '@/types'
+import { formValidator, openToastNotification } from '@/utils'
+import { CreateProductSchema } from '@/schemas'
+import { useWarehouseStore, useProductStore, useCategoryStore, } from '@/stores'
+
+// ================= COMPONENTS =============== //
 import AppInput from '@/components/AppInput.vue'
 import AppButton from '@/components/AppButton.vue'
 import AppFileUpload from '@/components/AppFileUpload.vue'
-import { CustomFormData, CreateProductDto, Category, IState } from '@/types'
-import { formValidator, handleFileUpload, openToastNotification } from '@/utils'
-import { CreateProductSchema } from '@/schemas'
-import { useWarehouseStore, useProductStore } from '@/stores'
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'completed']);
 const props = defineProps({
   openModal: {
     type: Boolean,
     default: false,
   },
-  categories: {
-    type: Array,
-    default() {
-      const data: Array<Category> = [];
-      return data;
-    },
-  },
-  states: {
-    type: Array,
-    default() {
-      const data: Array<IState> = [];
-      return data;
-    },
-  },
 });
 
-const warehouseStore = useWarehouseStore();
+const categoryStore = useCategoryStore();
 const productStore = useProductStore();
+const warehouseStore = useWarehouseStore();
+
 const isLoading = ref<boolean>(false);
-const loadingWarehouse = ref(false);
+const loadingWarehouse = ref<boolean>(false);
+const startFileUpload = ref<boolean>(false);
+const warehouses = ref<WarehouseByState>([]);
 const productSizes = ['S', 'M', 'L', 'XL', 'XXL', 'NIL'];
-const warehouses = ref<any[]>([]);
-let imageFiles: Array<File> = [];
+const states = computed(() => warehouseStore.states);
+const categories = computed(() => categoryStore.categories);
+const createProductPayload = ref<CreateProductDto>({} as CreateProductDto);
 
 const formData = ref<CustomFormData>({
   name: {
     value: null,
     errorMessage: null,
-    clear: function() {
-      this.errorMessage = null;
-      this.value = null;
-    },
   },
   description: {
     value: null,
     errorMessage: null,
-    clear: function() {
-      this.errorMessage = null;
-      this.value = null;
-    },
   },
   images: {
     value: [],
     errorMessage: null,
-    clear: function() {
-      this.errorMessage = null;
-      this.value = [];
-    },
   },
   sizes: {
     value: [],
     errorMessage: null,
-    clear: function() {
-      this.errorMessage = null;
-      this.value = [];
-    },
   },
   price: {
     value: null,
     errorMessage: null,
-    clear: function() {
-      this.errorMessage = null;
-      this.value = null;
-    },
   },
   quantity: {
     value: null,
     errorMessage: null,
-    clear: function() {
-      this.errorMessage = null;
-      this.value = null;
-    },
   },
   state: {
     value: null,
     errorMessage: null,
-    clear: function() {
-      this.errorMessage = null;
-      this.value = null;
-    },
   },
   warehouse: {
     value: null,
     errorMessage: null,
-    clear: function() {
-      this.errorMessage = null;
-      this.value = null;
-    },
   },
   manufacturer: {
     value: null,
     errorMessage: null,
-    clear: function() {
-      this.errorMessage = null;
-      this.value = null;
-    },
   },
   category: {
     value: null,
     errorMessage: null,
-    clear: function() {
-      this.errorMessage = null;
-      this.value = null;
-    },
   },
 });
 
-function closeModal() {
-  if (isLoading.value === true) return;
-  for (const key in formData.value) {
-    if (Object.prototype.hasOwnProperty.call(formData.value, key)) {
-      if (formData.value[key].clear) {
-        formData.value[key].clear();
-      }
+// ================== METHODS ================= //
+function clearFormData() {
+  formData.value = {
+    name: {
+      value: null,
+      errorMessage: null,
+    },
+    description: {
+      value: null,
+      errorMessage: null,
+    },
+    images: {
+      value: [],
+      errorMessage: null,
+    },
+    sizes: {
+      value: [],
+      errorMessage: null,
+    },
+    price: {
+      value: null,
+      errorMessage: null,
+    },
+    quantity: {
+      value: null,
+      errorMessage: null,
+    },
+    state: {
+      value: null,
+      errorMessage: null,
+    },
+    warehouse: {
+      value: null,
+      errorMessage: null,
+    },
+    manufacturer: {
+      value: null,
+      errorMessage: null,
+    },
+    category: {
+      value: null,
+      errorMessage: null,
     }
   }
+}
+
+function closeModal() {
+  if (isLoading.value === true) return;
+  clearFormData();
   emit('close');
+}
+
+function handleSavedFile(files: Array<File | string>) {
+  formData.value.images.value = [...files];
+}
+
+function handleFileError(errorMessage: string | null) {
+  formData.value.images.errorMessage = errorMessage;
+}
+
+function handleFileUploadSuccess(urls: Array<string> | null) {
+  startFileUpload.value = false;
+  if (!urls) {
+    isLoading.value = false;
+    return;
+  }
+
+  const { price, quantity } = createProductPayload.value;
+
+  createProductPayload.value.images = urls.map(
+    url => ({image_url: url, s3_id: ''})
+  );
+  createProductPayload.value.price = price.toString() as any;
+  createProductPayload.value.quantity = quantity.toString() as any;
+
+  createProduct({...createProductPayload.value});
 }
 
 function updateSize(value: string) {
@@ -369,44 +391,42 @@ function updateSize(value: string) {
   }
 }
 
-function handleSavedFile(files: File[]) {
-  if (isLoading.value === true) return;
-  formData.value.images.value = files;
-  // TODO: check proxy Array
-  if (files.length  >= 1) {
-    formData.value.images.errorMessage = null;
-  }
-}
-
-async function handleStateSelection(stateId: any) {
-  await validateFormData('state');
-  if (props.states.findIndex((i: any) => i.code == stateId) >= 0) {
+async function handleStateSelection(stateId: string) {
+  if (states.value.findIndex((i: any) => i.code == stateId) >= 0) {
+    formData.value.state.errorMessage = null;
     loadingWarehouse.value = true;
     warehouses.value = await warehouseStore.fetchWarehouseByState(stateId);
     loadingWarehouse.value = false;
+  }
+  else {
+    formData.value.state.errorMessage = 'State is required';
   }
 }
 
 async function validateFormData(field?: keyof CreateProductDto, proceedOnSuccess = false) {
   const payload = await formValidator<CreateProductDto>(formData, CreateProductSchema, field);
   if (payload && proceedOnSuccess) {
-    await createProduct(payload);
+    isLoading.value = true;
+    createProductPayload.value = payload;
+    startFileUpload.value = true;
   }
 }
 
 async function createProduct(payload: CreateProductDto) {
   isLoading.value = true;
   try {
-    payload.price = payload.price.toString() as any;
-    payload.quantity = payload.quantity.toString() as any;
-    const urls = await handleFileUpload(payload.images);
-    if (urls) {
-      payload.images = [];
-      urls.forEach(url => payload.images.push({ image_url: url }))
-    }
+    // payload.price = payload.price.toString() as any;
+    // payload.quantity = payload.quantity.toString() as any;
+    // const urls = await handleFileUpload(payload.images);
+    // if (urls) {
+    //   payload.images = [];
+    //   urls.forEach(url => payload.images.push({ image_url: url }))
+    // }
 
     const success = await productStore.createProduct(payload);
     if (success) {
+      emit('completed');
+      clearFormData();
       openToastNotification({
         message: 'Product created successfully'
       })
@@ -414,6 +434,7 @@ async function createProduct(payload: CreateProductDto) {
   } catch (error) {
     console.log(error);
   }
+  isLoading.value = false;
 }
 
 
