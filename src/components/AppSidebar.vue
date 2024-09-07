@@ -130,7 +130,7 @@ const sidebarLinks = ref<SidebarLink[]>([
   {
     id: 2,
     title: 'Orders',
-    link: null,
+    link: ROUTES.orders.name,
     isActive: false,
     icon: OrdersIcon,
     activeIcon: OrdersIconActive,
@@ -139,7 +139,7 @@ const sidebarLinks = ref<SidebarLink[]>([
   {
     id: 3,
     title: 'Customers',
-    link: null,
+    link: ROUTES.customer.name,
     isActive: false,
     icon: CustomersIcon,
     activeIcon: CustomersIconActive,

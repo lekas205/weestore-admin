@@ -22,6 +22,15 @@
           <Plus class="mr-2" />
           {{ createBtnText }}
         </button>
+
+        <button
+          v-if="hasDelete"
+          class="table-btn red-btn"
+          @click="$emit('delete')"
+        >
+          <Trash2 class="mr-2" />
+           Delete
+        </button>
       </div>
     </div>
     <slot />
@@ -29,15 +38,19 @@
 </template>
 
 <script setup lang="ts">
-import { Plus } from 'lucide-vue-next'
+import { Plus, Trash2 } from 'lucide-vue-next'
 import AppInput from '@/components/AppInput.vue'
 
-defineEmits(['create', 'search']);
+defineEmits(['create', 'search', 'delete']);
 
 defineProps({
   searchLabelText: {
     type: String,
     required: false,
+  },
+  hasDelete: {
+    type: Boolean,
+    default: false
   },
   createBtnText: {
     type: String,
