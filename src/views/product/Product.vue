@@ -41,6 +41,7 @@
     <EditProduct
       :open-modal="editProductModal"
       @close="editProductModal = false"
+      @completed="handleEditCompleted()"
     />
   </div>
   <AppPageLoader v-if="isLoading" /> 
@@ -78,6 +79,11 @@ const productSummary = ref({
 
 function handleCreateCompleted() {
   createProductModal.value = false;
+  refreshProductInfo.value = true;
+}
+
+function handleEditCompleted() {
+  editProductModal.value = false;
   refreshProductInfo.value = true;
 }
 

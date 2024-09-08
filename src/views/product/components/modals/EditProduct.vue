@@ -322,7 +322,7 @@ watch(selectedProduct, async (newValue) => {
   formData.value.price.value = data.price;
   formData.value.quantity.value = data.stock_quantity;
   formData.value.state.value = data.state_id;
-  formData.value.category.value = newValue.category;
+  formData.value.category.value = newValue.category_id;
   formData.value.manufacturer.value = newValue.manufacturer;
 
   loadingWarehouse.value = true;

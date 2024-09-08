@@ -8,10 +8,10 @@
         <h1 class="tw-text-4xl mb-10 mt-10">Login</h1>
         <form @submit.prevent="login">
           <div class="mb-6">
-            <p class="tw-font-medium">Email</p>
+            <p class="tw-font-medium">Username</p>
             <app-input
               v-model="formData.username"
-              label="Email"
+              label="Username"
               type="text"
               @blur="validateUsername"
               @input="validateUsername"

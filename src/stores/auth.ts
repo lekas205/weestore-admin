@@ -6,17 +6,11 @@ import { LoginDto, LoginResDto } from '@/types'
 import { handleStoreRequestError } from '@/utils'
 
 export const useAuthStore = defineStore('auth', {
-  state: () => ({ count: 0, loader: false }),
+  state: () => ({ loader: false }),
 
-  getters: {
-    doubleCount: (state) => state.count * 2,
-  },
+  getters: {},
 
   actions: {
-    increaseCount() {
-      this.count++;
-    },
-
     toggleLoader(): void {
       this.loader = !this.loader;
     },
@@ -49,7 +43,7 @@ export const useAuthStore = defineStore('auth', {
       http.request({
         url: ENDPOINTS.LOGOUT,
         method: 'get',
-        headers: {'Authorization': token},
+        headers: {'Authorization': `Bearer ${token}`},
       })
       .catch(e => console.log(e))
       this.removeSavedAuthToken();
