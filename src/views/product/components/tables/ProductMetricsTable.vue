@@ -12,13 +12,33 @@
     >
       <template v-slot:item.name="{ item }">
         <div class="tw-flex tw-items-center">
-          <div class="mr-3">
+          <!-- <div class="mr-3">
             <TableImage :url="item.icon" />
-          </div>
+          </div> -->
           <p class="tw-text-nowrap">
-            {{ item.name }}
+            {{ item.product_name }}
           </p>
         </div>
+      </template>
+
+      <template v-slot:item.price="{ item }">
+        {{ $formatAsMoney(item.price) }}
+      </template>
+
+      <template v-slot:item.stock_quantity="{ item }">
+        {{ $formatAsMoney(item.stock_quantity, false) }}
+      </template>
+
+      <template v-slot:item.quantity_bought="{ item }">
+        {{ $formatAsMoney(item.quantity_bought, false) }}
+      </template>
+
+      <template v-slot:item.in_stock_value="{ item }">
+        {{ $formatAsMoney(item.in_stock_value) }}
+      </template>
+
+      <template v-slot:item.out_stock_value="{ item }">
+        {{ $formatAsMoney(item.out_stock_value) }}
       </template>
 
       <!-- Table Footer -->
@@ -31,55 +51,55 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { formatAsMoney } from '@/utils'
-import { Pagination } from '@/types'
-import LoginImage from '@/assets/images/png/login-image.png'
+import { Pagination, ProductMetrics, QueryFilter } from '@/types'
+import { useProductStore } from '@/stores'
 
 // ================ COMPONENTS ================ //
 import TableWrapper from '@/components/AppTableWrapper.vue'
 import TableFooter from '@/components/AppTableFooter.vue'
 import TableImage from '@/components/AppTableImage.vue'
 
+const productStore = useProductStore();
+
 const isLoading = ref(false);
+const items = computed<ProductMetrics[]>(() => productStore.productMetricsList);
+const pagination = computed<Pagination>(() => productStore.productMetricsPagination);
+const queryFilter = ref<QueryFilter>({ page: 1 });
 const headers = ref<any[]>([
   {
     title: "PRODUCT NAME",
     align: 'start',
-    key: "name",
+    key: "product_name",
   },
   { title: "CATEGORY", key: "category" },
   { title: "MANUFACTURER", key: "manufacturer" },
-  { title: "WAREHOUSE", key: "warehouse" },
+  { title: "WAREHOUSE", key: "warehouse_name" },
   { title: "SALES PRICE", key: "price" },
-  { title: "QTY-A", key: "quantity" },
-  { title: "STATUS", key: "statue" },
-  { title: "VIEW", key: "action" },
-  { title: "PUBLISHED", key: "isPublished" },
-  { title: "ACTION", key: "action", align: 'center' },
+  { title: "QTY-A", key: "stock_quantity" },
+  { title: "QTY-B", key: "quantity_bought" },
+  { title: "Value Of Qty In Stock", key: "in_stock_value" },
+  { title: "Value Of Qty Out Of Stock", key: "out_stock_value" },
 ]);
 
-const items = computed<any[]>(() => {
-  return [
-    {
-      name: 'Nivea Roll On',
-      icon: LoginImage,
-      category: 'Men',
-      manufacturer: 'Friesland',
-      warehouse: 'Ikotun',
-      price: formatAsMoney(30000),
-      isPublished: false,
-    },
-  ]
-});
+function handleNextPage(page: number) {
+  queryFilter.value.page = page;
+  loadProductMetrics();
+}
 
-const pagination = computed<Pagination>(() => {
-  return {
-    total: 0,
-    currentPageTotal: 0,
-    currentPageNo: 1,
-    totalNoPages: 1
+async function loadProductMetrics() {
+  isLoading.value = true;
+  try {
+    await productStore.fetchProductMetrics();
+  } catch (error) {
+   console.log(error);
   }
-});
+  isLoading.value = false;
+}
+
+// ============ ON DEFORE MOUNTED ================ //
+(async function() {
+  loadProductMetrics();
+})()
 
 </script>
 

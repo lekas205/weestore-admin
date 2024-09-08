@@ -80,7 +80,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const input = ref<HTMLInputElement | null>(null);
 const files = ref<CustomFile[]>([]);
-const internalExistingImages = ref<Array<string>>(props.existingImages);
+const internalExistingImages = ref<Array<string>>([...props.existingImages]);
 
 
 const internalDisable = computed(() => {

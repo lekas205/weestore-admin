@@ -46,7 +46,7 @@ export type Warehouse = {
   warehouse_name: string;
   address: string;
   city: string;
-  manager_name: string,
+  manager_name: string;
   postal_code: string | null;
   country: string | null;
   phone: string;
@@ -95,25 +95,48 @@ export type CreateProductRes = ApiResponseDto;
 export type UpdateProductDto = z.infer<typeof UpdateProductSchema>;
 
 export type Product = {
-  product_id: string,
-  warehouse_id: string,
-  state_id: string,
-  product_name: string,
-  description: string,
-  manufacturer: string,
-  published: boolean,
-  price: number,
-  stock_quantity: number,
-  quantity_bought: number,
-  stamp_user: string | null,
-  status: string,
-  warehouse_name: string,
-  category: string,
+  product_id: string;
+  warehouse_id: string;
+  state_id: string;
+  product_name: string;
+  description: string;
+  manufacturer: string;
+  published: boolean;
+  price: number;
+  stock_quantity: number;
+  quantity_bought: number;
+  stamp_user: string | null;
+  status: string;
+  warehouse_name: string;
+  category: string;
   images: {
-    imageUrl: string,
+    imageUrl: string;
     isPrimary: boolean
-  }[],
-  sizes: string[],
+  }[];
+  sizes: string[];
+}
+
+export type ProductMetrics = {
+  product_id: string;
+  warehouse_id: string;
+  state_id: string;
+  product_name: string;
+  description: string;
+  manufacturer: string;
+  published: boolean;
+  price: number;
+  stock_quantity: number;
+  quantity_bought: number;
+  stamp_user: string | null;
+  state: {
+    code: string;
+    name: string
+  };
+  warehouse_name: string;
+  in_stock_value: number;
+  out_stock_value: number;
+  category: string;
 }
 
 export type FetchProductsRes = ApiResponseDto<ApiPagination<Product[]>>;
+export type FetchProductMetricsRes = ApiResponseDto<ApiPagination<ProductMetrics[]>>;

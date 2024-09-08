@@ -24,6 +24,7 @@
           <ProductInfoTable
             :referesh-data="refreshProductInfo"
             @refresh-done="refreshProductInfo = false"
+            @edit-product="editProductModal = true"
           />
         </v-tabs-window-item>
 
@@ -36,6 +37,10 @@
       :open-modal="createProductModal"
       @close="createProductModal = false"
       @completed="handleCreateCompleted()"
+    />
+    <EditProduct
+      :open-modal="editProductModal"
+      @close="editProductModal = false"
     />
   </div>
   <AppPageLoader v-if="isLoading" /> 
@@ -51,6 +56,7 @@ import ProductSummary from './components/cards/ProductSummary.vue'
 import ProductInfoTable from './components/tables/ProductInformationTable.vue'
 import ProductMetricsTable from './components/tables/ProductMetricsTable.vue'
 import CreateProduct from './components/modals/CreateProduct.vue'
+import EditProduct from './components/modals/EditProduct.vue'
 import AppPageLoader from '@/components/AppPageLoader.vue'
 
 const categoryStore = useCategoryStore();
@@ -58,6 +64,7 @@ const warehouseStore = useWarehouseStore();
 
 const isLoading = ref(false);
 const createProductModal = ref(false);
+const editProductModal = ref(false);
 const tab = ref<any>(0);
 const refreshProductInfo = ref(false);
 const productSummary = ref({

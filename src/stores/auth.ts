@@ -45,7 +45,13 @@ export const useAuthStore = defineStore('auth', {
     },
 
     logout(): void {
-      http.get(ENDPOINTS.LOGOUT).catch();
+      const token = localStorage.getItem(SAVED_AUTH_TOKEN_KEY);
+      http.request({
+        url: ENDPOINTS.LOGOUT,
+        method: 'get',
+        headers: {'Authorization': token},
+      })
+      .catch(e => console.log(e))
       this.removeSavedAuthToken();
       router.push({ name: ROUTES.login.name });
     },

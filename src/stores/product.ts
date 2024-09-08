@@ -6,9 +6,11 @@ import {
   ApiResponseDto,
   CreateProductDto,
   CreateProductRes,
+  FetchProductMetricsRes,
   FetchProductsRes,
   Pagination,
   Product,
+  ProductMetrics,
   QueryFilter,
   UpdateProductDto
 } from '@/types'
@@ -16,6 +18,7 @@ import { handleStoreRequestError } from '@/utils'
 
 interface State {
   productData: ApiPagination<Product[]> | null;
+  productMetricsData: ApiPagination<ProductMetrics[]> | null;
   product: Product | null;
   selectedProduct: Product | null;
 }
@@ -23,13 +26,16 @@ interface State {
 export const useProductStore = defineStore('product', {
   state: (): State => ({
     productData: null,
+    productMetricsData: null,
     product: null,
     selectedProduct: null,
   }),
 
   getters: {
     productList: (state): Product[] => state.productData?.rows || [],
+    productMetricsList: (state): ProductMetrics[] => state.productMetricsData?.rows || [],
     productPagination: (state): Pagination => state.productData?.paging || DEFAULT_PAGINATION,
+    productMetricsPagination: (state): Pagination => state.productMetricsData?.paging || DEFAULT_PAGINATION,
   },
 
   actions: {
@@ -53,6 +59,20 @@ export const useProductStore = defineStore('product', {
           { params }
         );
         this.productData = data.payload;
+        return data.payload.rows;
+      } catch (error) {
+        handleStoreRequestError(error);
+      }
+
+      return [];
+    },
+    async fetchProductMetrics(params?: QueryFilter): Promise<ProductMetrics[]> {
+      try {
+        const { data } = await http.get<FetchProductMetricsRes>(
+          ENDPOINTS.PRODUCT_METRICS,
+          { params }
+        );
+        this.productMetricsData = data.payload;
         return data.payload.rows;
       } catch (error) {
         handleStoreRequestError(error);

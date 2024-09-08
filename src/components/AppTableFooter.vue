@@ -10,13 +10,16 @@
         v-model="currentPage"
         :length="totalNoPages"
         :total-visible="5"
+        @update:modelValue="$emit('next', $event)"
       ></v-pagination>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+
+defineEmits(['next']);
 
 const props = defineProps({
   total: {
@@ -37,9 +40,7 @@ const props = defineProps({
   },
 })
 
-const currentPage = computed(() => {
-  return props.currentPageNo;
-})
+const currentPage = ref(props.currentPageNo);
 
 </script>
 
