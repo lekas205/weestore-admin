@@ -4,29 +4,29 @@
             <h1 class="tw-text-[30px] tw-font-bold tw-mb-4">Order Invoice</h1>
             <div class="tw-flex tw-items-center tw-gap-3">
                 <span>STATUS</span>
-                <app-chip status="pending"></app-chip>
+                <app-chip :status="orderDetails.status.toLowerCase()"></app-chip>
             </div>
 
             <div class="tw-flex tw-justify-between tw-mt-[100px] tw-mb-[70px]">
                 <div class="t">
                     <h4 class="tw-font-bold">DATE</h4>
-                    <p>May 18, 2024</p>
+                    <p> {{ formatDate(orderDetails.created_data) }} </p>
                 </div>
 
                 <div class="tw-text-center">
                     <h4 class="tw-font-bold">ORDER NUMBER</h4>
-                    <p>#1119</p>
+                    <p>#{{orderDetails.order_no }}</p>
                 </div>
 
                 <div class="tw-text-center tw-w-[300px]">
                     <h4 class="tw-font-bold"> INVOICE TO </h4>
-                    <p>Adekunle seun 912423432 Adekunle@gmail.com 23 Ire Akari Estte, Ajoa Lgos Warehouse 1 Ibadan</p>
+                    <p> {{ orderDetails.customer_name }} 912423432 Adekunle@gmail.com 23 Ire Akari Estte, Ajoa Lgos Warehouse 1 Ibadan</p>
                 </div>
             </div>
 
             <v-data-table 
                 hide-default-footer 
-                :items="items" 
+                :items="orderedItems" 
                 :loading="loading" 
                 :headers="headers"
                 loading-text="Loading... Please wait" 
@@ -40,12 +40,12 @@
         <div class="tw-flex tw-justify-between tw-bg-[#EFEEEE] tw-border tw-border-[#A4A9AE75] tw-py-[20px] tw-px-[60px] tw-mt-[40px]">
                 <div class="tw-text-center">
                     <h4 class="tw-font-bold tw-mb-2">OPAYMENT METHOD</h4>
-                    <p>Pay on Delivery</p>
+                    <p> {{PAYMENT_METHOD[orderDetails.payment_method]  }} </p>
                 </div>
 
                 <div class="tw-text-center">
                     <h4 class="tw-font-bold tw-mb-2">TOTAL AMOUNT</h4>
-                    <p class="tw-text-primary tw-font-[500]">#3,500</p>
+                    <p class="tw-text-primary tw-font-[500]"> {{ formatAsMoney(orderDetails.amount) }} </p>
                 </div>
             </div>
         </div>
@@ -60,9 +60,21 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import AppChip from "../../components/AppChip.vue";
+import { computed, onMounted, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useRoute } from "vue-router";
 
+import { useOrderStore } from "@/stores";
+import AppChip from "@/components/AppChip.vue";
+import { PAYMENT_METHOD } from "@/constants";
+import { formatDate, formatTime, formatAsMoney, formatText, capitalizeFirstLeters } from "@/utils";
+
+const orderStore = useOrderStore();
+const { 
+    orderDetails
+} = storeToRefs(orderStore)
+
+const route = useRoute()
 const headers = ref([
 {
     align: 'start',
@@ -70,12 +82,24 @@ const headers = ref([
     sortable: false,
     title: 'SR',
     },
-    { key: 'product_tile', title: 'Product Title' },
+    { key: 'product_name', title: 'Product Title' },
     { key: 'quantity', title: 'Quantity' },
     { key: 'price', title: 'Item Price' },
     { key: 'amount', title: 'Amount' },
-
-
-
 ])
+
+const orderedItems = computed(()=>{
+    return orderDetails.value?.order_items?.map((elm:any, index:number)=> {
+        return {
+            sr: index + 1,
+            product_name: capitalizeFirstLeters(elm.product_name),
+            price: formatAsMoney(elm.price),
+            amount: formatAsMoney(elm.amount),
+            quantity: elm.quantity
+        }
+    })
+})
+onMounted(()=>{
+
+})
 </script>

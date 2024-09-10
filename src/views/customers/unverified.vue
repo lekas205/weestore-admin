@@ -14,17 +14,17 @@
             >
 
                 <template v-slot:item.status="{ item }">
-                    <p class="text-primary text-capitalize"> {{ item.status}} </p>
+                    <p class="text-primary text-capitalize"> Unverified </p>
                 </template>
                 <template v-slot:item.action="{ item }">
                     <div class="tw-flex tw-items-center tw-gap-4">
-                        <v-btn color="primary"> Verify </v-btn>
+                        <v-btn color="primary" @click="verify(item.id)"> Verify </v-btn>
                         <v-btn color="primary"> Delete </v-btn>
                     </div>
                 </template>
 
                 <template  v-slot:bottom>
-                    <TableFooter v-bind="pagination" />
+                    <TableFooter v-bind="pagination" v-model:page="page" />
                 </template>
             </v-data-table>
         </app-table-wrapper>
@@ -32,14 +32,25 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted, computed , watch} from "vue";
+import { storeToRefs } from "pinia";
+import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
 import { ChevronLeft } from 'lucide-vue-next'
 
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
+import { useCustomersStore, useAuthStore } from "@/stores";
+import { formatDate, formatText, formatAsMoney , openToastNotification} from "@/utils";
+
+const authStore = useAuthStore()
+const customerStore = useCustomersStore()
+
+const { unverifiedCustomers: customer } = storeToRefs(customerStore)
 
 const router = useRouter()
+
+const page = ref(1)
 const headers = ref([
     {
     align: 'start',
@@ -53,14 +64,43 @@ const headers = ref([
     { key: 'action', title: 'Action' },
 ])
 
-const items = ref([
-    {
-        id: 123,
-        date: "May 16 2024 9:23 AM",
-        name: "Olalekan Micheal",
-        email: "micheal@gmail.com",
-        phone_no: "09087543243",
-        status: "unverified",
+const items = computed(()=> {
+    return customer.value?.data?.map((elm: any)=>{
+    return {
+        id: elm.customer_id,
+        date: formatDate(elm.registration_date),
+        name: `${formatText(elm.first_name)} ${formatText(elm.last_name)}`,
+        email: elm.email,
+        phone_no: elm.phone,
     }
-])
+   })
+})
+
+const pagination = computed(()=> customer.value?.pagination)
+
+const fetchCustomer = async (query:any)=>{
+    await  customerStore.getUnverifiedCustomer(query)
+}
+
+watch(()=> page.value, (newPage)=>{
+if(newPage)  fetchCustomer({page: newPage})
+})
+
+const verify = async(id: string) => {
+    authStore.toggleLoader();
+   await customerStore.verifyCustomer(id)
+   await fetchCustomer({page: page.value})
+   authStore.toggleLoader();
+
+   openToastNotification({
+      message: `Customer has been verified successfully`,
+      variant: 'success'
+    });
+}
+
+onMounted(async ()=>{
+    authStore.toggleLoader();
+    await fetchCustomer({page: page.value})
+    authStore.toggleLoader();
+})
 </script>

@@ -157,7 +157,7 @@ const sidebarLinks = ref<SidebarLink[]>([
   {
     id: 5,
     title: 'Wallets',
-    link: null,
+    link: ROUTES.wallet.name,
     isActive: false,
     icon: WalletsIcon,
     activeIcon: WalletsIconActive,
@@ -166,7 +166,7 @@ const sidebarLinks = ref<SidebarLink[]>([
   {
     id: 6,
     title: 'Credits',
-    link: null,
+    link: ROUTES.credit.name,
     isActive: false,
     icon: CreditsIcon,
     activeIcon: CreditsIconActive,

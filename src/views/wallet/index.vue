@@ -1,7 +1,7 @@
 <template>
-    <section class="px-4 py-5">
-        <StatCard />
-
+    <section class="tw-p-[30px]">
+        <!-- <v-btn color="primary" @click="$router.back()"> <ChevronLeft/> Back </v-btn> -->
+        <stat-card />
         <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]">
             <v-data-table 
                 hide-default-footer 
@@ -11,15 +11,8 @@
                 loading-text="Loading... Please wait" 
                 class="custom-table"
             >
-                <template v-slot:item.action="{ item }">
-                    <div class="tw-flex tw-items-center tw-gap-4">
-                        <ZoomIn @click="router.push('/customers/'+item.id)" />
-                        <Trash2 />
-                    </div>
-                </template>
-
                 <template  v-slot:bottom>
-                    <TableFooter v-bind="pagination" v-model:page="page" />
+                    <TableFooter v-bind="pagination"  v-model:page="page"/>
                 </template>
             </v-data-table>
         </app-table-wrapper>
@@ -27,39 +20,34 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref , watch} from "vue";
-import { useRouter } from "vue-router";
+import { onMounted, ref, computed , watch} from "vue";
 import { storeToRefs } from "pinia";
-import { Trash2, ZoomIn } from 'lucide-vue-next'
+import { useRouter } from "vue-router";
+import { ChevronLeft } from 'lucide-vue-next'
 
-import StatCard from "./components/StatCard.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
 import { useCustomersStore, useAuthStore } from "@/stores";
-import { formatDate, formatText } from "@/utils";
+import StatCard from "./components/StatCard.vue";
+import { formatText } from "@/utils";
 
 
-const router = useRouter();
+const router = useRouter()
 const authStore = useAuthStore()
 const customerStore = useCustomersStore()
 
 const { customers } = storeToRefs(customerStore)
 
 const page = ref(1)
-const loading = ref(false);
 const headers = ref([
-    // {
-    //     align: 'start',
-    //     key: 'id',
-    //     sortable: false,
-    //     title: 'ID',
-    // },
-    { key: 'date', title: 'Joining Date' },
-    { key: 'name', title: 'Name' },
-    { key: 'email', title: 'Email' },
+    {
+    align: 'start',
+    key: 'name',
+    sortable: false,
+    title: 'Client Name',
+    },
     { key: 'phone_no', title: 'Phone Number' },
-    { key: 'platform', title: 'How do you hear about us' },
-    { key: 'action', title: 'Action' },
+    { key: 'amount', title: 'Amount In Account' },
 ])
 
 const pagination = computed(()=> customers.value?.pagination)
@@ -67,14 +55,12 @@ const items = computed(() => {
     return customers.value?.data?.map((elm: any)=> {
         return  {
             id: elm.customer_id,
-            date: formatDate(elm.registration_date),
             name: `${formatText(elm.first_name)} ${formatText(elm.last_name)}`,
-            email: elm.email,
             phone_no: elm.phone,
-            platform: elm.platform ?? "--",
         }
     })
 })
+
 
 const fetchCustomer = async (query:any)=>{
     await  customerStore.fetchCustomers(query)
@@ -85,7 +71,7 @@ watch(()=> page.value, (newPage)=>{
 if(newPage)  fetchCustomer({page: newPage})
 })
 
-onMounted( async()=>{
+onMounted(async ()=>{
     authStore.toggleLoader();
     await fetchCustomer({page: page.value})
     authStore.toggleLoader();

@@ -23,25 +23,31 @@
   const router = useRouter()
   const summaryData = ref([
     {
-      title: ' All Customers',
+      title: 'No of Disbursement',
       amount: '0',
       color: 'tw-bg-primary',
       link: null
     },
     {
-      title: 'Active Customers',
+      title: 'Active Credit',
       amount: '320',
       color: 'tw-bg-blue',
       link: null
     },
     {
-      title: 'In Active Customers',
+      title: 'Amount Disbursed',
       amount: '322',
-      color: 'tw-bg-lime',
+      color: 'tw-bg-orange',
       link: null
     },
     {
-      title: 'Unverified Customers',
+      title: 'Amount Repaid',
+      amount: '40',
+      color: 'tw-bg-lime',
+      link: '/customers/unverified'
+    },
+    {
+      title: 'Pending Loan Repayment',
       amount: '40',
       color: 'tw-bg-wine',
       link: '/customers/unverified'

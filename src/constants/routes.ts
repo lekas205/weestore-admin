@@ -40,13 +40,13 @@ export const ROUTES = {
     title: "Orders Management",
   },
 
-  viewOrders: {
+  view_orders: {
     path: "/order/:id",
     name: "ViewOrders",
     requiresAuth: true,
     title: "View Order",
   },
-  orderReturn: {
+  order_return: {
     path: "/orders/returned-order",
     name: "ReeturnedOrders",
     requiresAuth: true,
@@ -82,11 +82,17 @@ export const ROUTES = {
     requiresAuth: true,
     title: "Wallets",
   },
+  topup_approval: {
+    path: "/wallets/topup-approval",
+    name: "WalletsTopupApproval",
+    requiresAuth: true,
+    title: "Pending TopUp Approval",
+  },
   credit: {
     path: "/credits",
     name: "Credits",
     requiresAuth: true,
-    title: "Credits",
+    title: "Credits Management",
   },
   payment: {
     path: "/payments",

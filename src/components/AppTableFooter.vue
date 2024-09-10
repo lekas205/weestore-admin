@@ -16,8 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-
+import { computed, watch } from 'vue'
 const props = defineProps({
   total: {
     type: Number,
@@ -35,11 +34,24 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  page:{
+    type: Number,
+    required: true,
+  }
 })
 
-const currentPage = computed(() => {
-  return props.currentPageNo;
-})
+const emits =defineEmits<{
+  (e: "update:page", page: number): void
+}>()
+
+const currentPage = computed({
+    get() {
+        return props.page;
+    },
+    set(newValue) {
+        emits("update:page", newValue);
+    },
+});
 
 </script>
 

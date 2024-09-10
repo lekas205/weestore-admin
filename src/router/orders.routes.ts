@@ -14,22 +14,22 @@ export const ordersRoutes = [
     },
   },
   {
-    path: ROUTES.viewOrders.path,
-    name: ROUTES.viewOrders.name,
+    path: ROUTES.view_orders.path,
+    name: ROUTES.view_orders.name,
     component: ViewOrder,
     meta: {
       layout: PRIVATE,
-      title: ROUTES.viewOrders.title,
+      title: ROUTES.view_orders.title,
       requiresAuth: true,
     },
   },
   {
-    path: ROUTES.orderReturn.path,
-    name: ROUTES.orderReturn.name,
+    path: ROUTES.order_return.path,
+    name: ROUTES.order_return.name,
     component: ReturnProcessing,
     meta: {
       layout: PRIVATE,
-      title: ROUTES.orderReturn.title,
+      title: ROUTES.order_return.title,
       requiresAuth: true,
     },
   },

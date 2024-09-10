@@ -1,10 +1,10 @@
 <template>
     <div class="pa-5">
         <div class="tw-flex">
-            <h2 class="tw-text-[32px] tw-font-bold tw-mr-auto"> {{ customer.name }}  </h2>
+            <h2 class="tw-text-[32px] tw-font-bold tw-mr-auto"> {{ formatText(customer.first_name) }} {{ formatText(customer.last_name) }}  </h2>
             <v-btn color="primary"> Edit </v-btn>
 
-            <div class="tw-bg-[#FF0F00AD] tw-text-white pa-4 tw-w-[300px] tw-ml-[40px] rounded-lg">
+            <!-- <div class="tw-bg-[#FF0F00AD] tw-text-white pa-4 tw-w-[300px] tw-ml-[40px] rounded-lg">
                 <h4 class="tw-text-[24px] tw-underline" >Bank Details</h4>
                 <div class="tw-flex tw-justify-between mb-2">
                     <p class="tw-text-[20px]">Bank Name</p>
@@ -18,7 +18,7 @@
                     <p class="tw-text-[20px]">Acct Number</p>
                     <p class="tw-text-[20px]"> {{ customer.bankDetails.acct_no }} </p>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <!-- customer personal data -->
@@ -27,7 +27,7 @@
             <v-col col="6" :md="3">
                 <p>FULL NAME</p>
                 <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
-                    {{ customer.name }}
+                    {{ `${ formatText(customer.first_name)} ${formatText(customer.last_name)} `}}
                 </div>
             </v-col>
             <v-col col="6" :md="3">
@@ -39,7 +39,7 @@
             <v-col col="6" :md="3">
                 <p>PHONE NUMBER</p>
                 <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
-                    {{ customer.phone_no }}
+                    {{ customer.phone }}
                 </div>
             </v-col>
             <v-col col="6" :md="3">
@@ -86,40 +86,54 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, markRaw } from "vue";
+import { storeToRefs } from "pinia";
+import { useRoute } from "vue-router";
+import { ref, markRaw, onMounted, computed } from "vue";
+
 import AppTab from "@/components/AppTab.vue";
 import OrderHistoryTable from "./components/OrderHistoryTable.vue";
 import TransactionHistory from "./components/TransactionHistory.vue";
 
+import { PAYMENT_METHOD } from "@/constants/common";
+import { useCustomersStore, useAuthStore } from "@/stores";
+import { formatDate, formatText, formatAsMoney } from "@/utils";
+
+const route = useRoute();
+const authStore = useAuthStore()
+const customerStore = useCustomersStore()
+
+const { custommerDetails: customer } = storeToRefs(customerStore)
+
 const tabTitles =markRaw(["order history", "transaction history"])
-const customer = ref({
-    name: "Wale Benson",
-    phone_no: "0909876534",
-    email: "walebenson@gmail.com",
-    bankDetails: {
-        acct_name: "walle",
-        bank_name: "UBA",
-        acct_no: "0748387732"
-    }
+
+const orderhistoryData = computed(()=> {
+    return customer.value.orders?.map((elm:any)=> {
+        return   {
+            order_number: elm.order_no ?? "--",
+            date:  formatDate(elm.created_data),
+            method: PAYMENT_METHOD[elm.payment_method],
+            amount: formatAsMoney(elm.amount),
+            status: elm.status.toLowerCase()
+        }
+    })
 })
 
-const orderhistoryData = ref([
-    {
-        order_no: "1234",
-        date: "May 16 2024 9:23 AM",
-        method: "transfer",
-        amount: "3000",
-        status: "delivered"
-    }
-])
+const transactionistoryData = computed(()=> {
+    return customer.value.transactions?.map((elm:any)=> {
+        return   {
+            order_no: elm.order_no ?? "--",
+            date:  elm.transaction_date,
+            method: PAYMENT_METHOD[elm.transaction_purpose],
+            amount: formatAsMoney(elm.amount),
+            position: elm.transaction_mode,
+            purpose: elm.purpose
+        }
+    })
+})
 
-const transactionistoryData = ref([
-    {
-        purpose: "Account Topup",
-        date: "May 16 2024 9:23 AM",
-        method: "Transfer",
-        amount: "3000",
-        position: "Debit"
-    }
-])
+onMounted(async ()=>{
+    authStore.toggleLoader();
+    await customerStore.getSingleCustomer(route.params.id as string)
+    authStore.toggleLoader();
+})
 </script>

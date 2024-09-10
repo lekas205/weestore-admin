@@ -5,15 +5,19 @@ import dashboardRoutes from "./dashboard.routes";
 import productRoutes from "./product.routes";
 import ordersRoutes from "./orders.routes";
 import customerRoutes from "./customer.routes";
+import creditRoutes from "./credit.routes";
+import walletRoutes from "./wallet.route";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     ...authRoutes,
     ...ordersRoutes,
+    ...creditRoutes,
     ...dashboardRoutes,
     ...productRoutes,
     ...customerRoutes,
+    ...walletRoutes,
   ],
 });
 

@@ -1,5 +1,5 @@
 <template>
-     <v-chip :color="chipColors[status]">
+     <v-chip :color="chipColors[status.toLowerCase()]">
          <span class="text-capitalize item">{{ status }} </span>
     </v-chip>
 </template>
@@ -15,6 +15,7 @@ const chipColors = ref({
     "pending": "yellow",
     "in trnasit": "orange",
     "processing": "purple",
+    "return order": 'red',
     "delivered": "success",
     "cancelled": "primary"
 })
