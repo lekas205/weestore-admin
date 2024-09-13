@@ -2,8 +2,7 @@
     <section class="tw-p-[30px]">
         <v-btn color="primary" @click="$router.back()"> <ChevronLeft/> Back </v-btn>
 
-
-        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]">
+        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]" @search="search">
             <v-data-table 
                 hide-default-footer 
                 :items="items" 
@@ -50,7 +49,13 @@ const { unverifiedCustomers: customer } = storeToRefs(customerStore)
 
 const router = useRouter()
 
-const page = ref(1)
+const page = ref(1);
+const loading = ref(false);
+const payload = ref({
+    page: 1,
+    search: ""
+});
+
 const headers = ref([
     {
     align: 'start',
@@ -79,12 +84,24 @@ const items = computed(()=> {
 const pagination = computed(()=> customer.value?.pagination)
 
 const fetchCustomer = async (query:any)=>{
+    loading.value = true
     await  customerStore.getUnverifiedCustomer(query)
+    loading.value = false
 }
 
 watch(()=> page.value, (newPage)=>{
-if(newPage)  fetchCustomer({page: newPage})
+    if(newPage) {
+        payload.value.page = newPage;
+        fetchCustomer(payload.value)
+    } 
 })
+
+const search = (text: string) => {
+    payload.value.search = text;
+    payload.value.page = 1;
+
+    fetchCustomer(payload.value)
+}
 
 const verify = async(id: string) => {
     authStore.toggleLoader();
@@ -100,7 +117,7 @@ const verify = async(id: string) => {
 
 onMounted(async ()=>{
     authStore.toggleLoader();
-    await fetchCustomer({page: page.value})
+    await fetchCustomer(payload.value)
     authStore.toggleLoader();
 })
 </script>

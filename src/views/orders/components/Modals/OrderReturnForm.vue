@@ -28,8 +28,8 @@
               </v-col>
               <v-col cols="12" md="9">
                 <AppInput
-                  v-model="formData.name.value"
-                  label="Product Name"
+                  v-model="formData.wharehouse"
+                  label="Wharehouse"
                   type="text"
                   :disabled="isLoading"
                   @blur="validateFormData('name')"
@@ -45,7 +45,7 @@
               </v-col>
               <v-col cols="12" md="9">
                 <AppInput
-                  v-model="formData.name.value"
+                  v-model="formData.reseller_name"
                   label="Reseller’s Name"
                   type="text"
                   :disabled="isLoading"
@@ -62,8 +62,8 @@
               </v-col>
               <v-col cols="12" md="9">
                 <AppInput
-                  v-model="formData.name.value"
-                  label="Reseller’s Name"
+                  v-model="formData.ordr_id"
+                  label="Order ID"
                   type="text"
                   :disabled="isLoading"
                   @blur="validateFormData('name')"
@@ -76,21 +76,20 @@
             <hr/>
 
             <v-row class="mt-4">
-                <v-col cols="12" md="6" v-for="i in 4">
+                <v-col cols="12" md="6" v-for="(i, index ) in 1">
                     <v-row>
                         <v-col cols="12" md="3">
                             <p class="tw-text-lg tw-font-medium">Product Name</p>
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
-                            v-model="formData.name.value"
+                            v-model="formData.order[0].product_name"
                             label=""
                             type="text"
                             :disabled="isLoading"
                             @blur="validateFormData('name')"
                             @input="validateFormData('name')"
                             />
-                            <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                         </v-col>
                     </v-row>
                     <v-row>
@@ -99,14 +98,13 @@
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
-                            v-model="formData.name.value"
+                            v-model="formData.order[0].sales_price"
                             label=""
                             type="text"
                             :disabled="isLoading"
                             @blur="validateFormData('name')"
                             @input="validateFormData('name')"
                             />
-                            <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                         </v-col>
                     </v-row>
                     <v-row>
@@ -115,14 +113,13 @@
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
-                            v-model="formData.name.value"
+                            v-model="formData.order[0].quantity"
                             label=""
                             type="text"
                             :disabled="isLoading"
                             @blur="validateFormData('name')"
                             @input="validateFormData('name')"
                             />
-                            <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                         </v-col>
                     </v-row>
                     <v-row class="mb-3">
@@ -131,14 +128,13 @@
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
-                            v-model="formData.name.value"
+                            v-model="formData.order[0].price"
                             label=""
                             type="text"
                             :disabled="isLoading"
                             @blur="validateFormData('name')"
                             @input="validateFormData('name')"
                             />
-                            <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                         </v-col>
                     </v-row>
                     <hr/>
@@ -160,7 +156,7 @@
                     </v-col>
                     <v-col cols="12" md="7">
                         <AppInput
-                        v-model="formData.name.value"
+                        v-model="formData.amount_paid"
                         label=""
                         type="text"
                         :disabled="isLoading"
@@ -178,7 +174,7 @@
                     </v-col>
                     <v-col cols="12" md="8">
                         <AppInput
-                        v-model="formData.name.value"
+                        v-model="formData.amount_retain"
                         label=""
                         type="text"
                         :disabled="isLoading"
@@ -195,11 +191,11 @@
             <v-col cols="12" md="6">
                 <v-row class="">
                     <v-col cols="12" md="5">
-                        <p class="tw-text-lg tw-font-medium">Total Amount Paid</p>
+                        <p class="tw-text-lg tw-font-medium"> Reason to Return</p>
                     </v-col>
                     <v-col cols="12" md="7">
                         <v-textarea
-                            v-model="formData.description.value"
+                            v-model="formData.return_reason"
                             variant="outlined"
                             :disabled="isLoading"
                             @blur="validateFormData('description')"
@@ -216,7 +212,7 @@
                     </v-col>
                     <v-col cols="12" md="8">
                         <AppInput
-                        v-model="formData.name.value"
+                        v-model="formData.amount_return"
                         label=""
                         type="text"
                         :disabled="isLoading"
@@ -245,7 +241,7 @@
   </template>
   
   <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, watch } from 'vue'
   import AppInput from '@/components/AppInput.vue'
   import AppButton from '@/components/AppButton.vue'
   import AppFileUpload from '@/components/AppFileUpload.vue'
@@ -259,6 +255,12 @@
     openModal: {
       type: Boolean,
       default: false,
+    },
+    order: {
+      type: Object,
+      default(){
+        return {}
+      }
     },
     status: {
         type: String,
@@ -290,88 +292,23 @@
   let imageFiles: Array<File> = [];
   const returnType = ref('half')
   
-  const formData = ref<CustomFormData>({
-    name: {
-      value: null,
-      errorMessage: null,
-      clear: function() {
-        this.errorMessage = null;
-        this.value = null;
-      },
-    },
-    description: {
-      value: null,
-      errorMessage: null,
-      clear: function() {
-        this.errorMessage = null;
-        this.value = null;
-      },
-    },
-    images: {
-      value: [],
-      errorMessage: null,
-      clear: function() {
-        this.errorMessage = null;
-        this.value = [];
-      },
-    },
-    sizes: {
-      value: [],
-      errorMessage: null,
-      clear: function() {
-        this.errorMessage = null;
-        this.value = [];
-      },
-    },
-    price: {
-      value: null,
-      errorMessage: null,
-      clear: function() {
-        this.errorMessage = null;
-        this.value = null;
-      },
-    },
-    quantity: {
-      value: null,
-      errorMessage: null,
-      clear: function() {
-        this.errorMessage = null;
-        this.value = null;
-      },
-    },
-    state: {
-      value: null,
-      errorMessage: null,
-      clear: function() {
-        this.errorMessage = null;
-        this.value = null;
-      },
-    },
-    warehouse: {
-      value: null,
-      errorMessage: null,
-      clear: function() {
-        this.errorMessage = null;
-        this.value = null;
-      },
-    },
-    manufacturer: {
-      value: null,
-      errorMessage: null,
-      clear: function() {
-        this.errorMessage = null;
-        this.value = null;
-      },
-    },
-    category: {
-      value: null,
-      errorMessage: null,
-      clear: function() {
-        this.errorMessage = null;
-        this.value = null;
-      },
-    },
-  });
+  const formData = ref<any>({
+    ordr_id: "",
+    wharehouse: "",
+    reseller_name: "",
+    order: [{
+      Porduct_name: "",
+      sales_price: "",
+      quantity: "",
+      price: "",
+
+    }],
+    amount_paid: "",
+    amount_retain: "",
+    return_eason: "",
+    amount_return: ","
+
+  })
   
   function closeModal() {
     if (isLoading.value === true) return;
@@ -384,6 +321,8 @@
     }
     emit('close');
   }
+
+  // watch(()=>  )
   
   function updateSize(value: string) {
     if (isLoading.value === true) return;

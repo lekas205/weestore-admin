@@ -1,5 +1,6 @@
 <template>
     <section>
+        <app-table-wrapper searchLabelText="Search by Order Number" @search="search">
         <v-data-table 
             hide-default-footer 
             :items="items" 
@@ -31,13 +32,14 @@
                 <ZoomIn class="tw-cursor-pointer" />
             </template>
             <template v-slot:item.view_order="{ item }">
-                <ZoomIn class="tw-cursor-pointer" @click="emits('viewOrder', item)" />
+                <ZoomIn class="tw-cursor-pointer" @click="router.push(`/order/${item.id}`)" />
             </template>
 
             <template  v-slot:bottom>
                 <TableFooter v-bind="pagination" v-model:page="page" />
             </template>
         </v-data-table>
+        </app-table-wrapper>
     </section>
 </template>
 
@@ -48,7 +50,9 @@ import { ZoomIn } from 'lucide-vue-next'
 
 import AppChip from "@/components/AppChip.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
-import { ORDER_STATUS } from "@/constants/common.ts";
+import AppTableWrapper from "@/components/AppTableWrapper.vue";
+
+import { ORDER_STATUS_OPTION } from "@/constants/common.ts";
 
 import AppSelect from "@/components/AppSelect.vue";
 
@@ -59,7 +63,7 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
-    (e: "fetchMore", page: number): void;
+    (e: "fetchMore", page: any): void;
     (e: "updateStatus", select: any): void;
     (e: "viewOrder", item: any):void
 }>()
@@ -67,8 +71,12 @@ const emits = defineEmits<{
 const select = ref('');
 const page = ref(1)
 const router = useRouter()
-const actionOptions = ref(ORDER_STATUS)
+const actionOptions = ref(ORDER_STATUS_OPTION)
 
+const payload= ref({
+    page: 11,
+    search: "",
+})
 const headers = ref([
     {
     align: 'start',
@@ -93,9 +101,16 @@ const updateStatus = (event, id) => {
 
 watch(()=> page.value, (newPage)=>{
     if(newPage){
-        emits("fetchMore", page.value)
+        payload.value.page = Number(newPage);
+        emits("fetchMore", payload.value)
     }
 })
+
+const search = (text: string) => {
+    payload.value.search = text;
+    payload.value.page = 1;
+    emits("fetchMore", payload.value)
+}
 
 // watch(()=> select.value, (newStatus)=>{
 //     if(newStatus){

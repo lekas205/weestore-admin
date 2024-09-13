@@ -1,24 +1,21 @@
 <template>
+  <section>
     <app-tab :tabTitles="tabTitles" class="mt-5">
        <!-- New Orders Table -->
        <template #new_orders>
-         <app-table-wrapper searchLabelText="Search by Order Number">
           <new-order-table
            :loading="loading"
             :items="newOrdersTableData"
             :pagination="new_orders?.pagination"
             class="elevation-1 custom-table"
             @fetchMore="fetchNewOrders($event)"
-            @viewOrder="viewOrderDetails"
             @updateStatus="updateOrderStatus($event)"
           >
           </new-order-table>
-         </app-table-wrapper>
        </template>
 
        <!-- Delivered Orders Table -->
        <template #delivered_orders>
-        <app-table-wrapper searchLabelText="Search by Categories Name">
            <delivered-order-table
             :items="deliveredOrderTableData"
             :loading="loading"
@@ -26,12 +23,10 @@
             @fetchMore="fetchDeliveredOrders"
            >
            </delivered-order-table>
-         </app-table-wrapper>
        </template>
 
       <!-- Order Returned Table -->
        <template #orders_returned>
-         <app-table-wrapper searchLabelText="Search for client" hasDelete>
            <returned-order-table
             :items="returnedOrderTableData"
             :loading="loading"
@@ -39,12 +34,10 @@
             @fetchMore="fetchReturnedOrders"
            >
            </returned-order-table>
-         </app-table-wrapper>
        </template>
 
         <!-- Completed Orders Table -->
         <template #completed_orders>
-         <app-table-wrapper searchLabelText="Search for client">
            <completed-order-table
             :items="completedOrderTableData"
             :loading="loading"
@@ -52,12 +45,10 @@
             @fetchMore="fetchCompletedOrders"
            >
            </completed-order-table>
-         </app-table-wrapper>
        </template>
 
         <!-- Declined Orders Table -->
         <template #declined_orders>
-         <app-table-wrapper searchLabelText="Search for client">
            <declined-order-table
             :items="completedOrderTableData"
             :loading="loading"
@@ -65,11 +56,11 @@
             @fetchMore="fetchDeclinedOrders"
            >
            </declined-order-table>
-         </app-table-wrapper>
        </template>
    </app-tab>
 
-   <DriverList v-model:openModal="openDriverModal"/>
+   <DriverList v-model:openModal="openDriverModal"  @procced="proceedToTransit($event)" />
+  </section>
 </template>
 
 <script lang="ts" setup>
@@ -91,7 +82,6 @@ import DeclinedOrderTable from "./Tables/Orders/DeclinedOrderTable.vue";
 import AppTab from "@/components/AppTab.vue";
 import AppTable from "@/components/AppTable.vue";
 import TableFooter from '@/components/AppTableFooter.vue'
-import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
 import { ROUTES } from "@/constants";
 import { openToastNotification } from '@/utils'
@@ -109,7 +99,8 @@ const {
 
 const router = useRouter()
 
-const loading = ref(false)
+const loading = ref(false);
+const ouderToUpdate = ref<any>({})
 const openDriverModal = ref(false)
 const tabTitles = ref([ 
   "new orders", 
@@ -129,13 +120,13 @@ const newOrdersTableData = computed(() => {
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
       "channel": formatText(elm.payment_method),
       "amount": formatAsMoney(elm.amount) ,
-      "status": elm.status.toLowerCase(),
+      "status": elm.status,
     }
   })
 })
 
 const  deliveredOrderTableData = computed(() => {
-  return delivered_orders.value?.data.map((elm:any)=> {
+  return delivered_orders.value?.data?.map((elm:any)=> {
     return  {
       id: elm.order_id,
       "order_number": elm.customer_name,
@@ -144,13 +135,13 @@ const  deliveredOrderTableData = computed(() => {
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
       "channel": formatText(elm.payment_method),
       "amount": formatAsMoney(elm.amount) ,
-      "status": elm.status.toLowerCase(),
+      "status": elm.status,
    }
   })
 })
 
 const declinedOrderTableData = computed(() => {
-  return declined_orders.value?.data.map((elm:any)=> {
+  return declined_orders.value?.data?.map((elm:any)=> {
     return  {
       id: elm.order_id,
       "order_number": elm.customer_name,
@@ -159,13 +150,13 @@ const declinedOrderTableData = computed(() => {
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
       "channel": formatText(elm.payment_method),
       "amount": formatAsMoney(elm.amount) ,
-      "status": elm.status.toLowerCase(),
+      "status": elm.status,
    }
   })
 })
 
 const completedOrderTableData = computed(() => {
-  return completed_orders.value?.data.map((elm:any)=> {
+  return completed_orders.value?.data?.map((elm:any)=> {
     return  {
       id: elm.order_id,
       "order_number": elm.customer_name,
@@ -174,13 +165,13 @@ const completedOrderTableData = computed(() => {
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
       "channel": formatText(elm.payment_method),
       "amount": formatAsMoney(elm.amount) ,
-      "status": elm.status.toLowerCase(),
+      "status": elm.status,
    }
   })
 })
 
 const returnedOrderTableData = computed(() => {
-  return returned_orders.value?.data.map((elm:any)=> {
+  return returned_orders.value?.data?.map((elm:any)=> {
     return  {
       id: elm.order_id,
       "order_number": elm.customer_name,
@@ -189,7 +180,7 @@ const returnedOrderTableData = computed(() => {
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
       "channel": formatText(elm.payment_method),
       "amount": formatAsMoney(elm.amount) ,
-      "status": elm.status.toLowerCase(),
+      "status": elm.status,
    }
   })
 })
@@ -210,51 +201,66 @@ const viewOrderDetails= (item: any) => {
   router.push({name: ROUTES.view_orders.name, params: { id: item.id }})
 }
 
-const fetchNewOrders = async(page: number) => {
+const fetchNewOrders = async(payload: any) => {
   loading.value = true
-  await orderStore.fetchNewOrders(`page=${page}`); 
+  await orderStore.fetchNewOrders(payload); 
   loading.value = false
 }
-const fetchDeliveredOrders = async(page: number) => {
+const fetchDeliveredOrders = async(payload:any) => {
   loading.value = true
-  await orderStore.fetchDeliveredOrders(`page=${page}`); 
+  await orderStore.fetchDeliveredOrders(payload); 
   loading.value = false
 }
-const fetchCompletedOrders = async(page: number) => {
+const fetchCompletedOrders = async(payload: any) => {
   loading.value = true
-  await orderStore.fetchCompletedOrders(`page=${page}`); 
+  await orderStore.fetchCompletedOrders(payload); 
   loading.value = false
 }
-const fetchReturnedOrders = async(page: number) => {
+const fetchReturnedOrders = async(payload: any) => {
   loading.value = true
-  await orderStore.fetchReturnedOrders(`page=${page}`); 
+  await orderStore.fetchReturnedOrders(payload); 
   loading.value = false
 }
-const fetchDeclinedOrders = async(page: number) => {
+const fetchDeclinedOrders = async(payload: any) => {
   loading.value = true
-  await orderStore.fetchDeclinedOrders(`page=${page}`); 
+  await orderStore.fetchDeclinedOrders(payload); 
   loading.value = false
 }
 const processStatusUpdate = (payload: any) => {
-
   if(payload.status.toLowerCase()  ===  "in_transit" &&  !payload.driverId ){
      openDriverModal.value = true
+     ouderToUpdate.value  = payload
      return false
   }
-
   return true
+}
+
+const proceedToTransit = async(driverId: string) => {
+  ouderToUpdate.value.driverId = driverId
+  updateOrderStatus(ouderToUpdate.value)
+}
+
+const fetchContent = async () => {
+  loading.value = true
+ await  orderStore.fetchNewOrders()
+  loading.value = false
 }
 
 const updateOrderStatus = async(payload: any) => {
   if(!processStatusUpdate(payload)) return
   loading.value = true
   const data = await orderStore.updateOrderStatus(payload); 
+
   if(data){
+
+    await fetchContent();
     openToastNotification({
       message: `Order has been updated successfully`,
       variant: 'success'
     });
+
   }
+ 
   loading.value = false
 }
 </script>

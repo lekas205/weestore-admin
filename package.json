@@ -20,7 +20,9 @@
     "vue-toast-notification": "^3.1.2",
     "vue3-dropzone": "^2.2.1",
     "vuetify": "^3.7.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "html2pdf.js": "^0.10.1",
+    "vue3-html2pdf": "^1.1.2"
   },
   "devDependencies": {
     "@types/node": "^22.5.0",

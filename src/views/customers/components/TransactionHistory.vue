@@ -14,7 +14,7 @@
             </template>
 
             <template  v-slot:bottom>
-                <TableFooter v-bind="pagination" />
+                <!-- <TableFooter v-bind="pagination" /> -->
             </template>
         </v-data-table>
     </section>

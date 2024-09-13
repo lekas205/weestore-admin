@@ -6,6 +6,7 @@ import { handleStoreRequestError } from "@/utils";
 import { useStorage } from "@vueuse/core";
 export const useOrderStore = defineStore("orders", () => {
   const new_orders = ref({});
+  const return_requests = ref({});
   const declined_orders = ref({});
   const returned_orders = ref({});
   const delivered_orders = ref({});
@@ -19,7 +20,11 @@ export const useOrderStore = defineStore("orders", () => {
   };
   const fetchNewOrders = async (query?: any): Promise<boolean> => {
     try {
-      const { data } = await http.get(ENDPOINTS.GET_NEW_ORDERS(query));
+      const { data } = await http.get(ENDPOINTS.GET_ORDERS + "/new", {
+        params: {
+          ...query,
+        },
+      });
       const { paging, rows } = data.payload;
 
       new_orders.value = {
@@ -35,7 +40,11 @@ export const useOrderStore = defineStore("orders", () => {
 
   const fetchDeliveredOrders = async (query?: any): Promise<boolean> => {
     try {
-      const { data } = await http.get(ENDPOINTS.GET_DELIVERED_ORDERS(query));
+      const { data } = await http.get(ENDPOINTS.GET_ORDERS + "/delivered", {
+        params: {
+          ...query,
+        },
+      });
       const { paging, rows } = data.payload;
 
       delivered_orders.value = {
@@ -51,7 +60,11 @@ export const useOrderStore = defineStore("orders", () => {
 
   const fetchCompletedOrders = async (query?: any): Promise<boolean> => {
     try {
-      const { data } = await http.get(ENDPOINTS.GET_COMPLETED_RDERS(query));
+      const { data } = await http.get(ENDPOINTS.GET_ORDERS + "/completed", {
+        params: {
+          ...query,
+        },
+      });
       const { paging, rows } = data.payload;
 
       completed_orders.value = {
@@ -67,7 +80,11 @@ export const useOrderStore = defineStore("orders", () => {
 
   const fetchReturnedOrders = async (query?: any): Promise<boolean> => {
     try {
-      const { data } = await http.get(ENDPOINTS.GET_RETURNED_RDERS(query));
+      const { data } = await http.get(ENDPOINTS.GET_ORDERS + "/returned", {
+        params: {
+          ...query,
+        },
+      });
       const { paging, rows } = data.payload;
 
       returned_orders.value = {
@@ -83,7 +100,11 @@ export const useOrderStore = defineStore("orders", () => {
 
   const fetchDeclinedOrders = async (query?: any): Promise<boolean> => {
     try {
-      const { data } = await http.get(ENDPOINTS.GET_RETURNED_RDERS(query));
+      const { data } = await http.get(ENDPOINTS.GET_ORDERS + "/declined", {
+        params: {
+          ...query,
+        },
+      });
       const { paging, rows } = data.payload;
 
       declined_orders.value = {
@@ -99,11 +120,41 @@ export const useOrderStore = defineStore("orders", () => {
 
   const updateOrderStatus = async (payload?: any): Promise<boolean> => {
     try {
-      const { data } = await http.patch(ENDPOINTS.UPDATE_ORDER_STATUS(payload));
+      const { data } = await http.patch(
+        ENDPOINTS.UPDATE_ORDER_STATUS(payload),
+        {
+          driverId: payload?.driverId,
+        }
+      );
       return true;
     } catch (error) {
-      console.log(error);
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
 
+  const fetchReturnRequest = async (query?: any): Promise<boolean> => {
+    try {
+      const { data } = await http.get(ENDPOINTS.GET_ORDERS + `/return/request`);
+      const { paging, rows } = data.payload;
+
+      return_requests.value = {
+        data: rows,
+        pagination: paging,
+      };
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
+  const getSingleOrder = async (id: string): Promise<boolean> => {
+    try {
+      const { data } = await http.get(ENDPOINTS.GET_ORDERS + `/${id}`);
+      orderDetails.value = data.payload;
+      return true;
+    } catch (error) {
       handleStoreRequestError(error);
       return false;
     }
@@ -113,10 +164,13 @@ export const useOrderStore = defineStore("orders", () => {
     new_orders,
     orderDetails,
     fetchNewOrders,
+    return_requests,
     completed_orders,
     delivered_orders,
     returned_orders,
     declined_orders,
+    getSingleOrder,
+    fetchReturnRequest,
     updateOrderDetails,
     fetchReturnedOrders,
     fetchDeliveredOrders,

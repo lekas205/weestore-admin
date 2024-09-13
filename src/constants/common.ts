@@ -7,14 +7,25 @@ export const PRIVATE = "private";
 
 export const PHONE_NUMBER_REGEX = /^(?:\+?234|0)(?:\d{10})$/;
 
-export const ORDER_STATUS = [
+export const ORDER_STATUS_OPTION = [
   { label: "Pending", value: "PENDING" },
   { label: "In Transit", value: "IN_TRANSIT" },
   { label: "Processing", value: "PROCESSING" },
   { label: "Cancelled", value: "CANCELLED" },
+  { label: "Completed", value: "COMPLETED" },
   { label: "Delivered", value: "DELIVERED" },
   { label: "Return Order", value: "RETURN_ORDER" },
 ];
+
+export const ORDER_STATUS = {
+  PENDING: "Pending",
+  IN_TRANSIT: "In Transit",
+  PROCESSING: "Processing",
+  CANCELLED: "Cancelled",
+  COMPLETED: "Completed",
+  DELIVERED: "Delivered",
+  RETURN_ORDER: "Return Order",
+};
 
 export const PAYMENT_METHOD = {
   WALLET: "Wallet",

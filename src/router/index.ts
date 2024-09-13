@@ -21,28 +21,28 @@ const router = createRouter({
   ],
 });
 
-// router.beforeEach((to, _from, next) => {
-//   let validRoute = false;
-//   let isUserLoggedIn = !!localStorage.getItem(SAVED_AUTH_TOKEN_KEY);
+router.beforeEach((to, _from, next) => {
+  let validRoute = false;
+  let isUserLoggedIn = !!localStorage.getItem(SAVED_AUTH_TOKEN_KEY);
 
-//   for (const key in ROUTES) {
-//     if (ROUTES[key as keyof typeof ROUTES].path === to.path) validRoute = true;
-//   }
+  for (const key in ROUTES) {
+    if (ROUTES[key as keyof typeof ROUTES].name === to.name) validRoute = true;
+  }
 
-//   const { requiresAuth } = to.meta;
-//   if (!validRoute) {
-//     next({ name: ROUTES.login.name });
-//   } else if (requiresAuth && !isUserLoggedIn) {
-//     next(`${ROUTES.login.path}?next=${to.path}`);
-//   } else if (!requiresAuth && isUserLoggedIn) {
-//     if (to.name == ROUTES.dashboard.name) {
-//       next();
-//     } else {
-//       next({ name: ROUTES.dashboard.name });
-//     }
-//   } else {
-//     next();
-//   }
-// });
+  const { requiresAuth } = to.meta;
+  if (!validRoute) {
+    next({ name: ROUTES.login.name });
+  } else if (requiresAuth && !isUserLoggedIn) {
+    next(`${ROUTES.login.path}?next=${to.path}`);
+  } else if (!requiresAuth && isUserLoggedIn) {
+    if (to.name == ROUTES.dashboard.name) {
+      next();
+    } else {
+      next({ name: ROUTES.dashboard.name });
+    }
+  } else {
+    next();
+  }
+});
 
 export default router;

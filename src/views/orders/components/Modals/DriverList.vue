@@ -7,7 +7,7 @@
                 <v-col :md="8" :col="12">
                     <v-autocomplete
                         v-model="select"
-                        :items="drivers"
+                        :items="driverList"
                         density="compact"
                         label="Search for driver by name"
                         item-title="name"
@@ -20,7 +20,7 @@
             </div>
 
             <div class="tw-flex tw-justify-center tw-gap-7 mt-5">
-                <app-button > Proceed </app-button>
+                <app-button @click="proceed"> Proceed </app-button>
                 <app-button secondary @click="setShow = false"> Cancel </app-button>
             </div>
         </v-card>
@@ -28,29 +28,35 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from "vue"
+    import { storeToRefs } from "pinia";
+    import { ref, computed, onMounted } from "vue"
 
-import AppButton from "@/components/AppButton.vue";
+    import AppButton from "@/components/AppButton.vue";
 
-import { useDriverStore } from "@/stores";
+    import { formatText } from "@/utils";
+    import { useDriverStore } from "@/stores";
 
-const driverStore = useDriverStore()
-
+    const driverStore = useDriverStore()
+    const {drivers }  = storeToRefs(driverStore)
     const props = defineProps<{
         openModal: boolean
     }>()
 
     const emits = defineEmits<{
+        (e : "procced", id: string): void
         (e : "update:openModal", val: boolean): void
     }>()
 
-    const select = ref("")
-    const drivers = ref([
-        {name: "Folorunsho Davis", id: "esdouyhjkdfdxcv"},
-        {name: "Peace Davis", id: "esdouyhjkdfdxcv"},
-        {name: "John Davis", id: "esdouyhjkdfdxcv"},
-        {name: "Mke Davis", id: "esdouyhjkdfdxcv"},
-    ])
+    const select = ref<string>("");
+
+    const driverList = computed(()=>{
+        return drivers.value?.data?.map((elm: any)=> {
+            return {
+                id: elm.driver_id,
+                name: `${formatText(elm.first_name)} ${formatText(elm.last_name)}`
+            }
+        })
+    })
 
     const setShow = computed({
         get() {
@@ -60,6 +66,11 @@ const driverStore = useDriverStore()
             emits("update:openModal", newValue);
         },
     })
+
+    const proceed = () => {
+        emits("procced", select.value)
+        setShow.value = false
+    }
 
     onMounted(async ()=>{
         await driverStore.fetchAllDrivers()

@@ -35,13 +35,22 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, markRaw } from "vue";
+import { storeToRefs } from "pinia";
+import { ref, markRaw,computed, onMounted } from "vue";
 
 import StatCard from "./components/StatCard.vue";
 import AppTab from '@/components/AppTab.vue';
 
 import CreditTable from "./components/Tables/CreditTable.vue";
 import LoanDetails from "./components/LoanDetails.vue";
+
+import { useCreditStore, useAuthStore } from "@/stores";
+
+const authStore = useAuthStore()
+const creditStore = useCreditStore()
+
+const { credit_request } = storeToRefs(creditStore)
+
 
 const loading = ref(false);
 const openModal = ref(false)
@@ -59,4 +68,10 @@ const creditRequestData = ref([
         "status": "Full Delivery",
     }
 ])
+
+const pagination = computed(()=> credit_request.value?.pagination)
+
+onMounted(async ()=>{
+   await creditStore.fetchCreditRequest();
+})
 </script>

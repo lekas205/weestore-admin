@@ -11,15 +11,7 @@ export const ENDPOINTS = {
   GET_STATES: "/utility/states",
   GET_WAREHOUSE_BY_STATE: (stateID: string) =>
     `/utility/state/warehouse/${stateID}`,
-  GET_NEW_ORDERS: (query?: string) => `${ADMIN_BASE}/order/new?${query ?? ""}`,
-  GET_DELIVERED_ORDERS: (query?: string) =>
-    `${ADMIN_BASE}/order/delivered?${query ?? ""}`,
-  GET_DECLINED_RDERS: (query?: string) =>
-    `${ADMIN_BASE}/order/declined?${query ?? ""}`,
-  GET_RETURNED_RDERS: (query?: string) =>
-    `${ADMIN_BASE}/order/returned?${query ?? ""}`,
-  GET_COMPLETED_RDERS: (query?: string) =>
-    `${ADMIN_BASE}/order/completed?${query ?? ""}`,
+  GET_ORDERS: `${ADMIN_BASE}/order`,
 
   UPDATE_ORDER_STATUS: ({
     orderId,
@@ -27,9 +19,10 @@ export const ENDPOINTS = {
   }: {
     orderId: string;
     status: string;
-  }) => `${ADMIN_BASE}/order/${orderId}/completed/${status}`,
+  }) => `${ADMIN_BASE}/order/${orderId}/status/${status}`,
 
   GET_ALL_DRIVERS: `${ADMIN_BASE}/driver?limit=200`,
   GET_CUSTOMERS: `${ADMIN_BASE}/customer`,
   PENDING_TOPUP_REQUEST: `${ADMIN_BASE}/topup/request`,
+  PENDDNG_CREDIT_REQUEST: `${ADMIN_BASE}/credit/request`,
 };

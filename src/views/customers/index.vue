@@ -1,8 +1,7 @@
 <template>
     <section class="px-4 py-5">
         <StatCard />
-
-        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]">
+        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]"  @search="search">
             <v-data-table 
                 hide-default-footer 
                 :items="items" 
@@ -47,6 +46,11 @@ const { customers } = storeToRefs(customerStore)
 
 const page = ref(1)
 const loading = ref(false);
+const payload = ref({
+    page: 1,
+    search: ""
+});
+
 const headers = ref([
     // {
     //     align: 'start',
@@ -77,13 +81,24 @@ const items = computed(() => {
 })
 
 const fetchCustomer = async (query:any)=>{
+    loading.value = true
     await  customerStore.fetchCustomers(query)
+    loading.value = false
 }
 
-
 watch(()=> page.value, (newPage)=>{
-if(newPage)  fetchCustomer({page: newPage})
+    if(newPage) {
+        payload.value.page = newPage;
+        fetchCustomer(payload.value)
+    } 
 })
+
+const search = (text: string) => {
+    payload.value.search = text;
+    payload.value.page = 1;
+
+    fetchCustomer(payload.value)
+}
 
 onMounted( async()=>{
     authStore.toggleLoader();

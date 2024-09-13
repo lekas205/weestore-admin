@@ -113,7 +113,7 @@ const orderhistoryData = computed(()=> {
             date:  formatDate(elm.created_data),
             method: PAYMENT_METHOD[elm.payment_method],
             amount: formatAsMoney(elm.amount),
-            status: elm.status.toLowerCase()
+            status: elm.status,
         }
     })
 })

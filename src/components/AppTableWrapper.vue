@@ -3,15 +3,26 @@
     <div class="table-top">
       <div class="search-container">
         <div v-if="searchLabelText" class="search-input">
-          <AppInput :label="searchLabelText"/>
+          <AppInput :label="searchLabelText" v-model="search"/>
         </div>
         <button
           v-if="searchLabelText"
+          :disabled="!search.length"
           class="table-btn search-btn"
-          @click="$emit('search')"
+          @click=" submit"
         >
           Search
         </button>
+        <v-btn
+          size="large"
+          variant="text"
+          color="red"
+          v-if="searched"
+          class="table-btn"
+          @click="clear"
+        >
+          Clear <X/>
+        </v-btn>
       </div>
       <div class="action-container">
         <button
@@ -38,10 +49,11 @@
 </template>
 
 <script setup lang="ts">
-import { Plus, Trash2 } from 'lucide-vue-next'
+import { ref } from 'vue';
+import { Plus, Trash2 , X} from 'lucide-vue-next'
 import AppInput from '@/components/AppInput.vue'
 
-defineEmits(['create', 'search', 'delete']);
+const emit = defineEmits(['create', 'search', 'delete']);
 
 defineProps({
   searchLabelText: {
@@ -57,6 +69,20 @@ defineProps({
     required: false,
   }
 });
+
+const search = ref("");
+const searched = ref(false);
+
+const submit = () => {
+  searched.value = true;
+  emit('search', search.value)
+}
+
+const clear = () => {
+  searched.value = false;
+  search.value = ""
+  emit('search', search.value)
+}
 </script>
 
 <style lang="scss" scoped>

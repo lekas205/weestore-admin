@@ -1,7 +1,5 @@
 <template>
-    
     <section class="mt-6 px-5  pb-5">
-      <div id="invoice-area" >
         <div  class="tw-p-5 tw-rounded-[30px] tw-bg-white">
             <h1 class="tw-text-[30px] tw-font-bold tw-mb-4">Order Invoice</h1>
             <div class="tw-flex tw-items-center tw-gap-3">
@@ -51,33 +49,7 @@
                 </div>
             </div>
         </div>
-      </div>
-
-        <div class="tw-flex tw-justify-between tw-mt-[40px]" >
-            <v-btn color="primary" size="large" class="tw-rounded-lg" :loading="loading" @click="downloadInvoice"> <img src="@/assets/images/svg/download-icon.svg" alt="" class="tw-w-[25px] tw-mr-2"> Download Invoice</v-btn>
-            <v-btn color="primary" size="large" class="tw-rounded-lg" @click="printInvoice"> <img src="@/assets/images/svg/print-icon.svg" alt="" class="tw-w-[18px] tw-mr-2"> Print Invoice</v-btn>
-        </div>
     </section>
-
-    <VueHtml2pdf
-        :show-layout="false"
-        :float-layout="true"
-        :enable-download="true"
-        :preview-modal="false"
-        :paginate-elements-by-height="1400"
-        :filename="`order-invoice`"
-        :pdf-quality="2"
-        :manual-pagination="false"
-        pdf-format="a4"
-        :pdf-margin="10"
-        pdf-orientation="portrait"
-        pdf-content-width="800px"
-        ref="html2Pdf"
-      >
-        <template  v-slot:pdf-content>
-            <OrderInvoice />
-        </template>
-     </VueHtml2pdf>
 </template>
 
 <script lang="ts" setup>
@@ -86,75 +58,45 @@ import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
 import VueHtml2pdf from "vue3-html2pdf";
 
-import OrderInvoice from "./components/downloadd-invouce.vue";
-
-import { useOrderStore, useAuthStore } from "@/stores";
+import { useOrderStore } from "@/stores";
 import AppChip from "@/components/AppChip.vue";
 import { PAYMENT_METHOD } from "@/constants";
 import { 
-    formatDate, 
-    formatTime, 
-    formatAsMoney, 
-    formatText, 
-    capitalizeFirstLeters
+   formatDate, 
+   formatTime, 
+   formatAsMoney, 
+   formatText, 
+   capitalizeFirstLeters
 } from "@/utils";
 
-const route = useRoute()
-const authStore = useAuthStore()
 const orderStore = useOrderStore();
 const { 
-    orderDetails
+   orderDetails
 } = storeToRefs(orderStore)
 
-const html2Pdf = ref();
-const loading = ref(false)
+const route = useRoute()
 const headers = ref([
 {
-    align: 'start',
-    key: 'sr',
-    sortable: false,
-    title: 'SR',
-    },
-    { key: 'product_name', title: 'Product Title' },
-    { key: 'quantity', title: 'Quantity' },
-    { key: 'price', title: 'Item Price' },
-    { key: 'amount', title: 'Amount' },
+   align: 'start',
+   key: 'sr',
+   sortable: false,
+   title: 'SR',
+   },
+   { key: 'product_name', title: 'Product Title' },
+   { key: 'quantity', title: 'Quantity' },
+   { key: 'price', title: 'Item Price' },
+   { key: 'amount', title: 'Amount' },
 ])
 
 const orderedItems = computed(()=>{
-    return orderDetails.value?.order_items?.map((elm:any, index:number)=> {
-        return {
-            sr: index + 1,
-            product_name: capitalizeFirstLeters(elm.product_name),
-            price: formatAsMoney(elm.price),
-            amount: formatAsMoney(elm.amount),
-            quantity: elm.quantity
-        }
-    })
+   return orderDetails.value?.order_items?.map((elm:any, index:number)=> {
+       return {
+           sr: index + 1,
+           product_name: capitalizeFirstLeters(elm.product_name),
+           price: formatAsMoney(elm.price),
+           amount: formatAsMoney(elm.amount),
+           quantity: elm.quantity
+       }
+   })
 })
-
-const downloadInvoice = () => {
-  loading.value = true;
-  setTimeout(() => {
-    html2Pdf.value.generatePdf();
-    loading.value = false;
-  }, 1500);
-};
-
-const printInvoice = () => {
-    var printContent = document.getElementById('invoice-area').innerHTML;
-    
-    var originalContent = document.body.innerHTML;
-    document.body.innerHTML = printContent;
-    window.print();
-    document.body.innerHTML = originalContent;
-    window.location.reload()
-}
-
-onMounted( async ()=>{
-    authStore.toggleLoader();
-    await orderStore.getSingleOrder(route.params.id as string)
-    authStore.toggleLoader();
-})
-
 </script>

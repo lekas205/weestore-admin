@@ -31,7 +31,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, onMounted, ref } from "vue";
 
 // ============ Componeents ============//
 import AppTab from "@/components/AppTab.vue";
@@ -40,10 +41,17 @@ import NewReturnedOrders from "./Tables/Return/NewReturnedOrders.vue";
 import OrderRequestApproval from "./Tables/Return/RequestApproval.vue";
 import DeclinedRequest from "./Tables/Return/DeclinedRequest.vue";
 
-const loading = ref(false)
-const tabTitles = ref([ "new return request", "approved", "declined"])
-const newOrdersTableData = ref([
-    {
+import { useOrderStore } from "@/stores";
+
+const orderStores  = useOrderStore()
+
+const { return_requests } = storeToRefs(orderStores)
+
+const loading = ref(false);
+
+const tabTitles = ref([ "new return request", "approved", "declined"]);
+const newOrdersTableData = computed(()=>{
+    return  [{
         "order_number": "Ela John",
         "date": "May 16 2024",
         "reseller_name": "Nivea Roll on",
@@ -51,6 +59,12 @@ const newOrdersTableData = ref([
         "return_type": 2400,
         "amount_return": "BANK TRANSFER",
         "amount_retain": "Full Delivery",
-    }
-])
+    }]
+})
+
+onMounted( async ()=>{
+    await orderStores.fetchReturnRequest()
+    console.log(return_requests.value);
+    
+})
 </script>

@@ -6,3 +6,4 @@ export * from "./orders";
 export * from "./drivers";
 export * from "./customers";
 export * from "./wallet";
+export * from "./credit";

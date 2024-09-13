@@ -1,5 +1,6 @@
 <template>
     <section>
+        <app-table-wrapper searchLabelText="Search for client" hasDelete @search="search">
         <v-data-table 
             hide-default-footer 
             :items="items" 
@@ -26,39 +27,52 @@
                         single-line
                     ></v-select>
 
-                    <p class="tw-text-[18px] tw-underline tw-w-[30%]" @click="openModal=true">Process Return</p>
+                    <p class="tw-text-[18px] tw-underline tw-w-[30%]" @click="processReturn">Process Return</p>
                 </div>
             </template>
 
             <template  v-slot:bottom>
-                <TableFooter v-bind="pagination" />
+                <TableFooter v-bind="pagination"  v-model:apge="page"/>
             </template>
         </v-data-table>
 
-        <OrderReturnForm :openModal="openModal" @close="openModal = false" />
+        <OrderReturnForm :openModal="openModal" @close="openModal = false" :order="itemToProcess" />
+        </app-table-wrapper>
     </section>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, watch, computed} from "vue";
 
 import AppChip from "@/components/AppChip.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
+import AppTableWrapper from "@/components/AppTableWrapper.vue";
+
+import { ORDER_STATUS_OPTION } from "@/constants/common.ts";
+
 import OrderReturnForm from "../../Modals/OrderReturnForm.vue";
 const props = defineProps<{
     items: any[],
-    loading: boolean 
+    loading: boolean ,
+    pagination: any,
 }>()
 
+const emits = defineEmits<{
+    (e: "fetchMore", page: any): void;
+    (e: "updateStatus", select: any): void;
+}>()
+
+const page =  ref(1)
 const select = ref("")
 const openModal = ref(false)
-const actionOptions = ref([
-    { label: 'Pending', value: 'pending' },
-    { label: 'In Transit', value: 'transit' },
-    { label: 'processing', value: 'processing' },
-    { label: 'Cancelled', value: 'cancelled' },
-    { label: 'Delivered', value: 'delivered' },
-])
+const itemToProcess = ref({})
+const actionOptions = ref(ORDER_STATUS_OPTION)
+
+
+const payload= ref({
+    page: 1,
+    search: "",
+})
 
 const headers = ref([
     {
@@ -74,6 +88,24 @@ const headers = ref([
     { key: 'amount', title: 'Amount' },
     { key: 'status', title: 'Status' },
     { key: 'action', title: 'Action' , width: "25%"},
-
 ])
+
+watch(()=> page.value, (newPage)=>{
+    if(newPage){
+        payload.value.page = Number(newPage);
+        emits("fetchMore", payload.value);
+    }
+})
+
+const processReturn = (item: any) => {
+    itemToProcess.value = item;
+    openModal.value =true;
+
+}
+
+const search = (text: string) => {
+    payload.value.search = text;
+    payload.value.page = 1;
+    emits("fetchMore", payload.value)
+}
 </script>

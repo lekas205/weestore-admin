@@ -1,5 +1,6 @@
 <template>
     <section>
+        <app-table-wrapper searchLabelText="Search by Categories Name" @search="search">
         <v-data-table 
             hide-default-footer 
             :items="items" 
@@ -7,7 +8,6 @@
             :headers="headers"
             loading-text="Loading... Please wait" 
         >
-
             <template v-slot:item.status="{ item }">
                 <app-chip :status="item.status">
                 </app-chip>
@@ -26,39 +26,51 @@
                 ></v-select>
             </template>
             <template v-slot:item.view_order="{ item }">
-                <ZoomIn class="tw-cursor-pointer" @click="router.push('/order/123')" />
+                <ZoomIn class="tw-cursor-pointer" @click="router.push(`/order/${item.id}`)"/>
             </template>
 
             <template  v-slot:bottom>
-                <TableFooter v-bind="pagination" />
+                <TableFooter v-bind="pagination" v-model:page="page" />
             </template>
         </v-data-table>
+        </app-table-wrapper>
     </section>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { ZoomIn } from 'lucide-vue-next'
 import { useRouter } from "vue-router";
 
 import AppChip from "@/components/AppChip.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
-
+import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
 const router = useRouter()
 
 const props = defineProps<{
     items: any[],
-    loading: boolean 
+    loading: boolean,
+    pagination: any
 }>()
 
+const emits = defineEmits<{
+    (e: "fetchMore", page: any): void;
+    (e: "updateStatus", select: any): void;
+}>()
+
+const page = ref(1)
+const payload= ref({
+    page: 1,
+    search: "",
+});
 const actionOptions = ref([
     { label: 'Pending', value: 'pending' },
     { label: 'In Transit', value: 'transit' },
     { label: 'processing', value: 'processing' },
     { label: 'Cancelled', value: 'cancelled' },
     { label: 'Delivered', value: 'delivered' },
-])
+]);
 
 const headers = ref([
     {
@@ -75,6 +87,18 @@ const headers = ref([
     { key: 'status', title: 'Status' },
     { key: 'view_order', title: 'View' },
     { key: 'action', title: 'Action', width: "20%" },
-   
 ])
+
+watch(()=> page.value, (newPage)=>{
+    if(newPage){
+        payload.value.page = Number(newPage);
+        emits("fetchMore", payload.value)
+    }
+})
+
+const search = (text: string) => {
+    payload.value.search = text;
+    payload.value.page = 1;
+    emits("fetchMore", payload.value)
+}
 </script>
