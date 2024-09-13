@@ -27,7 +27,7 @@
                         single-line
                     ></v-select>
 
-                    <p class="tw-text-[18px] tw-underline tw-w-[30%]" @click="processReturn">Process Return</p>
+                    <p class="tw-text-[18px] tw-underline tw-w-[30%]" @click="processReturn(item)">Process Return</p>
                 </div>
             </template>
 
@@ -42,6 +42,7 @@
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from "pinia";
 import { ref, watch, computed} from "vue";
 
 import AppChip from "@/components/AppChip.vue";
@@ -51,6 +52,12 @@ import AppTableWrapper from "@/components/AppTableWrapper.vue";
 import { ORDER_STATUS_OPTION } from "@/constants/common.ts";
 
 import OrderReturnForm from "../../Modals/OrderReturnForm.vue";
+import { useOrderStore } from "@/stores";
+
+const orderStore = useOrderStore();
+const { 
+  returned_orders,
+} = storeToRefs(orderStore)
 const props = defineProps<{
     items: any[],
     loading: boolean ,
@@ -98,7 +105,7 @@ watch(()=> page.value, (newPage)=>{
 })
 
 const processReturn = (item: any) => {
-    itemToProcess.value = item;
+    itemToProcess.value = returned_orders.value.data.find((elm:any)=> elm.order_id === item.id);
     openModal.value =true;
 
 }

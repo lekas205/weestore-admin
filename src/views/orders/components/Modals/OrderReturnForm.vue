@@ -29,12 +29,12 @@
               <v-col cols="12" md="9">
                 <AppInput
                   v-model="formData.wharehouse"
+                  :value="formData.wharehouse"
                   label="Wharehouse"
                   type="text"
                   :disabled="isLoading"
-                  @blur="validateFormData('name')"
-                  @input="validateFormData('name')"
                 />
+                <!-- {{ formData.wharehouse }} -->
                 <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
               </v-col>
             </v-row>
@@ -45,12 +45,11 @@
               </v-col>
               <v-col cols="12" md="9">
                 <AppInput
-                  v-model="formData.reseller_name"
                   label="Reseller’s Name"
                   type="text"
                   :disabled="isLoading"
-                  @blur="validateFormData('name')"
-                  @input="validateFormData('name')"
+                  v-model="formData.reseller_name"
+                  :value="formData.reseller_name"
                 />
                 <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
               </v-col>
@@ -62,12 +61,11 @@
               </v-col>
               <v-col cols="12" md="9">
                 <AppInput
-                  v-model="formData.ordr_id"
                   label="Order ID"
                   type="text"
                   :disabled="isLoading"
-                  @blur="validateFormData('name')"
-                  @input="validateFormData('name')"
+                  :value="formData.order_id"
+                  v-model="formData.order_id"
                 />
                 <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
               </v-col>
@@ -84,11 +82,10 @@
                         <v-col cols="12" md="9">
                             <AppInput
                             v-model="formData.order[0].product_name"
+                            :value="formData.order[0].product_name"
                             label=""
                             type="text"
                             :disabled="isLoading"
-                            @blur="validateFormData('name')"
-                            @input="validateFormData('name')"
                             />
                         </v-col>
                     </v-row>
@@ -98,12 +95,11 @@
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
-                            v-model="formData.order[0].sales_price"
+                            :value="formData.order[0].price"
+                            v-model="formData.order[0].price"
                             label=""
                             type="text"
                             :disabled="isLoading"
-                            @blur="validateFormData('name')"
-                            @input="validateFormData('name')"
                             />
                         </v-col>
                     </v-row>
@@ -113,12 +109,11 @@
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
+                            :value="formData.order[0].quantity"
                             v-model="formData.order[0].quantity"
                             label=""
                             type="text"
                             :disabled="isLoading"
-                            @blur="validateFormData('name')"
-                            @input="validateFormData('name')"
                             />
                         </v-col>
                     </v-row>
@@ -128,12 +123,11 @@
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
-                            v-model="formData.order[0].price"
+                            :value="formData.order[0].amount"
+                            v-model="formData.order[0].amount"
                             label=""
                             type="text"
                             :disabled="isLoading"
-                            @blur="validateFormData('name')"
-                            @input="validateFormData('name')"
                             />
                         </v-col>
                     </v-row>
@@ -157,11 +151,10 @@
                     <v-col cols="12" md="7">
                         <AppInput
                         v-model="formData.amount_paid"
+                        :value="formData.amount_paid"
                         label=""
                         type="text"
                         :disabled="isLoading"
-                        @blur="validateFormData('name')"
-                        @input="validateFormData('name')"
                         />
                         <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                     </v-col>
@@ -174,12 +167,11 @@
                     </v-col>
                     <v-col cols="12" md="8">
                         <AppInput
+                        :value="formData.amount_retain"
                         v-model="formData.amount_retain"
                         label=""
                         type="text"
                         :disabled="isLoading"
-                        @blur="validateFormData('name')"
-                        @input="validateFormData('name')"
                         />
                         <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                     </v-col>
@@ -195,11 +187,10 @@
                     </v-col>
                     <v-col cols="12" md="7">
                         <v-textarea
+                            :value="formData.return_reason"
                             v-model="formData.return_reason"
                             variant="outlined"
                             :disabled="isLoading"
-                            @blur="validateFormData('description')"
-                            @input="validateFormData('description')"
                         ></v-textarea>
                         <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                     </v-col>
@@ -212,12 +203,11 @@
                     </v-col>
                     <v-col cols="12" md="8">
                         <AppInput
+                        :value="formData.amount_return"
                         v-model="formData.amount_return"
                         label=""
                         type="text"
                         :disabled="isLoading"
-                        @blur="validateFormData('name')"
-                        @input="validateFormData('name')"
                         />
                         <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                     </v-col>
@@ -293,14 +283,14 @@
   const returnType = ref('half')
   
   const formData = ref<any>({
-    ordr_id: "",
+    order_id: "",
     wharehouse: "",
     reseller_name: "",
     order: [{
       Porduct_name: "",
-      sales_price: "",
-      quantity: "",
       price: "",
+      quantity: "",
+      amount: "",
 
     }],
     amount_paid: "",
@@ -322,7 +312,34 @@
     emit('close');
   }
 
-  // watch(()=>  )
+  watch(()=> props.openModal, (newval)=>{
+    if(newval){
+      formData.value.wharehouse = props.order.warehouse_name;
+      formData.value.order_id = props.order.order_no
+      formData.value.order = props.order.order_items
+      formData.value.amount_paid = props.order.amount
+    }
+  } )
+
+  watch(
+    () => formData,
+    (newValue, oldValue) => {
+      if(newValue){
+        recalculateORders()
+      }
+    },
+    { deep: true }
+  )
+
+  const recalculateORders = () => {
+    formData.value.order.forEach((elm: any, index:number)=>{
+      elm.amount = elm.price * elm.quantity
+       index === 0 ? 
+       formData.value.amount_retain = elm.amount 
+       : formData.value.amount_retain+= elm.about
+    });
+    formData.value.amount_return =  formData.value.amount_paid -  formData.value.amount_retain
+  } 
   
   function updateSize(value: string) {
     if (isLoading.value === true) return;
