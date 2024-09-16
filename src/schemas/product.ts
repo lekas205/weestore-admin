@@ -124,3 +124,7 @@ export const CreateProductSchema = z.object({
       message: 'Select at least 1 size'
     })
 })
+
+export const UpdateProductSchema = CreateProductSchema.extend({
+  productId: z.string(),
+})

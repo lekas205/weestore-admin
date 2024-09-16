@@ -1,3 +1,5 @@
+import { Pagination } from "@/types";
+
 // KEYS
 export const SAVED_AUTH_TOKEN_KEY = "AUTH_TOKEN";
 
@@ -32,4 +34,11 @@ export const PAYMENT_METHOD = {
   PAY_ON_DELIVERY: "Pay on Delivery",
   TRANSFER: "Transfer",
   wallet_to_system: "Wallet",
+};
+
+export const DEFAULT_PAGINATION: Pagination = {
+  total: 0,
+  currentPageTotal: 0,
+  currentPageNo: 1,
+  totalNoPages: 1,
 };

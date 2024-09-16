@@ -49,8 +49,10 @@ export type SidebarLink = {
   }[]
 }
 
-export type CustomFormData = Record<string, {
-  value: any,
-  errorMessage: string | null,
-  clear?: () => void
-}>;
+export type CustomFormData<T = Record<string, any>> = {
+  [key in keyof T]: {
+    value: T[key] | null,
+    errorMessage: string | null,
+    clear?: () => void
+  }
+};

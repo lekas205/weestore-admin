@@ -188,7 +188,6 @@ function closeModal() {
 }
 
 function validateStateId(code: string) {
-  console.log(code)
   if (states.value.findIndex((i: any) => i.code == code) >= 0) {
     formData.value.state_id.errorMessage = null;
   }

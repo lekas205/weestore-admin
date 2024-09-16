@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { CircleX } from 'lucide-vue-next'
 // import { useDropzone } from "vue3-dropzone";
 import { handleFileUpload, openToastNotification } from '@/utils'
@@ -80,7 +80,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const input = ref<HTMLInputElement | null>(null);
 const files = ref<CustomFile[]>([]);
-const internalExistingImages = ref<Array<string>>(props.existingImages);
+const internalExistingImages = ref<Array<string>>([...props.existingImages]);
 
 
 const internalDisable = computed(() => {
@@ -116,14 +116,41 @@ watch(() => props.startUpload, async (upload) => {
       ]);
     }
     else {
-    openToastNotification({
-      message: 'Error uploading Image(s)',
-    });
+      openToastNotification({
+        message: 'Error uploading Image(s)',
+      });
       emit('uploadCompleted', null);
       emit('fileError', 'Error uploading Image(s)');
     }
   }
 })
+
+function emitSavedFiles() {
+  emit('savedFile', [
+    ...files.value,
+    ...internalExistingImages.value
+  ])
+}
+
+function validateFile(file: File): boolean {
+  let isValid = true;
+  const fileType = file.type;
+
+  if (!fileType.startsWith('image/')) {
+    emit('fileError', 'Please upload a valid image file.');
+    isValid = false;
+  }
+  else if (file.size > props.maxFileSize) {
+    emit('fileError', 'File is too large. Maximum file size is 2MB.');
+    isValid = false;
+  }
+
+  if (isValid === true) {
+    emit('fileError', null);
+  }
+
+  return isValid;
+}
 
 function saveFileToLocal(event: any): void {
   const file: File = event.target.files[0];
@@ -150,9 +177,7 @@ function handleFilePreview(file: File) {
   reader.onload = function(e) {
     file['src'] = e.target?.result as string;
     files.value.push(file);
-    emit('savedFile', [
-      ...files.value
-    ]);
+    emitSavedFiles();
   };
 
   reader.readAsDataURL(file);
@@ -164,9 +189,7 @@ function removeFile(idx: number) {
     input.value.disabled = false;
   }
 
-  emit('savedFile', [
-    ...files.value
-  ]);
+  emitSavedFiles();
 }
 
 function removeExistingImage(idx: number) {
@@ -175,32 +198,8 @@ function removeExistingImage(idx: number) {
     input.value.disabled = false;
   }
 
-  emit('savedFile', [
-    ...internalExistingImages.value
-  ]);
+  emitSavedFiles();
 }
-
-function validateFile(file: File): boolean {
-  let isValid = true;
-  const fileType = file.type;
-
-  if (!fileType.startsWith('image/')) {
-    emit('fileError', 'Please upload a valid image file.');
-    isValid = false;
-  }
-  else if (file.size > props.maxFileSize) {
-    emit('fileError', 'File is too large. Maximum file size is 2MB.');
-    isValid = false;
-  }
-
-  if (isValid === true) {
-    emit('fileError', null);
-  }
-
-  return isValid;
-}
-
-
 </script>
 
 <style lang="scss" scoped>

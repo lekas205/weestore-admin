@@ -4,7 +4,7 @@
       <v-card class="px-4 py-7">
         <div class="title-container">
           <div class="title">
-            <p class="tw-text-3xl tw-font-semibold">Add Product</p>
+            <p class="tw-text-3xl tw-font-semibold">Edit Product</p>
           </div>
 
           <div class="title-tab">
@@ -53,6 +53,7 @@
                 allowMultipleFiles
                 :disabled="isLoading"
                 :startUpload="startFileUpload"
+                :existing-images="formData.images.value!"
                 @savedFile="handleSavedFile"
                 @fileError="handleFileError"
                 @upload-completed="handleFileUploadSuccess"
@@ -70,6 +71,7 @@
                 <div v-for="(size, idx) in productSizes" :key="idx">
                   <input
                     @input="updateSize(size)"
+                    :checked="formData.sizes.value!.includes(size)"
                     class="product-checkbox"
                     type="checkbox"
                     name="size-checkbox"
@@ -132,17 +134,18 @@
             </v-col>
             <v-col cols="12" md="9">
               <div class="product-select">
-                <v-combobox
+                <v-autocomplete
                   v-model="formData.state.value"
+                  auto-select-first="exact"
                   label="State"
+                  variant="outlined"
                   item-title="name"
                   item-value="code"
-                  variant="outlined"
-                  :return-object="false"
                   :items="states"
+                  :return-object="false"
                   :disabled="isLoading || loadingWarehouse"
                   @update:model-value="handleStateSelection"
-                ></v-combobox>
+                ></v-autocomplete>
               </div>
               <p class="error-text">{{ formData.state.errorMessage }}</p>
             </v-col>
@@ -153,18 +156,19 @@
             </v-col>
             <v-col cols="12" md="9">
               <div class="product-select">
-                <v-combobox
+                <v-autocomplete
                   v-model="formData.warehouse.value"
+                  auto-select-first="exact"
                   label="Warehouse"
                   variant="outlined"
                   item-title="name"
                   item-value="id"
+                  :items="warehouses"
                   :return-object="false"
                   :loading="loadingWarehouse"
-                  :items="warehouses"
                   :disabled="isLoading || loadingWarehouse"
                   @update:model-value="validateFormData('warehouse')"
-                ></v-combobox>
+                ></v-autocomplete>
               </div>
               <p class="error-text">{{ formData.warehouse.errorMessage }}</p>
             </v-col>
@@ -175,17 +179,18 @@
             </v-col>
             <v-col cols="12" md="9">
               <div class="product-select">
-                <v-combobox
+                <v-autocomplete
                   v-model="formData.category.value"
+                  auto-select-first="exact"
                   label="Category"           
                   variant="outlined"
                   item-title="category_name"
                   item-value="category_id"
-                  :return-object="false"
                   :items="categories"
+                  :return-object="false"
                   :disabled="isLoading"
                   @update:model-value="validateFormData('category')"
-                ></v-combobox>
+                ></v-autocomplete>
               </div>
               <p class="error-text">{{ formData.category.errorMessage }}</p>
             </v-col>
@@ -209,7 +214,7 @@
         </div>
         <div class="btn-container">
           <AppButton @click="validateFormData(undefined, true)" class="mr-3" type="submit" :loading="isLoading" :disabled="isLoading">
-            Create
+            Edit
           </AppButton>
 
           <AppButton @click="closeModal" :disabled="isLoading">
@@ -222,10 +227,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { CustomFormData, CreateProductDto, WarehouseByState } from '@/types'
+import { ref, computed, watch } from 'vue'
+import { CustomFormData, CreateProductDto, WarehouseByState, Product, UpdateProductDto } from '@/types'
 import { formValidator, openToastNotification } from '@/utils'
-import { CreateProductSchema } from '@/schemas'
+import { UpdateProductSchema } from '@/schemas'
 import { useWarehouseStore, useProductStore, useCategoryStore, } from '@/stores'
 
 // ================= COMPONENTS =============== //
@@ -241,20 +246,27 @@ const props = defineProps({
   },
 });
 
+// =============== STORE =============== //
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
 const warehouseStore = useWarehouseStore();
 
+// ============== DATA ================ //
 const isLoading = ref<boolean>(false);
 const loadingWarehouse = ref<boolean>(false);
 const startFileUpload = ref<boolean>(false);
 const warehouses = ref<WarehouseByState>([]);
+const editProductPayload = ref<UpdateProductDto>({} as UpdateProductDto);
 const productSizes = ['S', 'M', 'L', 'XL', 'XXL', 'NIL'];
 const states = computed(() => warehouseStore.states);
 const categories = computed(() => categoryStore.categories);
-const createProductPayload = ref<CreateProductDto>({} as CreateProductDto);
+const selectedProduct = computed<Product>(() => productStore.selectedProduct as Product);
 
-const formData = ref<CustomFormData>({
+const defaultFormValue: CustomFormData<UpdateProductDto> = {
+  productId: {
+    value: null,
+    errorMessage: null,
+  },
   name: {
     value: null,
     errorMessage: null,
@@ -295,52 +307,34 @@ const formData = ref<CustomFormData>({
     value: null,
     errorMessage: null,
   },
-});
+}
+
+const formData = ref({...defaultFormValue});
+
+// ============= WATCHER ============== //
+watch(selectedProduct, async (newValue) => {
+  const data = { ...newValue };
+  formData.value.productId.value = data.product_id;
+  formData.value.name.value = data.product_name;
+  formData.value.description.value = data.description;
+  formData.value.images.value = data.images.map(i => i.imageUrl);
+  formData.value.sizes.value = data.sizes;
+  formData.value.price.value = data.price;
+  formData.value.quantity.value = data.stock_quantity;
+  formData.value.state.value = data.state_id;
+  formData.value.category.value = newValue.category_id;
+  formData.value.manufacturer.value = newValue.manufacturer;
+
+  loadingWarehouse.value = true;
+  warehouses.value = await warehouseStore.fetchWarehouseByState(data.state_id);
+  loadingWarehouse.value = false;
+  formData.value.warehouse.value = newValue.warehouse_id;
+},
+{ deep: true })
 
 // ================== METHODS ================= //
 function clearFormData() {
-  formData.value = {
-    name: {
-      value: null,
-      errorMessage: null,
-    },
-    description: {
-      value: null,
-      errorMessage: null,
-    },
-    images: {
-      value: [],
-      errorMessage: null,
-    },
-    sizes: {
-      value: [],
-      errorMessage: null,
-    },
-    price: {
-      value: null,
-      errorMessage: null,
-    },
-    quantity: {
-      value: null,
-      errorMessage: null,
-    },
-    state: {
-      value: null,
-      errorMessage: null,
-    },
-    warehouse: {
-      value: null,
-      errorMessage: null,
-    },
-    manufacturer: {
-      value: null,
-      errorMessage: null,
-    },
-    category: {
-      value: null,
-      errorMessage: null,
-    }
-  }
+  formData.value = {...defaultFormValue};
 }
 
 function closeModal() {
@@ -357,27 +351,10 @@ function handleFileError(errorMessage: string | null) {
   formData.value.images.errorMessage = errorMessage;
 }
 
-function handleFileUploadSuccess(urls: Array<string> | null) {
-  startFileUpload.value = false;
-  if (!urls) {
-    isLoading.value = false;
-    return;
-  }
-
-  const { price, quantity } = createProductPayload.value;
-
-  createProductPayload.value.images = urls.map(
-    url => ({image_url: url, s3_id: ''})
-  );
-  createProductPayload.value.price = price.toString() as any;
-  createProductPayload.value.quantity = quantity.toString() as any;
-
-  createProduct({...createProductPayload.value});
-}
-
 function updateSize(value: string) {
-  if (isLoading.value === true) return;
-  const existingIdx = formData.value.sizes.value.indexOf(value);
+  if (isLoading.value === true || !formData.value.sizes.value) return;
+
+  const existingIdx = formData.value.sizes.value.indexOf(value) || -1;
 
   if (existingIdx < 0) {
     formData.value.sizes.value.push(value);
@@ -403,32 +380,42 @@ async function handleStateSelection(stateId: string) {
   }
 }
 
-async function validateFormData(field?: keyof CreateProductDto, proceedOnSuccess = false) {
-  const payload = await formValidator<CreateProductDto>(formData, CreateProductSchema, field);
+async function validateFormData(field?: keyof UpdateProductDto, proceedOnSuccess = false) {
+  const payload = await formValidator<UpdateProductDto>(formData, UpdateProductSchema, field);
   if (payload && proceedOnSuccess) {
     isLoading.value = true;
-    createProductPayload.value = payload;
+    editProductPayload.value = payload;
     startFileUpload.value = true;
   }
 }
 
-async function createProduct(payload: CreateProductDto) {
+function handleFileUploadSuccess(urls: Array<string> | null) {
+  startFileUpload.value = false;
+  if (!urls) {
+    isLoading.value = false;
+    return;
+  }
+
+  const { price, quantity } = editProductPayload.value;
+
+  editProductPayload.value.images = urls.map(
+    url => ({image_url: url, s3_id: ''})
+  );
+  editProductPayload.value.price = price.toString() as any;
+  editProductPayload.value.quantity = quantity.toString() as any;
+
+  editProduct({...editProductPayload.value});
+}
+
+async function editProduct(payload: UpdateProductDto) {
   isLoading.value = true;
   try {
-    // payload.price = payload.price.toString() as any;
-    // payload.quantity = payload.quantity.toString() as any;
-    // const urls = await handleFileUpload(payload.images);
-    // if (urls) {
-    //   payload.images = [];
-    //   urls.forEach(url => payload.images.push({ image_url: url }))
-    // }
-
-    const success = await productStore.createProduct(payload);
+    const success = await productStore.updateProduct(payload);
     if (success) {
       emit('completed');
       clearFormData();
       openToastNotification({
-        message: 'Product created successfully'
+        message: 'Product Edited Successfully'
       })
     }
   } catch (error) {
@@ -436,8 +423,6 @@ async function createProduct(payload: CreateProductDto) {
   }
   isLoading.value = false;
 }
-
-
 </script>
 
 <style lang="scss" scoped>

@@ -25,4 +25,9 @@ export const ENDPOINTS = {
   GET_CUSTOMERS: `${ADMIN_BASE}/customer`,
   PENDING_TOPUP_REQUEST: `${ADMIN_BASE}/topup/request`,
   PENDDNG_CREDIT_REQUEST: `${ADMIN_BASE}/credit/request`,
+
+  PRODUCT_METRICS: `${ADMIN_BASE}/product/metrics`,
+  PRODUCT_BY_ID: (id: any) => `${ADMIN_BASE}/product/${id}`,
+  PUBLISH_PRODUCT: (id: any) => `${ADMIN_BASE}/product/${id}/publish`,
+  UNPUBLISH_PRODUCT: (id: any) => `${ADMIN_BASE}/product/${id}/unpublish`,
 };

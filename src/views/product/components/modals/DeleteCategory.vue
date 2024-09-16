@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, defineEmits } from 'vue'
+import { ref } from 'vue'
 import { Trash2 } from 'lucide-vue-next'
 import { useCategoryStore } from '@/stores'
 import { openToastNotification } from '@/utils'
