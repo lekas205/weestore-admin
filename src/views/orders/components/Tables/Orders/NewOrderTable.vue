@@ -1,6 +1,6 @@
 <template>
     <section>
-        <app-table-wrapper searchLabelText="Search by Order Number" @search="search">
+        <app-table-wrapper searchLabelText="Search by Order Number" @search="search" @filter="emits('filter', $event)">
         <v-data-table 
             hide-default-footer 
             :items="items" 
@@ -63,6 +63,7 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
+    (e: "filter", item: any):void
     (e: "fetchMore", page: any): void;
     (e: "updateStatus", select: any): void;
     (e: "viewOrder", item: any):void

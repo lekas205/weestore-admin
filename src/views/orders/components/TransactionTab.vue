@@ -8,6 +8,7 @@
             :items="newOrdersTableData"
             :pagination="new_orders?.pagination"
             class="elevation-1 custom-table"
+            @filter="fetchNewOrders($event)"
             @fetchMore="fetchNewOrders($event)"
             @updateStatus="updateOrderStatus($event)"
           >
@@ -181,6 +182,7 @@ const returnedOrderTableData = computed(() => {
       "channel": formatText(elm.payment_method),
       "amount": formatAsMoney(elm.amount) ,
       "status": elm.status,
+      is_return_processed: elm.is_return_processed,
    }
   })
 })

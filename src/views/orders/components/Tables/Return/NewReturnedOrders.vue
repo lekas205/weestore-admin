@@ -1,6 +1,6 @@
 <template>
     <section>
-        <app-table-wrapper searchLabelText="Search by Order Number" hasDelete>
+        <app-table-wrapper searchLabelText="Search by Order Number" hasDelete @search="search">
         <v-data-table 
             hide-default-footer 
             :items="items" 
@@ -20,7 +20,7 @@
                             <v-btn color="green" variant="text" @click="approveReturn(item)"> Approve </v-btn>
                         </v-list-item>
                         <v-list-item>
-                            <v-btn color="red" variant="text"> Decline </v-btn>
+                            <v-btn color="red" variant="text" @click="emits('declineRequest', item.request_id)"> Decline </v-btn>
                         </v-list-item>
                     </v-list>
                     </v-menu>
@@ -28,17 +28,18 @@
             </template>
 
             <template  v-slot:bottom>
-                <TableFooter v-bind="pagination" />
+                <TableFooter v-bind="pagination"  v-model:page="page"/>
             </template>
         </v-data-table>
         </app-table-wrapper>
 
-        <OrderReturnForm :openModal="openModal" @close="openModal = false"  status="Approval" />
+        <OrderReturnForm :openModal="openModal" @close="openModal = false"  @refreshData="emits('refreshData')" status="Approval" :order="itemToProcess" />
     </section>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { storeToRefs } from "pinia";
 import { Ellipsis } from 'lucide-vue-next'
 
 import AppChip from "@/components/AppChip.vue";
@@ -46,13 +47,31 @@ import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
 import OrderReturnForm from "../../Modals/OrderReturnForm.vue";
+import { useOrderStore } from "@/stores";
 
+const orderStores  = useOrderStore()
+
+const { return_requests } = storeToRefs(orderStores)
 const props = defineProps<{
     items: any[],
-    loading: boolean 
+    loading: boolean,
+    pagination: any,
 }>()
 
-const openModal = ref(false)
+const emits = defineEmits<{
+    (e: "fetchMore", page: any): void;
+    (e: "updateStatus", select: any): void;
+    (e: "refreshData"): void;
+    (e: "declineRequest", id: string): void
+}>()
+
+const page = ref(1);
+const openModal = ref(false);
+const itemToProcess = ref({})
+const payload= ref({
+    page: 1,
+    search: "",
+})
 const headers = ref([
     {
     align: 'start',
@@ -69,9 +88,21 @@ const headers = ref([
     { key: 'action', title: 'Action' },
 ])
 
+watch(()=> page.value, (newPage)=>{
+    if(newPage){
+        payload.value.page = Number(newPage);
+        emits("fetchMore", payload.value);
+    }
+})
+
+const search = (text: string) => {
+    payload.value.search = text;
+    payload.value.page = 1;
+    emits("fetchMore", payload.value)
+}
 
 const approveReturn = (item: any) => {
-    openModal.value = true
-    console.log(item, "__________");
+    itemToProcess.value = return_requests.value.data.find((elm:any)=> elm.order_id === item.id);
+    openModal.value =true;
 }
 </script>

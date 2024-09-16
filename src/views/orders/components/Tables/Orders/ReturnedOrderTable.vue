@@ -16,7 +16,7 @@
 
             <template v-slot:item.action="{ item }">
                 <div class="tw-flex tw-gap-3">
-                    <v-select
+                    <!-- <v-select
                         v-model="select"
                         :items="actionOptions"
                         item-title="label"
@@ -25,9 +25,9 @@
                         persistent-hint
                         return-object
                         single-line
-                    ></v-select>
+                    ></v-select> -->
 
-                    <p class="tw-text-[18px] tw-underline tw-w-[30%]" @click="processReturn(item)">Process Return</p>
+                    <p class="tw-text-[18px] tw-underline tw-w-[30%]" v-if="!item.is_return_processed" @click="processReturn(item)">Process Return</p>
                 </div>
             </template>
 
@@ -107,7 +107,6 @@ watch(()=> page.value, (newPage)=>{
 const processReturn = (item: any) => {
     itemToProcess.value = returned_orders.value.data.find((elm:any)=> elm.order_id === item.id);
     openModal.value =true;
-
 }
 
 const search = (text: string) => {

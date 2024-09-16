@@ -72,6 +72,5 @@ const headers = ref([
 
 const approveReturn = (item: any) => {
     openModal.value = true
-    console.log(item, "__________");
 }
 </script>

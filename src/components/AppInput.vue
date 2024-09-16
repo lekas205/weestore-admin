@@ -2,11 +2,10 @@
   <div class="input-group d-flex align-center rounded-lg">
     <slot name="prepend-icon"></slot>
     <input
-      :value="props.value"
+      v-model="model"
       :placeholder="label"
       :type="internalType"
       v-bind="$attrs"
-      @input="emits('update:modelValue', $event.target.value)"
     />
     <div class="password-icon" v-if="type == 'password'">
       <svg v-if="!showPassword" @click="showPassword = !showPassword" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
@@ -17,14 +16,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 
 const model = ref("");
 
 interface Props {
   label?: string;
   type?: string;
-  value?: string | number
+  value?: string;
 }
 const emits = defineEmits<{
   (e: "update:modelValue", data: any): void;
@@ -32,7 +31,7 @@ const emits = defineEmits<{
 const props = withDefaults(defineProps<Props>(), {
   label: '',
   type: 'text',
-  value: "" ,
+  value: "" 
 })
 
 defineOptions({
@@ -55,6 +54,12 @@ const internalType = computed(() => {
     return props.type;
   }
 });
+
+onMounted(()=>{
+  if(props.value){
+    model.value = props.value
+  }
+})
 </script>
 
 <style lang="scss" scoped>

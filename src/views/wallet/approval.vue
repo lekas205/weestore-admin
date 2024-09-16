@@ -73,7 +73,7 @@ const items = computed(()=> {
             id: elm.request_id,
             name: `${formatText(elm.customer.first_name)} ${formatText(elm.customer.last_name)}`,
             amount: formatAsMoney(elm.amount),
-            phone_no: elm.phone,
+            phone_no: elm.customer.phone,
         }
     })
 })

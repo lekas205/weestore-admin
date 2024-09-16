@@ -24,7 +24,30 @@
           Clear <X/>
         </v-btn>
       </div>
-      <div class="action-container">
+      <div class="action-container tw-gap-4">
+        <v-menu>
+          <template v-slot:activator="{ props }">
+            <v-btn
+              size="large"
+              color="black"
+              v-bind="props"
+              variant="outlined"
+            >
+            <Filter />
+              Filter by
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in items"
+              :key="index"
+              :value="index"
+              @click="filterTable(item.value)"
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
         <button
           v-if="createBtnText"
           class="table-btn green-btn"
@@ -50,10 +73,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Plus, Trash2 , X} from 'lucide-vue-next'
+import { Plus, Trash2 ,Filter, X} from 'lucide-vue-next'
 import AppInput from '@/components/AppInput.vue'
+import { getDateRange } from "@/utils";
 
-const emit = defineEmits(['create', 'search', 'delete']);
+const emit = defineEmits(['create', 'search', 'delete', 'filter']);
 
 defineProps({
   searchLabelText: {
@@ -82,6 +106,19 @@ const clear = () => {
   searched.value = false;
   search.value = ""
   emit('search', search.value)
+}
+
+const  items =  ref([
+  { title: 'Today', value: "today" },
+  { title: '3 days', value: "last3" },
+  { title: '7 days', value: "last7" },
+  { title: '2 weeks', value: "last14" },
+  { title: 'Last 30 days', value: "lastmonth" },
+  { title: 'Custom' },
+])
+
+const filterTable = (range:string) =>{
+  emit('filter',{ start_date: getDateRange(range), end_date: getDateRange('today')})
 }
 </script>
 

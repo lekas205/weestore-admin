@@ -5,7 +5,11 @@
            <NewReturnedOrders
             :items="newOrdersTableData"
             :loading="loading"
+            :pagination="return_requests.pagination"
             class="elevation-1 custom-table"
+            @declineRequest="declineRequest($event)"
+            @fetchMore="fetchContent($event)"
+            @refreshData ="fetchContent()"
            >
            </NewReturnedOrders>
        </template>
@@ -41,30 +45,53 @@ import NewReturnedOrders from "./Tables/Return/NewReturnedOrders.vue";
 import OrderRequestApproval from "./Tables/Return/RequestApproval.vue";
 import DeclinedRequest from "./Tables/Return/DeclinedRequest.vue";
 
-import { useOrderStore } from "@/stores";
+import { useOrderStore, useAuthStore } from "@/stores";
+import { formatDate, formatTime, formatAsMoney, formatText, capitalizeFirstLeters } from "@/utils";
+
 
 const orderStores  = useOrderStore()
+const authStore = useAuthStore()
 
 const { return_requests } = storeToRefs(orderStores)
 
 const loading = ref(false);
 
-const tabTitles = ref([ "new return request", "approved", "declined"]);
-const newOrdersTableData = computed(()=>{
-    return  [{
-        "order_number": "Ela John",
-        "date": "May 16 2024",
-        "reseller_name": "Nivea Roll on",
-        "warehouse": 2000,
-        "return_type": 2400,
-        "amount_return": "BANK TRANSFER",
-        "amount_retain": "Full Delivery",
-    }]
+const returnType = ref({
+    FULL_RETURN: "Full Return",
+    HALF_RETURN: "Partial Return",
 })
 
+const itemToProcess = ref({})
+const tabTitles = ref([ "new return request", "approved", "declined"]);
+
+const newOrdersTableData = computed(()=>{
+    return return_requests.value?.data?.map((elm:any)=>{
+        return  {
+            order_number: elm.order_no,
+            date: formatDate(elm.created_at),
+            reseller_name: `${formatText(elm.first_name)} ${formatText(elm.last_name)}`,
+            warehouse: formatText(elm.warehouse),
+            return_type: returnType.value[elm.return_type],
+            amount_return: formatAsMoney(elm.amount_to_return),
+            amount_retain: formatAsMoney(elm.amount_to_retain),
+        }      
+    })
+  
+})
+
+const fetchContent = async (query?: any) => {
+    loading.value = true;
+    await orderStores.fetchReturnRequest(query);
+    loading.value = false;
+}
+
+const declineRequest = async(requestId: string) => {
+    orderStores.ApproveDeclineReturn({requestId, action: "approve"});
+}
+
 onMounted( async ()=>{
-    await orderStores.fetchReturnRequest()
-    console.log(return_requests.value);
-    
+    authStore.toggleLoader();
+    await fetchContent()
+    authStore.toggleLoader();
 })
 </script>

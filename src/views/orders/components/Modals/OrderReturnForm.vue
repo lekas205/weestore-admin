@@ -7,12 +7,12 @@
               <p 
                 @click="returnType= 'half' "
                 class="tw-font-[700] tw-text-[20px] tw-text-[#A5A1A8] tw-cursor-pointer" 
-                :class="{'tw-underline tw-text-[#000000]': returnType === 'half'}"
+                :class="{'tw-underline tw-text-[#000]': returnType === 'half'}"
              >Half return </p>
                 <p 
                     @click="returnType= 'full' "
                     class="tw-font-[700] tw-text-[20px] tw-text-[#A5A1A8] tw-cursor-pointer" 
-                    :class="{'tw-underline tw-text-[#000000]': returnType === 'full'}"
+                    :class="{'tw-underline tw-text-[#000]': returnType === 'full'}"
                 >Full Return</p>
             </div>
   
@@ -32,7 +32,7 @@
                   :value="formData.wharehouse"
                   label="Wharehouse"
                   type="text"
-                  :disabled="isLoading"
+                  readonly
                 />
                 <!-- {{ formData.wharehouse }} -->
                 <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
@@ -47,7 +47,7 @@
                 <AppInput
                   label="Reseller’s Name"
                   type="text"
-                  :disabled="isLoading"
+                  readonly
                   v-model="formData.reseller_name"
                   :value="formData.reseller_name"
                 />
@@ -63,7 +63,7 @@
                 <AppInput
                   label="Order ID"
                   type="text"
-                  :disabled="isLoading"
+                  readonly
                   :value="formData.order_id"
                   v-model="formData.order_id"
                 />
@@ -74,18 +74,18 @@
             <hr/>
 
             <v-row class="mt-4">
-                <v-col cols="12" md="6" v-for="(i, index ) in 1">
+                <v-col cols="12" md="6" v-for="(i, index ) in formData.orders">
                     <v-row>
                         <v-col cols="12" md="3">
                             <p class="tw-text-lg tw-font-medium">Product Name</p>
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
-                            v-model="formData.order[0].product_name"
-                            :value="formData.order[0].product_name"
+                            v-model="formData.orders[index].product_name"
+                            :value="formData.orders[index].product_name"
                             label=""
                             type="text"
-                            :disabled="isLoading"
+                            readonly
                             />
                         </v-col>
                     </v-row>
@@ -95,27 +95,29 @@
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
-                            :value="formData.order[0].price"
-                            v-model="formData.order[0].price"
+                            :value="formData.orders[index].price"
+                            v-model="formData.orders[index].price"
                             label=""
                             type="text"
-                            :disabled="isLoading"
+                            readonly
                             />
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col cols="12" md="3">
-                            <p class="tw-text-lg tw-font-medium">Quantity in Stock</p>
-                        </v-col>
-                        <v-col cols="12" md="9">
-                            <AppInput
-                            :value="formData.order[0].quantity"
-                            v-model="formData.order[0].quantity"
-                            label=""
-                            type="text"
-                            :disabled="isLoading"
-                            />
-                        </v-col>
+                      <v-col cols="12" md="3">
+                          <p class="tw-text-lg tw-font-medium">Quantity in Stock</p>
+                      </v-col>
+                      <v-col cols="12" md="9">
+                          <AppInput
+                          :value="formData.orders[index].quantity"
+                          v-model="formData.orders[index].quantity"
+                          label=""
+                          type="number"
+                          />
+                          <p class="error-text" v-if="formData.orders[index].quantity  > formData.orders[index].initial_quantity">{{ `Sorry quatity can't be increased above ${formData.orders[index].initial_quantity}` }}</p>
+
+                      </v-col>
+
                     </v-row>
                     <v-row class="mb-3">
                         <v-col cols="12" md="3">
@@ -123,11 +125,11 @@
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
-                            :value="formData.order[0].amount"
-                            v-model="formData.order[0].amount"
+                            :value="formData.orders[index].amount"
+                            v-model="formData.orders[index].amount"
                             label=""
                             type="text"
-                            :disabled="isLoading"
+                            readonly
                             />
                         </v-col>
                     </v-row>
@@ -154,7 +156,7 @@
                         :value="formData.amount_paid"
                         label=""
                         type="text"
-                        :disabled="isLoading"
+                        readonly
                         />
                         <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                     </v-col>
@@ -171,7 +173,7 @@
                         v-model="formData.amount_retain"
                         label=""
                         type="text"
-                        :disabled="isLoading"
+                        readonly
                         />
                         <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                     </v-col>
@@ -187,10 +189,10 @@
                     </v-col>
                     <v-col cols="12" md="7">
                         <v-textarea
-                            :value="formData.return_reason"
-                            v-model="formData.return_reason"
+                            :value="formData.reason"
+                            v-model="formData.reason"
                             variant="outlined"
-                            :disabled="isLoading"
+                            readonly
                         ></v-textarea>
                         <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                     </v-col>
@@ -207,7 +209,7 @@
                         v-model="formData.amount_return"
                         label=""
                         type="text"
-                        :disabled="isLoading"
+                        readonly
                         />
                         <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                     </v-col>
@@ -216,12 +218,12 @@
           </v-row>
 
           <div class="btn-container">
-            <v-btn  @click="closeModal" size="large" :disabled="isLoading" variant="text" color="primary">
+            <v-btn  @click="closeModal" size="large" readonly variant="text" color="primary">
               Cancel
             </v-btn>
-            <AppButton @click="validateFormData(undefined, true)" class="mr-3" type="submit" :loading="isLoading" :disabled="isLoading">
+            <v-btn @click="submit" class="mr-3" size="large" color="primary" type="submit" :loading="isLoading" :disabled="disabledBtn || isLoading">
               {{ status === 'request' ?" Submit request": "Approve"}}
-            </AppButton>
+            </v-btn>
   
 
           </div>
@@ -231,16 +233,17 @@
   </template>
   
   <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed, ref, watch } from 'vue'
   import AppInput from '@/components/AppInput.vue'
   import AppButton from '@/components/AppButton.vue'
   import AppFileUpload from '@/components/AppFileUpload.vue'
   import { CustomFormData, CreateProductDto, Category, IState } from '@/types'
-  import { formValidator, handleFileUpload, openToastNotification } from '@/utils'
+  import { formValidator, handleFileUpload, openToastNotification, formatAsMoney } from '@/utils'
   import { CreateProductSchema } from '@/schemas'
-  import { useWarehouseStore, useProductStore } from '@/stores'
+  import { useOrderStore } from '@/stores'
   
-  const emit = defineEmits(['close']);
+  const orderStore = useOrderStore();
+  const emit = defineEmits(['close', 'refreshData']);
   const props = defineProps({
     openModal: {
       type: Boolean,
@@ -273,20 +276,14 @@
     },
   });
   
-  const warehouseStore = useWarehouseStore();
-  const productStore = useProductStore();
+  const returnType = ref('half');
   const isLoading = ref<boolean>(false);
-  const loadingWarehouse = ref(false);
-  const productSizes = ['S', 'M', 'L', 'XL', 'XXL', 'NIL'];
-  const warehouses = ref<any[]>([]);
-  let imageFiles: Array<File> = [];
-  const returnType = ref('half')
-  
+
   const formData = ref<any>({
     order_id: "",
     wharehouse: "",
     reseller_name: "",
-    order: [{
+    orders: [{
       Porduct_name: "",
       price: "",
       quantity: "",
@@ -295,7 +292,7 @@
     }],
     amount_paid: "",
     amount_retain: "",
-    return_eason: "",
+    reason: "",
     amount_return: ","
 
   })
@@ -314,10 +311,21 @@
 
   watch(()=> props.openModal, (newval)=>{
     if(newval){
-      formData.value.wharehouse = props.order.warehouse_name;
-      formData.value.order_id = props.order.order_no
-      formData.value.order = props.order.order_items
-      formData.value.amount_paid = props.order.amount
+      formData.value.reason = props.order.reason;
+      formData.value.wharehouse = props.order.warehouse_name || props.order.warehouse;
+      formData.value.order_id = props.order.order_no;
+      formData.value.reseller_name = props.order.first_name + " " +  props.order.last_name;
+      formData.value.orders = props.order.orderItems.map((elm:any)=>{
+        return {
+          id: elm.product_id,
+          product_name: elm.product_name,
+          price: elm.price,
+          quantity: elm.quantity,
+          amount: elm.amount,
+          initial_quantity:  Number(elm.quantity),
+        }
+      })
+      formData.value.amount_paid = props.order.amount ||  props.order.total_amount;      
     }
   } )
 
@@ -331,80 +339,47 @@
     { deep: true }
   )
 
+  const disabledBtn = computed(()=>{
+    return formData.value.orders.some((elm:any)=> elm.quantity > elm.initial_quantity)
+  })
+
   const recalculateORders = () => {
-    formData.value.order.forEach((elm: any, index:number)=>{
+    formData.value.orders.forEach((elm: any, index:number)=>{
       elm.amount = elm.price * elm.quantity
        index === 0 ? 
        formData.value.amount_retain = elm.amount 
-       : formData.value.amount_retain+= elm.about
+       : formData.value.amount_retain+= elm.amount
     });
     formData.value.amount_return =  formData.value.amount_paid -  formData.value.amount_retain
   } 
-  
-  function updateSize(value: string) {
-    if (isLoading.value === true) return;
-    const existingIdx = formData.value.sizes.value.indexOf(value);
-  
-    if (existingIdx < 0) {
-      formData.value.sizes.value.push(value);
-    }
-    else {
-      formData.value.sizes.value.splice(existingIdx, 1);
-    }
-  
-    if(formData.value.sizes.value.length > 0) {
-      formData.value.sizes.errorMessage = null;
-    }
-  }
-  
-  function handleSavedFile(files: File[]) {
-    if (isLoading.value === true) return;
-    formData.value.images.value = files;
-    // TODO: check proxy Array
-    if (files.length  >= 1) {
-      formData.value.images.errorMessage = null;
-    }
-  }
-  
-  async function handleStateSelection(stateId: any) {
-    await validateFormData('state');
-    if (props.states.findIndex((i: any) => i.code == stateId) >= 0) {
-      loadingWarehouse.value = true;
-      warehouses.value = await warehouseStore.fetchWarehouseByState(stateId);
-      loadingWarehouse.value = false;
-    }
-  }
-  
-  async function validateFormData(field?: keyof CreateProductDto, proceedOnSuccess = false) {
-    const payload = await formValidator<CreateProductDto>(formData, CreateProductSchema, field);
-    if (payload && proceedOnSuccess) {
-      await createProduct(payload);
-    }
-  }
-  
-  async function createProduct(payload: CreateProductDto) {
-    isLoading.value = true;
-    try {
-      payload.price = payload.price.toString() as any;
-      payload.quantity = payload.quantity.toString() as any;
-      const urls = await handleFileUpload(payload.images);
-      if (urls) {
-        payload.images = [];
-        urls.forEach(url => payload.images.push({ image_url: url }))
-      }
-  
-      const success = await productStore.createProduct(payload);
-      if (success) {
-        openToastNotification({
-          message: 'Product created successfully'
+
+  const createReturnRequestDTO = computed(()=>{
+    return {
+      ordeerId: props.order.order_id,
+      payload: {
+        reason: formData.value.reason,
+        returnType : returnType.value === 'half' ? "HALF_RETURN": "FULL_RETURN",
+        products: formData.value.orders.map((elm:any)=>{
+          return {
+            productId: elm.id,
+            quantity: Number(elm.quantity) ,
+            amount: elm.amount,
+          }
         })
       }
-    } catch (error) {
-      console.log(error);
     }
+  })
+
+  const submit = async () => {
+    isLoading.value = true;
+    props.status === 'request' ?
+      await  orderStore.initiateOrderReturn(createReturnRequestDTO.value)
+      : await orderStore.ApproveDeclineReturn({requestId : props.order.request_id, action: "approve"});
+    isLoading.value = false;
+
+    closeModal()
+    emit("refreshData")
   }
-  
-  
   </script>
   
   <style lang="scss" scoped>

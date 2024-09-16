@@ -135,7 +135,12 @@ export const useOrderStore = defineStore("orders", () => {
 
   const fetchReturnRequest = async (query?: any): Promise<boolean> => {
     try {
-      const { data } = await http.get(ENDPOINTS.GET_ORDERS + `/return/request`);
+      const { data } = await http.get(
+        ENDPOINTS.GET_ORDERS + `/return/request`,
+        {
+          params: { ...query },
+        }
+      );
       const { paging, rows } = data.payload;
 
       return_requests.value = {
@@ -160,6 +165,37 @@ export const useOrderStore = defineStore("orders", () => {
     }
   };
 
+  const initiateOrderReturn = async ({
+    payload,
+    ordeerId,
+  }): Promise<boolean> => {
+    try {
+      const { data } = await http.post(
+        ENDPOINTS.GET_ORDERS + `/${ordeerId}/return`,
+        payload
+      );
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
+  const ApproveDeclineReturn = async ({
+    action,
+    requestId,
+  }): Promise<boolean> => {
+    try {
+      const { data } = await http.put(
+        ENDPOINTS.GET_ORDERS + `/return/request/${requestId}?action=${action}`
+      );
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
   return {
     new_orders,
     orderDetails,
@@ -177,5 +213,7 @@ export const useOrderStore = defineStore("orders", () => {
     fetchCompletedOrders,
     fetchDeclinedOrders,
     updateOrderStatus,
+    initiateOrderReturn,
+    ApproveDeclineReturn,
   };
 });
