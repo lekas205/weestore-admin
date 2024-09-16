@@ -16,23 +16,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 
-const model = defineModel();
+const model = ref("");
 
 interface Props {
   label?: string;
   type?: string;
+  value?: string;
 }
-
+const emits = defineEmits<{
+  (e: "update:modelValue", data: any): void;
+}>();
 const props = withDefaults(defineProps<Props>(), {
   label: '',
   type: 'text',
+  value: "" 
 })
 
 defineOptions({
   inheritAttrs: false
 })
+
+watch(
+  () => model.value,
+  (newvalue) => {
+    emits("update:modelValue", newvalue);
+  }
+);
 
 const showPassword = ref(false);
 const internalType = computed(() => {
@@ -43,6 +54,12 @@ const internalType = computed(() => {
     return props.type;
   }
 });
+
+onMounted(()=>{
+  if(props.value){
+    model.value = props.value
+  }
+})
 </script>
 
 <style lang="scss" scoped>

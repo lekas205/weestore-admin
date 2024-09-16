@@ -3,17 +3,51 @@
     <div class="table-top">
       <div class="search-container">
         <div v-if="searchLabelText" class="search-input">
-          <AppInput :label="searchLabelText"/>
+          <AppInput :label="searchLabelText" v-model="search"/>
         </div>
         <button
           v-if="searchLabelText"
+          :disabled="!search.length"
           class="table-btn search-btn"
-          @click="$emit('search')"
+          @click=" submit"
         >
           Search
         </button>
+        <v-btn
+          size="large"
+          variant="text"
+          color="red"
+          v-if="searched"
+          class="table-btn"
+          @click="clear"
+        >
+          Clear <X/>
+        </v-btn>
       </div>
-      <div class="action-container">
+      <div class="action-container tw-gap-4">
+        <v-menu>
+          <template v-slot:activator="{ props }">
+            <v-btn
+              size="large"
+              color="black"
+              v-bind="props"
+              variant="outlined"
+            >
+            <Filter />
+              Filter by
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in items"
+              :key="index"
+              :value="index"
+              @click="filterTable(item.value)"
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
         <button
           v-if="createBtnText"
           class="table-btn green-btn"
@@ -22,6 +56,15 @@
           <Plus class="mr-2" />
           {{ createBtnText }}
         </button>
+
+        <button
+          v-if="hasDelete"
+          class="table-btn red-btn"
+          @click="$emit('delete')"
+        >
+          <Trash2 class="mr-2" />
+           Delete
+        </button>
       </div>
     </div>
     <slot />
@@ -29,21 +72,54 @@
 </template>
 
 <script setup lang="ts">
-import { Plus } from 'lucide-vue-next'
+import { ref } from 'vue';
+import { Plus, Trash2 ,Filter, X} from 'lucide-vue-next'
 import AppInput from '@/components/AppInput.vue'
+import { getDateRange } from "@/utils";
 
-defineEmits(['create', 'search']);
+const emit = defineEmits(['create', 'search', 'delete', 'filter']);
 
 defineProps({
   searchLabelText: {
     type: String,
     required: false,
   },
+  hasDelete: {
+    type: Boolean,
+    default: false
+  },
   createBtnText: {
     type: String,
     required: false,
   }
 });
+
+const search = ref("");
+const searched = ref(false);
+
+const submit = () => {
+  searched.value = true;
+  emit('search', search.value)
+}
+
+const clear = () => {
+  searched.value = false;
+  search.value = ""
+  emit('search', search.value)
+}
+
+const  items =  ref([
+  { title: 'Today', value: "today" },
+  { title: '3 days', value: "last3" },
+  { title: '7 days', value: "last7" },
+  { title: '2 weeks', value: "last14" },
+  { title: 'Last 30 days', value: "lastmonth" },
+  { title: 'Custom' },
+])
+
+const filterTable = (range:string) =>{
+  emit('filter',{ start_date: getDateRange(range), end_date: getDateRange('today')})
+}
 </script>
 
 <style lang="scss" scoped>

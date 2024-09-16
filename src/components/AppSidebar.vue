@@ -130,7 +130,7 @@ const sidebarLinks = ref<SidebarLink[]>([
   {
     id: 2,
     title: 'Orders',
-    link: null,
+    link: ROUTES.orders.name,
     isActive: false,
     icon: OrdersIcon,
     activeIcon: OrdersIconActive,
@@ -139,7 +139,7 @@ const sidebarLinks = ref<SidebarLink[]>([
   {
     id: 3,
     title: 'Customers',
-    link: null,
+    link: ROUTES.customer.name,
     isActive: false,
     icon: CustomersIcon,
     activeIcon: CustomersIconActive,
@@ -157,7 +157,7 @@ const sidebarLinks = ref<SidebarLink[]>([
   {
     id: 5,
     title: 'Wallets',
-    link: null,
+    link: ROUTES.wallet.name,
     isActive: false,
     icon: WalletsIcon,
     activeIcon: WalletsIconActive,
@@ -166,7 +166,7 @@ const sidebarLinks = ref<SidebarLink[]>([
   {
     id: 6,
     title: 'Credits',
-    link: null,
+    link: ROUTES.credit.name,
     isActive: false,
     icon: CreditsIcon,
     activeIcon: CreditsIconActive,

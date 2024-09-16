@@ -1,0 +1,139 @@
+<template>
+    <div class="pa-5">
+        <div class="tw-flex">
+            <h2 class="tw-text-[32px] tw-font-bold tw-mr-auto"> {{ formatText(customer.first_name) }} {{ formatText(customer.last_name) }}  </h2>
+            <v-btn color="primary"> Edit </v-btn>
+
+            <!-- <div class="tw-bg-[#FF0F00AD] tw-text-white pa-4 tw-w-[300px] tw-ml-[40px] rounded-lg">
+                <h4 class="tw-text-[24px] tw-underline" >Bank Details</h4>
+                <div class="tw-flex tw-justify-between mb-2">
+                    <p class="tw-text-[20px]">Bank Name</p>
+                    <p class="tw-text-[20px]"> {{customer.bankDetails.bank_name }} </p>
+                </div>
+                <div class="tw-flex tw-justify-between mb-2"> 
+                    <p class="tw-text-[20px]">Acct Name</p>
+                    <p class="tw-text-[20px]"> {{ customer.bankDetails.acct_name }} </p>
+                </div>
+                <div class="tw-flex tw-justify-between">
+                    <p class="tw-text-[20px]">Acct Number</p>
+                    <p class="tw-text-[20px]"> {{ customer.bankDetails.acct_no }} </p>
+                </div>
+            </div> -->
+        </div>
+
+        <!-- customer personal data -->
+
+        <v-row :gutter="4" class="mt-5">
+            <v-col col="6" :md="3">
+                <p>FULL NAME</p>
+                <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                    {{ `${ formatText(customer.first_name)} ${formatText(customer.last_name)} `}}
+                </div>
+            </v-col>
+            <v-col col="6" :md="3">
+                <p>EMAIL ADDRESS</p>
+                <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                    {{ customer.email }}
+                </div>
+            </v-col>
+            <v-col col="6" :md="3">
+                <p>PHONE NUMBER</p>
+                <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                    {{ customer.phone }}
+                </div>
+            </v-col>
+            <v-col col="6" :md="3">
+                <p>CASH POINTS</p>
+                <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                    {{ customer.phone_no }}
+                </div>
+            </v-col>
+        </v-row>
+
+        <v-row :gutter="4" class="mt-5">
+            <v-col col="6" :md="3">
+                <p>CREDIT WALLET</p>
+                <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                </div>
+            </v-col>
+            <v-col col="6" :md="3">
+                <p>TOTAL PURCHASE</p>
+                <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                </div>
+            </v-col>
+            <v-col col="6" :md="3">
+                <p>TOTAL RETURNS</p>
+                <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                </div>
+            </v-col>
+            <v-col col="6" :md="3">
+                <p>MY ACCOUNT</p>
+                <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                </div>
+            </v-col>
+        </v-row>
+
+        <!-- Customer Transaction History -->
+        <app-tab :tabTitles="tabTitles" class="tw-mt-[50px]">
+            <template #order_history>
+                <OrderHistoryTable :loading="loading" :items="orderhistoryData" />
+            </template>
+            <template #transaction_history>
+                <TransactionHistory :loading="loading" :items="transactionistoryData" />
+            </template>
+        </app-tab>
+    </div>
+</template>
+
+<script lang="ts" setup>
+import { storeToRefs } from "pinia";
+import { useRoute } from "vue-router";
+import { ref, markRaw, onMounted, computed } from "vue";
+
+import AppTab from "@/components/AppTab.vue";
+import OrderHistoryTable from "./components/OrderHistoryTable.vue";
+import TransactionHistory from "./components/TransactionHistory.vue";
+
+import { PAYMENT_METHOD } from "@/constants/common";
+import { useCustomersStore, useAuthStore } from "@/stores";
+import { formatDate, formatText, formatAsMoney } from "@/utils";
+
+const route = useRoute();
+const authStore = useAuthStore()
+const customerStore = useCustomersStore()
+
+const { custommerDetails: customer } = storeToRefs(customerStore)
+
+const tabTitles =markRaw(["order history", "transaction history"])
+
+const orderhistoryData = computed(()=> {
+    return customer.value.orders?.map((elm:any)=> {
+        return   {
+            order_number: elm.order_no ?? "--",
+            date:  formatDate(elm.created_data),
+            method: PAYMENT_METHOD[elm.payment_method],
+            amount: formatAsMoney(elm.amount),
+            status: elm.status,
+        }
+    })
+})
+
+const transactionistoryData = computed(()=> {
+    return customer.value.transactions?.map((elm:any)=> {
+        return   {
+            order_no: elm.order_no ?? "--",
+            date:  elm.transaction_date,
+            method: PAYMENT_METHOD[elm.transaction_purpose],
+            amount: formatAsMoney(elm.amount),
+            position: elm.transaction_mode,
+            purpose: elm.purpose
+        }
+    })
+})
+
+onMounted(async ()=>{
+    authStore.toggleLoader();
+    await customerStore.getSingleCustomer(route.params.id as string)
+    authStore.toggleLoader();
+})
+</script>

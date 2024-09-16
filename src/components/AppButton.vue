@@ -80,7 +80,7 @@ button {
 }
 
 .secondary {
-  background-color: #fef3f1;
+  background-color: #fbded9;
   color: #f35c35;
 }
 

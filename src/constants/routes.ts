@@ -1,72 +1,103 @@
 export const ROUTES = {
   index: {
-    path: '/',
-    name: 'Index',
+    path: "/",
+    name: "Index",
     requiresAuth: false,
   },
   login: {
-    path: '/login',
-    name: 'Login',
+    path: "/login",
+    name: "Login",
     requiresAuth: false,
   },
   dashboard: {
-    path: '/dashboard',
-    name: 'Dashboard',
+    path: "/dashboard",
+    name: "Dashboard",
     requiresAuth: true,
-    title: 'Dashboard Overview'
+    title: "Dashboard Overview",
   },
   category: {
-    path: '/category',
-    name: 'Category',
+    path: "/category",
+    name: "Category",
     requiresAuth: true,
-    title: 'Category'
+    title: "Category",
   },
   warehouse: {
-    path: '/warehouse',
-    name: 'Warehouse',
+    path: "/warehouse",
+    name: "Warehouse",
     requiresAuth: true,
-    title: 'Warehouse'
+    title: "Warehouse",
   },
   product: {
-    path: '/product',
-    name: 'Product',
+    path: "/product",
+    name: "Product",
     requiresAuth: true,
-    title: 'Product'
+    title: "Product",
   },
   orders: {
-    path: '/orders',
-    name: 'Orders',
+    path: "/orders",
+    name: "Orders",
     requiresAuth: true,
-    title: 'Orders'
+    title: "Orders Management",
+  },
+
+  view_orders: {
+    path: "/order/:id",
+    name: "ViewOrders",
+    requiresAuth: true,
+    title: "View Order",
+  },
+  order_return: {
+    path: "/orders/returned-order",
+    name: "ReeturnedOrders",
+    requiresAuth: true,
+    title: "Return Processing",
   },
   customer: {
-    path: '/customers',
-    name: 'Customers',
+    path: "/customers",
+    name: "Customers",
     requiresAuth: true,
-    title: 'Customers'
+    title: "Customer Management",
+  },
+  unverified_customer: {
+    path: "/customers/unverified",
+    name: "UnverifiedCustomers",
+    requiresAuth: true,
+    title: "Customer Verification",
+  },
+  customer_details: {
+    path: "/customers/:id",
+    name: "CustomerDetails",
+    requiresAuth: true,
+    title: "Customer Details",
   },
   shipment: {
-    path: '/shipment',
-    name: 'Shipment',
+    path: "/shipment",
+    name: "Shipment",
     requiresAuth: true,
-    title: 'Shipment'
+    title: "Shipment",
   },
   wallet: {
-    path: '/wallets',
-    name: 'Wallets',
+    path: "/wallets",
+    name: "Wallets",
     requiresAuth: true,
-    title: 'Wallets'
+    title: "Wallets",
+  },
+  topup_approval: {
+    path: "/wallets/topup-approval",
+    name: "WalletsTopupApproval",
+    requiresAuth: true,
+    title: "Pending TopUp Approval",
   },
   credit: {
-    path: '/credits',
-    name: 'Credits',
+    path: "/credits",
+    name: "Credits",
     requiresAuth: true,
-    title: 'Credits'
+    title: "Credits Management",
   },
   payment: {
-    path: '/payments',
-    name: 'Payments',
+    path: "/payments",
+    name: "Payments",
     requiresAuth: true,
-    title: 'Payments'
+    title: "Payments",
   },
-}
+};
