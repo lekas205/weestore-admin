@@ -40,7 +40,7 @@ const props = defineProps({
   },
   page:{
     type: Number,
-    required: true,
+    required: false,
   }
 })
 
