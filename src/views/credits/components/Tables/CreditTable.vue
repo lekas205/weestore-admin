@@ -44,7 +44,7 @@ const emits = defineEmits<{
     (e: "showDetails"): void
 }>()
 
-const headers = ref([
+const headers = ref<any[]>([
     {
      align: 'start',
     key: 'name',

@@ -39,7 +39,7 @@ const props = defineProps<{
 }>()
 
 const openModal = ref(false)
-const headers = ref([
+const headers = ref<any[]>([
     {
     align: 'start',
     key: 'order_number',

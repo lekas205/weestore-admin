@@ -39,7 +39,7 @@ const customerStore = useCustomersStore()
 const { customers } = storeToRefs(customerStore)
 
 const page = ref(1)
-const headers = ref([
+const headers = ref<any[]>([
     {
     align: 'start',
     key: 'name',

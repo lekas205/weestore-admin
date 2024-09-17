@@ -52,7 +52,7 @@ const { pending_requests } = storeToRefs(walletStore)
 
 const page = ref(1);
 const loading = ref(false)
-const headers = ref([
+const headers = ref<any[]>([
     {
     align: 'start',
     key: 'name',

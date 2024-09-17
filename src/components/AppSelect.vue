@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 import { ref,computed, watch } from "vue";
 const props =  defineProps<{
-    value?: string,
+    value?: string | undefined,
     options: any[]
 }>()
 
