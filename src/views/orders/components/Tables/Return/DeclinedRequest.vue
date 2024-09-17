@@ -9,7 +9,7 @@
             loading-text="Loading... Please wait" 
         >
 
-            <template v-slot:item.action="{ item }">
+            <!-- <template v-slot:item.action="{ item }">
                 <v-menu :location="'bottom'">
                     <template v-slot:activator="{ props }">
                         <Ellipsis  v-bind="props" class="tw-cursor-pointer" />
@@ -25,7 +25,7 @@
                     </v-list>
                     </v-menu>
                
-            </template>
+            </template> -->
 
             <template  v-slot:bottom>
                 <TableFooter v-bind="pagination" />
@@ -49,7 +49,8 @@ import OrderReturnForm from "../../Modals/OrderReturnForm.vue";
 
 const props = defineProps<{
     items: any[],
-    loading: boolean 
+    loading: boolean,
+    pagination?: any
 }>()
 
 const openModal = ref(false)
@@ -68,9 +69,4 @@ const headers = ref<any[]>([
     { key: 'amount_retain', title: 'Amount to Retain' },
     { key: 'action', title: 'Action' },
 ])
-
-
-const approveReturn = (item: any) => {
-    openModal.value = true
-}
 </script>

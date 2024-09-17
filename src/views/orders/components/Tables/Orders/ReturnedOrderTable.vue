@@ -61,7 +61,7 @@ const {
 const props = defineProps<{
     items: any[],
     loading: boolean ,
-    pagination: any,
+    pagination?: any,
 }>()
 
 const emits = defineEmits<{
@@ -72,7 +72,7 @@ const emits = defineEmits<{
 const page =  ref(1)
 const select = ref("")
 const openModal = ref(false)
-const itemToProcess = ref({})
+const itemToProcess = ref<any>({})
 const actionOptions = ref(ORDER_STATUS_OPTION)
 
 
@@ -97,7 +97,7 @@ const headers = ref<any[]>([
     { key: 'action', title: 'Action' , width: "25%"},
 ])
 
-watch(()=> page.value, (newPage)=>{
+watch(()=> page.value, (newPage: any)=>{
     if(newPage){
         payload.value.page = Number(newPage);
         emits("fetchMore", payload.value);

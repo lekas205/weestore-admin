@@ -37,7 +37,8 @@ import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
 const props = defineProps<{
     items: any[],
-    loading: boolean 
+    loading: boolean,
+    pagination?: any,
 }>()
 
 const emits = defineEmits<{

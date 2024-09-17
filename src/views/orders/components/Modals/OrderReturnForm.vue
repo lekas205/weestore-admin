@@ -309,7 +309,7 @@
     emit('close');
   }
 
-  watch(()=> props.openModal, (newval)=>{
+  watch(()=> props.openModal, (newval: boolean)=>{
     if(newval){
       formData.value.reason = props.order.reason;
       formData.value.wharehouse = props.order.warehouse_name || props.order.warehouse;
@@ -331,7 +331,7 @@
 
   watch(
     () => formData,
-    (newValue, oldValue) => {
+    (newValue:any) => {
       if(newValue){
         recalculateORders()
       }

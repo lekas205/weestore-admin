@@ -198,7 +198,7 @@ const pagination = computed<Pagination>(() => {
 
 const viewOrderDetails= (item: any) => {
   // this find method is temporal till i get and endpoint to get single order
-  let data = new_orders.value.data.find((elm)=> elm.order_id === item.id ) 
+  let data = new_orders.value.data.find((elm: any)=> elm.order_id === item.id ) 
   orderStore.updateOrderDetails(data);
   router.push({name: ROUTES.view_orders.name, params: { id: item.id }})
 }

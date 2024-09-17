@@ -50,7 +50,7 @@ import TableFooter from '@/components/AppTableFooter.vue'
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
 const loading = ref(false)
-const salesTableData = ref([
+const salesTableData = ref<any[]>([
     {
         "RESELLER NAME": "Ela John",
         "NUMBER": "09138208161",
@@ -64,7 +64,7 @@ const salesTableData = ref([
     },
 ])
 
-const cashInflowTableData = ref([
+const cashInflowTableData = ref<any>([
     {
         "Reseller Name": "Ela John",
         "Number": "09138208161",
@@ -76,7 +76,7 @@ const cashInflowTableData = ref([
     },
 ])
 
-const cashOutflowTableData = ref([
+const cashOutflowTableData = ref<any>([
     {
         "Reseller Name": "Ela John",
         "Number": "09138208161",

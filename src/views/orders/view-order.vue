@@ -108,7 +108,7 @@ const {
 
 const html2Pdf = ref();
 const loading = ref(false)
-const headers = ref([
+const headers = ref<any[]>([
 {
     align: 'start',
     key: 'sr',
@@ -121,7 +121,7 @@ const headers = ref([
     { key: 'amount', title: 'Amount' },
 ])
 
-const orderedItems = computed(()=>{
+const orderedItems = computed<any[]>(()=>{
     return orderDetails.value?.order_items?.map((elm:any, index:number)=> {
         return {
             sr: index + 1,
@@ -142,9 +142,9 @@ const downloadInvoice = () => {
 };
 
 const printInvoice = () => {
-    var printContent = document.getElementById('invoice-area').innerHTML;
+    const printContent:any = document.getElementById('invoice-area')?.innerHTML;
     
-    var originalContent = document.body.innerHTML;
+    const originalContent = document.body.innerHTML;
     document.body.innerHTML = printContent;
     window.print();
     document.body.innerHTML = originalContent;

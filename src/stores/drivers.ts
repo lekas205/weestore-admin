@@ -8,7 +8,11 @@ export const useDriverStore = defineStore("drivers", () => {
 
   const fetchAllDrivers = async (query?: any): Promise<boolean> => {
     try {
-      const { data } = await http.get(ENDPOINTS.GET_ALL_DRIVERS);
+      const { data } = await http.get(ENDPOINTS.GET_ALL_DRIVERS, {
+        params: {
+          ...query,
+        },
+      });
       const { paging, rows } = data.payload;
       drivers.value = {
         data: rows,

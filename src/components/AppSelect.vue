@@ -13,6 +13,7 @@
 
 <script lang="ts" setup>
 import { ref,computed, watch } from "vue";
+
 const props =  defineProps<{
     value?: string | undefined,
     options: any[]
@@ -26,7 +27,7 @@ const select = computed({
     get() {
         return props.value;
     },
-    set(newValue) {
+    set(newValue: any) {
         emits("update", newValue);
     },
 });

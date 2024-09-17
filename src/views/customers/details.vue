@@ -102,8 +102,9 @@ const route = useRoute();
 const authStore = useAuthStore()
 const customerStore = useCustomersStore()
 
-const { custommerDetails: customer } = storeToRefs(customerStore)
+const { custommerDetails: customer }:any = storeToRefs(customerStore)
 
+const loading = ref(false)
 const tabTitles =markRaw(["order history", "transaction history"])
 
 const orderhistoryData = computed(()=> {
@@ -118,7 +119,7 @@ const orderhistoryData = computed(()=> {
     })
 })
 
-const transactionistoryData = computed(()=> {
+const transactionistoryData = computed<any>(()=> {
     return customer.value.transactions?.map((elm:any)=> {
         return   {
             order_no: elm.order_no ?? "--",

@@ -67,7 +67,7 @@ const emits = defineEmits<{
 
 const page = ref(1);
 const openModal = ref(false);
-const itemToProcess = ref({})
+const itemToProcess = ref<any>({})
 const payload= ref({
     page: 1,
     search: "",

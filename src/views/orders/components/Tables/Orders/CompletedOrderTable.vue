@@ -19,7 +19,7 @@
             </template>
 
             <template  v-slot:bottom>
-                <TableFooter v-bind="pagination"   v-model:page="page"/>
+                <TableFooter v-bind="pagination" v-model:page="page"/>
             </template>
         </v-data-table>
         </app-table-wrapper>
@@ -28,6 +28,7 @@
 
 <script lang="ts" setup>
 import { ref, watch } from "vue";
+import { useRouter } from "vue-router";
 import { ZoomIn } from 'lucide-vue-next'
 
 import AppChip from "@/components/AppChip.vue";
@@ -37,7 +38,8 @@ import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
 const props = defineProps<{
     items: any[],
-    loading: boolean 
+    loading: boolean,
+    pagination?: any
 }>()
 
 const emits = defineEmits<{
@@ -45,13 +47,15 @@ const emits = defineEmits<{
     (e: "updateStatus", select: any): void;
 }>()
 
-const page = ref("")
+const router = useRouter();
+const page = ref<number>(1);
+
 const payload= ref({
     page: 1,
     search: "",
 });
 
-const headers = ref([
+const headers = ref<any[]>([
     {
     align: 'start',
     key: 'order_number',
@@ -67,7 +71,7 @@ const headers = ref([
     { key: 'view_order', title: 'View' },
 ])
 
-watch(()=> page.value, (newPage)=>{
+watch(()=> page.value, (newPage: number)=> {
     if(newPage){
         payload.value.page = Number(newPage);
         emits("fetchMore", payload.value)

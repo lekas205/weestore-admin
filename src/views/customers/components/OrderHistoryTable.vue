@@ -37,7 +37,7 @@ const props = defineProps<{
     loading: boolean 
 }>()
 
-const headers = ref([
+const headers = ref<any[]>([
     {
      align: 'start',
     key: 'order_number',

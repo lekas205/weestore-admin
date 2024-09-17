@@ -4,7 +4,7 @@ import http from "@/lib/http";
 import { ENDPOINTS } from "@/constants";
 import { handleStoreRequestError } from "@/utils";
 export const useWalletStore = defineStore("wallet", () => {
-  const pending_requests = ref({});
+  const pending_requests: any = ref({});
 
   const fetchPendingRequest = async (query?: any): Promise<boolean> => {
     try {

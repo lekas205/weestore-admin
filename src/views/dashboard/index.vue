@@ -15,7 +15,7 @@
       <performance-card :performanceStats="performanceData" class="tw-w-[50%]"/>
       <performance-card :performanceStats="performanceData" class="tw-w-[50%]"/>
     </div>
-    <!-- <transaction-tables /> -->
+    <transaction-tables />
   </div>
 </template>
 
@@ -23,7 +23,7 @@
 import SummaryCards from './components/SummaryCard.vue'
 import StatCards from './components/StatCard.vue'
 import PerformanceCard from "./components/PerformanceCard.vue";
-// import TransactionTables from "./components/TransactionTables.vue";
+import TransactionTables from "./components/TransactionTables.vue";
 
 import { ref } from 'vue'
 

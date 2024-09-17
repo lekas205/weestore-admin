@@ -29,7 +29,7 @@
 <script lang="ts" setup>
 import { ref, watch} from "vue";
 import { ZoomIn } from 'lucide-vue-next'
-
+import { useRouter } from "vue-router";
 import AppChip from "@/components/AppChip.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
@@ -37,7 +37,7 @@ import AppTableWrapper from "@/components/AppTableWrapper.vue";
 const props = defineProps<{
     items: any[],
     loading: boolean,
-    pagination: any
+    pagination?: any
 }>()
 
 const emits = defineEmits<{
@@ -45,7 +45,9 @@ const emits = defineEmits<{
     (e: "updateStatus", select: any): void;
 }>()
 
-const page = ref("")
+const router = useRouter()
+
+const page = ref("");
 const payload= ref({
     page: 1,
     search: "",
