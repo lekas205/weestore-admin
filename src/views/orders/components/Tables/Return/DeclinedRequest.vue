@@ -28,7 +28,7 @@
             </template> -->
 
             <template  v-slot:bottom>
-                <TableFooter v-bind="pagination" />
+                <TableFooter v-bind="pagination"  @next="next($event)"/>
             </template>
         </v-data-table>
         </app-table-wrapper>
@@ -53,7 +53,16 @@ const props = defineProps<{
     pagination?: any
 }>()
 
+const emits = defineEmits<{
+    (e: "fetchMore", page: any): void;
+    (e: "updateStatus", select: any): void;
+}>()
+
 const openModal = ref(false)
+const payload= ref({
+    page: 1,
+    search: "",
+});
 const headers = ref<any[]>([
     {
     align: 'start',
@@ -69,4 +78,10 @@ const headers = ref<any[]>([
     { key: 'amount_retain', title: 'Amount to Retain' },
     { key: 'action', title: 'Action' },
 ])
+
+const next = (page: number) => {
+    payload.value.page = Number(page);
+    emits("fetchMore", payload.value)
+}
+
 </script>

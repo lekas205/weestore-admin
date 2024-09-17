@@ -2,7 +2,8 @@
   <div class="input-group d-flex align-center rounded-lg">
     <slot name="prepend-icon"></slot>
     <input
-      v-model="model"
+      :value="value"
+      @input="$emit('update:value',($event.target as HTMLInputElement).value)"
       :placeholder="label"
       :type="internalType"
       v-bind="$attrs"
@@ -23,11 +24,12 @@ const model = ref("");
 interface Props {
   label?: string;
   type?: string;
-  value?: string;
+  value?: string | number | null;
 }
 const emits = defineEmits<{
-  (e: "update:modelValue", data: any): void;
+  (e: "update:value", data: any): void;
 }>();
+
 const props = withDefaults(defineProps<Props>(), {
   label: '',
   type: 'text',
@@ -37,13 +39,6 @@ const props = withDefaults(defineProps<Props>(), {
 defineOptions({
   inheritAttrs: false
 })
-
-watch(
-  () => model.value,
-  (newvalue) => {
-    emits("update:modelValue", newvalue);
-  }
-);
 
 const showPassword = ref(false);
 const internalType = computed(() => {
@@ -55,11 +50,6 @@ const internalType = computed(() => {
   }
 });
 
-onMounted(()=>{
-  if(props.value){
-    model.value = props.value
-  }
-})
 </script>
 
 <style lang="scss" scoped>

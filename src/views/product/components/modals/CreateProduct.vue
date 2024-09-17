@@ -19,7 +19,7 @@
             </v-col>
             <v-col cols="12" md="9">
               <AppInput
-                v-model="formData.name.value"
+                v-model:value="formData.name.value"
                 label="Product Name"
                 type="text"
                 :disabled="isLoading"
@@ -87,7 +87,7 @@
             </v-col>
             <v-col cols="12" md="9">
               <AppInput
-                v-model="formData.price.value"
+                v-model:value="formData.price.value"
                 label="Sales Price"
                 type="number"
                 :disabled="isLoading"
@@ -103,7 +103,7 @@
             </v-col>
             <v-col cols="12" md="9">
               <AppInput
-                v-model="formData.quantity.value"
+                v-model:value="formData.quantity.value"
                 label="Quantity"
                 type="number"
                 :disabled="isLoading"
@@ -196,7 +196,7 @@
             </v-col>
             <v-col cols="12" md="9">
               <AppInput
-                v-model="formData.manufacturer.value"
+                v-model:value="formData.manufacturer.value"
                 label="Manufacturer"
                 type="text"
                 :disabled="isLoading"

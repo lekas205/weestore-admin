@@ -1,6 +1,6 @@
 <template>
     <section>
-        <app-table-wrapper searchLabelText="Search for client" @search="search">
+        <app-table-wrapper searchLabelText="Search for client" @search="search" @filter="emits('filter', $event)">
         <v-data-table 
             hide-default-footer 
             :items="items" 
@@ -19,7 +19,7 @@
             </template>
 
             <template  v-slot:bottom>
-                <TableFooter v-bind="pagination" v-model:page="page"/>
+                <TableFooter v-bind="pagination" @next="next($event)"/>
             </template>
         </v-data-table>
         </app-table-wrapper>
@@ -43,6 +43,7 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
+    (e: "filter", item: any):void;
     (e: "fetchMore", page: any): void;
     (e: "updateStatus", select: any): void;
 }>()
@@ -71,12 +72,10 @@ const headers = ref<any[]>([
     { key: 'view_order', title: 'View' },
 ])
 
-watch(()=> page.value, (newPage: number)=> {
-    if(newPage){
-        payload.value.page = Number(newPage);
-        emits("fetchMore", payload.value)
-    }
-})
+const next = (page: number) => {
+    payload.value.page = Number(page);
+    emits("fetchMore", payload.value)
+}
 
 const search = (text: string) => {
     payload.value.search = text;
