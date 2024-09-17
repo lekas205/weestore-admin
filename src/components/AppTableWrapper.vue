@@ -114,7 +114,7 @@ const  items =  ref([
   { title: '7 days', value: "last7" },
   { title: '2 weeks', value: "last14" },
   { title: 'Last 30 days', value: "lastmonth" },
-  { title: 'Custom' },
+  // { title: 'Custom' },
 ])
 
 const filterTable = (range:string) =>{

@@ -51,7 +51,7 @@ const payload= ref({
     search: "",
 });
 
-const headers = ref([
+const headers = ref<any[]>([
     {
     align: 'start',
     key: 'order_number',
