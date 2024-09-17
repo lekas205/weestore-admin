@@ -1,10 +1,10 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import http from "@/lib/http";
-import { ENDPOINTS } from "@/constants";
+import { ENDPOINTS, STATE_PAYLOAD } from "@/constants";
 import { handleStoreRequestError } from "@/utils";
 export const useCreditStore = defineStore("credit", () => {
-  const credit_request = ref({});
+  const credit_request = ref({ ...STATE_PAYLOAD });
 
   const fetchCreditRequest = async (query?: any): Promise<boolean> => {
     try {
