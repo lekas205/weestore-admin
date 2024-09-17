@@ -27,15 +27,14 @@
             <v-data-table 
                 hide-default-footer 
                 :items="orderedItems" 
-                :loading="loading" 
                 :headers="headers"
                 loading-text="Loading... Please wait" 
                 class="elevation-1 custom-table"
             >
-            <template v-slot:item.amount="{ item }">
-                <p class="tw-text=primary"> {{item.amount}} </p>
-            </template>
-        </v-data-table>
+                <template v-slot:item.amount="{ item }">
+                    <p class="tw-text=primary"> {{item.amount}} </p>
+                </template>
+            </v-data-table>
 
         <div class="tw-flex tw-justify-between tw-bg-[#EFEEEE] tw-border tw-border-[#A4A9AE75] tw-py-[20px] tw-px-[60px] tw-mt-[40px]">
                 <div class="tw-text-center">
@@ -74,8 +73,8 @@ const {
    orderDetails
 } = storeToRefs(orderStore)
 
-const route = useRoute()
-const headers = ref([
+const route = useRoute();
+const headers = ref<any[]>([
 {
    align: 'start',
    key: 'sr',
@@ -88,7 +87,7 @@ const headers = ref([
    { key: 'amount', title: 'Amount' },
 ])
 
-const orderedItems = computed(()=>{
+const orderedItems = computed<any[]>(()=>{
    return orderDetails.value?.order_items?.map((elm:any, index:number)=> {
        return {
            sr: index + 1,

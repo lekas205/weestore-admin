@@ -51,7 +51,7 @@ const router = useRouter()
 const props = defineProps<{
     items: any[],
     loading: boolean,
-    pagination: any
+    pagination?: any
 }>()
 
 const emits = defineEmits<{
@@ -59,7 +59,8 @@ const emits = defineEmits<{
     (e: "updateStatus", select: any): void;
 }>()
 
-const page = ref(1)
+const select = ref<any>();
+const page = ref<number>(1);
 const payload= ref({
     page: 1,
     search: "",
@@ -89,7 +90,7 @@ const headers = ref<any[]>([
     { key: 'action', title: 'Action', width: "20%" },
 ])
 
-watch(()=> page.value, (newPage)=>{
+watch(()=> page.value, (newPage: number)=>{
     if(newPage){
         payload.value.page = Number(newPage);
         emits("fetchMore", payload.value)

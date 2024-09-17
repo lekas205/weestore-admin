@@ -56,7 +56,7 @@ const payload = ref({
     search: ""
 });
 
-const headers = ref([
+const headers = ref<any[]>([
     {
     align: 'start',
     key: 'name',
@@ -69,7 +69,7 @@ const headers = ref([
     { key: 'action', title: 'Action' },
 ])
 
-const items = computed(()=> {
+const items = computed<any[]>(()=> {
     return customer.value?.data?.map((elm: any)=>{
     return {
         id: elm.customer_id,
@@ -81,7 +81,7 @@ const items = computed(()=> {
    })
 })
 
-const pagination = computed(()=> customer.value?.pagination)
+const pagination = computed<any>(()=> customer.value?.pagination)
 
 const fetchCustomer = async (query:any)=>{
     loading.value = true

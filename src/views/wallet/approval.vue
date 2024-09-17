@@ -67,7 +67,7 @@ const headers = ref<any[]>([
 ])
 
 const pagination = computed(()=> pending_requests.value?.pagination)
-const items = computed(()=> {
+const items = computed<any[]>(()=> {
     return pending_requests.value?.data?.map((elm:any)=> {
         return {
             id: elm.request_id,

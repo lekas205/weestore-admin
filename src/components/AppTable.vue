@@ -5,11 +5,11 @@
         :loading="loading" 
         loading-text="Loading... Please wait" 
     >
-    <template  v-slot:table-slot>
-        <slot name='table-slot' />
-    </template>
+        <!-- <template  v-slot:table-slot>
+            <slot name='table-slot' />
+        </template> -->
         <template  v-slot:bottom>
-            <TableFooter v-bind="pagination" />
+            <!-- <TableFooter v-bind="pagination" /> -->
         </template>
      </v-data-table>
 </template>
@@ -18,7 +18,7 @@
 import TableFooter from '@/components/AppTableFooter.vue';
 
  const props = defineProps<{
-    headers: any[],
+    headers?: any[],
     items: any[],
     loading: boolean
  }>()

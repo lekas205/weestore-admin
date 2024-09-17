@@ -14,7 +14,7 @@ export const useOrderStore = defineStore("orders", () => {
   const delivered_orders = ref({ ...STATE_PAYLOAD });
   const completed_orders = ref({ ...STATE_PAYLOAD });
 
-  const orderDetails = ref({});
+  const orderDetails = ref<any>({});
   useStorage("order-details", orderDetails);
 
   const updateOrderDetails = (details: any) => {

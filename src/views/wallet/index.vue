@@ -39,6 +39,7 @@ const customerStore = useCustomersStore()
 const { customers } = storeToRefs(customerStore)
 
 const page = ref(1)
+const loading = ref<boolean>(false)
 const headers = ref<any[]>([
     {
     align: 'start',
@@ -51,7 +52,7 @@ const headers = ref<any[]>([
 ])
 
 const pagination = computed(()=> customers.value?.pagination)
-const items = computed(() => {
+const items = computed<any[]>(() => {
     return customers.value?.data?.map((elm: any)=> {
         return  {
             id: elm.customer_id,

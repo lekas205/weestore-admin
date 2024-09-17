@@ -10,7 +10,7 @@
         >
 
             <template v-slot:item.action="{ item }">
-                <v-btn color="primary" class="rounded-lg"> <Printer size="20px" class="mr-2" /> Print </v-btn> 
+                <v-btn color="primary" class="rounded-lg"> <Printer :size="20" class="mr-2" /> Print </v-btn> 
             </template>
 
             <template  v-slot:bottom>
@@ -35,7 +35,8 @@ import OrderReturnForm from "../../Modals/OrderReturnForm.vue";
 
 const props = defineProps<{
     items: any[],
-    loading: boolean 
+    loading: boolean,
+    pagination?: any
 }>()
 
 const openModal = ref(false)
@@ -54,9 +55,4 @@ const headers = ref<any[]>([
     { key: 'amount_retain', title: 'Amount to Retain' },
     { key: 'action', title: 'Action' },
 ])
-
-
-const approveReturn = (item: any) => {
-    openModal.value = true
-}
 </script>

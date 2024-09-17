@@ -4,7 +4,7 @@ import http from "@/lib/http";
 import { ENDPOINTS, STATE_PAYLOAD } from "@/constants";
 import { handleStoreRequestError } from "@/utils";
 export const useCustomersStore = defineStore("customers", () => {
-  const customers = ref({ ...STATE_PAYLOAD });
+  const customers: any = ref({ ...STATE_PAYLOAD });
   const custommerDetails = ref({ ...STATE_PAYLOAD });
   const unverifiedCustomers = ref({ ...STATE_PAYLOAD });
 
