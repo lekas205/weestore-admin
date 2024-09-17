@@ -10,7 +10,7 @@
           <div class="mb-6">
             <p class="tw-font-medium">Username</p>
             <app-input
-              v-model="formData.username"
+              v-model:value="formData.username"
               label="Username"
               type="text"
               @blur="validateUsername"
@@ -23,7 +23,7 @@
           <div class="mb-6">
             <p>Password</p>
             <app-input
-              v-model="formData.password"
+              v-model:value="formData.password"
               label="Password"
               type="password"
               @blur="validatePassword"

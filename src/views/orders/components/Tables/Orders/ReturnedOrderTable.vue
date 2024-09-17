@@ -1,6 +1,6 @@
 <template>
     <section>
-        <app-table-wrapper searchLabelText="Search for client" hasDelete @search="search">
+        <app-table-wrapper searchLabelText="Search for client" hasDelete @search="search" @filter="emits('filter', $event)">
         <v-data-table 
             hide-default-footer 
             :items="items" 
@@ -32,7 +32,7 @@
             </template>
 
             <template  v-slot:bottom>
-                <TableFooter v-bind="pagination"  v-model:apge="page"/>
+                <TableFooter v-bind="pagination"  @next="next($event)"/>
             </template>
         </v-data-table>
 
@@ -65,6 +65,7 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
+    (e: "filter", item: any):void;
     (e: "fetchMore", page: any): void;
     (e: "updateStatus", select: any): void;
 }>()
@@ -74,7 +75,6 @@ const select = ref("")
 const openModal = ref(false)
 const itemToProcess = ref<any>({})
 const actionOptions = ref(ORDER_STATUS_OPTION)
-
 
 const payload= ref({
     page: 1,
@@ -97,12 +97,10 @@ const headers = ref<any[]>([
     { key: 'action', title: 'Action' , width: "25%"},
 ])
 
-watch(()=> page.value, (newPage: any)=>{
-    if(newPage){
-        payload.value.page = Number(newPage);
-        emits("fetchMore", payload.value);
-    }
-})
+const next = (page: number) => {
+    payload.value.page = Number(page);
+    emits("fetchMore", payload.value)
+}
 
 const processReturn = (item: any) => {
     itemToProcess.value = returned_orders.value.data.find((elm:any)=> elm.order_id === item.id);

@@ -20,6 +20,8 @@
            <delivered-order-table
             :items="deliveredOrderTableData"
             :loading="loading"
+            :pagination="delivered_orders?.pagination"
+            @filter="fetchDeliveredOrders($event)"
             class="elevation-1 custom-table"
             @fetchMore="fetchDeliveredOrders"
            >
@@ -33,6 +35,8 @@
             :loading="loading"
             class="elevation-1 custom-table"
             @fetchMore="fetchReturnedOrders"
+            :pagination="returned_orders?.pagination"
+            @filter="fetchReturnedOrders($event)"
            >
            </returned-order-table>
        </template>
@@ -43,7 +47,9 @@
             :items="completedOrderTableData"
             :loading="loading"
             class="elevation-1 custom-table"
+            :pagination="completed_orders?.pagination"
             @fetchMore="fetchCompletedOrders"
+            @filter="fetchCompletedOrders($event)"
            >
            </completed-order-table>
        </template>
@@ -55,6 +61,8 @@
             :loading="loading"
             class="elevation-1 custom-table"
             @fetchMore="fetchDeclinedOrders"
+            @filter="fetchDeclinedOrders($event)"
+            :pagination="declined_orders?.pagination"
            >
            </declined-order-table>
        </template>

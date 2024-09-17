@@ -1,7 +1,7 @@
 <template>
     <section class="px-4 py-5">
         <StatCard />
-        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]"  @search="search">
+        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]"  @search="search" @filter="fetchCustomer($event)">
             <v-data-table 
                 hide-default-footer 
                 :items="items" 

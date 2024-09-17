@@ -2,7 +2,7 @@
     <section class="tw-p-[30px]">
         <!-- <v-btn color="primary" @click="$router.back()"> <ChevronLeft/> Back </v-btn> -->
         <stat-card />
-        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]">
+        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]" @search="search" @filter="fetchCustomer($event)">
             <v-data-table 
                 hide-default-footer 
                 :items="items" 
@@ -12,7 +12,7 @@
                 class="custom-table"
             >
                 <template  v-slot:bottom>
-                    <TableFooter v-bind="pagination"  v-model:page="page"/>
+                    <TableFooter v-bind="pagination"  @next="next($event)"/>
                 </template>
             </v-data-table>
         </app-table-wrapper>
@@ -39,6 +39,10 @@ const customerStore = useCustomersStore()
 const { customers } = storeToRefs(customerStore)
 
 const page = ref(1)
+const payload = ref({
+    page: 1,
+    search: ""
+});
 const loading = ref<boolean>(false)
 const headers = ref<any[]>([
     {
@@ -64,13 +68,23 @@ const items = computed<any[]>(() => {
 
 
 const fetchCustomer = async (query:any)=>{
+    loading.value = true
     await  customerStore.fetchCustomers(query)
+    loading.value = false
+}
+
+const search = (text: string) => {
+    payload.value.search = text;
+    payload.value.page = 1;
+
+    fetchCustomer(payload.value)
 }
 
 
-watch(()=> page.value, (newPage)=>{
-if(newPage)  fetchCustomer({page: newPage})
-})
+const next = (page: number) =>{
+    payload.value.page = page;
+    fetchCustomer(payload.value)
+};
 
 onMounted(async ()=>{
     authStore.toggleLoader();

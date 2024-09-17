@@ -28,8 +28,7 @@
               </v-col>
               <v-col cols="12" md="9">
                 <AppInput
-                  v-model="formData.wharehouse"
-                  :value="formData.wharehouse"
+                  v-model:value="formData.wharehouse"
                   label="Wharehouse"
                   type="text"
                   readonly
@@ -48,8 +47,7 @@
                   label="Reseller’s Name"
                   type="text"
                   readonly
-                  v-model="formData.reseller_name"
-                  :value="formData.reseller_name"
+                  v-model:value="formData.reseller_name"
                 />
                 <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
               </v-col>
@@ -64,8 +62,7 @@
                   label="Order ID"
                   type="text"
                   readonly
-                  :value="formData.order_id"
-                  v-model="formData.order_id"
+                  v-model:value="formData.order_id"
                 />
                 <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
               </v-col>
@@ -81,8 +78,7 @@
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
-                            v-model="formData.orders[index].product_name"
-                            :value="formData.orders[index].product_name"
+                            v-model:value="formData.orders[index].product_name"
                             label=""
                             type="text"
                             readonly
@@ -95,8 +91,7 @@
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
-                            :value="formData.orders[index].price"
-                            v-model="formData.orders[index].price"
+                            v-model:value="formData.orders[index].price"
                             label=""
                             type="text"
                             readonly
@@ -109,8 +104,7 @@
                       </v-col>
                       <v-col cols="12" md="9">
                           <AppInput
-                          :value="formData.orders[index].quantity"
-                          v-model="formData.orders[index].quantity"
+                          v-model:value="formData.orders[index].quantity"
                           label=""
                           type="number"
                           />
@@ -125,8 +119,7 @@
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
-                            :value="formData.orders[index].amount"
-                            v-model="formData.orders[index].amount"
+                            v-model:value="formData.orders[index].amount"
                             label=""
                             type="text"
                             readonly
@@ -152,8 +145,7 @@
                     </v-col>
                     <v-col cols="12" md="7">
                         <AppInput
-                        v-model="formData.amount_paid"
-                        :value="formData.amount_paid"
+                        v-model:value="formData.amount_paid"
                         label=""
                         type="text"
                         readonly
@@ -169,8 +161,7 @@
                     </v-col>
                     <v-col cols="12" md="8">
                         <AppInput
-                        :value="formData.amount_retain"
-                        v-model="formData.amount_retain"
+                        v-model:value="formData.amount_retain"
                         label=""
                         type="text"
                         readonly
@@ -189,7 +180,6 @@
                     </v-col>
                     <v-col cols="12" md="7">
                         <v-textarea
-                            :value="formData.reason"
                             v-model="formData.reason"
                             variant="outlined"
                             readonly
@@ -205,8 +195,7 @@
                     </v-col>
                     <v-col cols="12" md="8">
                         <AppInput
-                        :value="formData.amount_return"
-                        v-model="formData.amount_return"
+                        v-model:value="formData.amount_return"
                         label=""
                         type="text"
                         readonly

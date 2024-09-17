@@ -3,7 +3,7 @@
     <div class="table-top">
       <div class="search-container">
         <div v-if="searchLabelText" class="search-input">
-          <AppInput :label="searchLabelText" v-model="search"/>
+          <AppInput :label="searchLabelText" v-model:value="search"/>
         </div>
         <button
           v-if="searchLabelText"

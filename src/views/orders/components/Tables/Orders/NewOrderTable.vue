@@ -36,7 +36,7 @@
             </template>
 
             <template  v-slot:bottom>
-                <TableFooter v-bind="pagination" v-model:page="page" />
+                <TableFooter v-bind="pagination" @next="next($event)" />
             </template>
         </v-data-table>
         </app-table-wrapper>
@@ -53,7 +53,6 @@ import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
 import { ORDER_STATUS_OPTION } from "@/constants/common.ts";
-
 import AppSelect from "@/components/AppSelect.vue";
 
 const props = defineProps<{
@@ -100,12 +99,10 @@ const updateStatus = (event, id) => {
     emits("updateStatus", {orderId: id, status: event.value})    
 }
 
-watch(()=> page.value, (newPage)=>{
-    if(newPage){
-        payload.value.page = Number(newPage);
-        emits("fetchMore", payload.value)
-    }
-})
+const next = (page: number) => {
+    payload.value.page = Number(page);
+    emits("fetchMore", payload.value)
+}
 
 const search = (text: string) => {
     payload.value.search = text;

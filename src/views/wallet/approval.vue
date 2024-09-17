@@ -1,7 +1,7 @@
 <template>
     <section class="tw-p-[30px]">
         <v-btn color="primary" @click="$router.back()"> <ChevronLeft/> Back </v-btn>
-        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]">
+        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]" @search="search" @filter="fetcheData($event)">
             <v-data-table 
                 hide-default-footer 
                 :items="items" 
@@ -22,7 +22,7 @@
                 </template>
 
                 <template  v-slot:bottom>
-                    <TableFooter v-bind="pagination" v-model:page="page"/>
+                    <TableFooter v-bind="pagination"  @next="next($event)"/>
                 </template>
             </v-data-table>
         </app-table-wrapper>
@@ -51,6 +51,10 @@ const router = useRouter();
 const { pending_requests } = storeToRefs(walletStore)
 
 const page = ref(1);
+const payload = ref({
+    page: 1,
+    search: ""
+});
 const loading = ref(false)
 const headers = ref<any[]>([
     {
@@ -79,7 +83,9 @@ const items = computed<any[]>(()=> {
 })
 
 const fetcheData = async (query?: any) => {
+    loading.value = true
     await walletStore.fetchPendingRequest(query)
+    loading.value = false
 };
 
 const procceed = async(action: string, requestId: string) => {
@@ -100,10 +106,17 @@ const procceed = async(action: string, requestId: string) => {
     loading.value = false
 }
 
+const search = (text: string) => {
+    payload.value.search = text;
+    payload.value.page = 1;
 
-watch(()=> page.value, (newPage)=>{
-    if(newPage)  fetcheData({page: newPage})
-})
+    fetcheData(payload.value)
+}
+
+const next = (page: number) =>{
+    payload.value.page = page;
+    fetcheData(payload.value)
+};
 
 onMounted( async ()=> {
     authStore.toggleLoader();

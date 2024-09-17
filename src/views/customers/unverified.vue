@@ -2,7 +2,7 @@
     <section class="tw-p-[30px]">
         <v-btn color="primary" @click="$router.back()"> <ChevronLeft/> Back </v-btn>
 
-        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]" @search="search">
+        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]" @search="search" @filter="fetchCustomer($event)">
             <v-data-table 
                 hide-default-footer 
                 :items="items" 
@@ -23,7 +23,7 @@
                 </template>
 
                 <template  v-slot:bottom>
-                    <TableFooter v-bind="pagination" v-model:page="page" />
+                    <TableFooter v-bind="pagination" @next="next($event)" />
                 </template>
             </v-data-table>
         </app-table-wrapper>
@@ -89,12 +89,10 @@ const fetchCustomer = async (query:any)=>{
     loading.value = false
 }
 
-watch(()=> page.value, (newPage)=>{
-    if(newPage) {
-        payload.value.page = newPage;
-        fetchCustomer(payload.value)
-    } 
-})
+const next = (page: number) =>{
+    payload.value.page = page;
+    fetchCustomer(payload.value)
+};
 
 const search = (text: string) => {
     payload.value.search = text;
