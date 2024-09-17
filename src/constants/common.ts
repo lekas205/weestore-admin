@@ -42,3 +42,8 @@ export const DEFAULT_PAGINATION: Pagination = {
   currentPageNo: 1,
   totalNoPages: 1,
 };
+
+export const STATE_PAYLOAD = {
+  data: [],
+  pagination: {},
+};

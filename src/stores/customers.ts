@@ -1,12 +1,12 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import http from "@/lib/http";
-import { ENDPOINTS } from "@/constants";
+import { ENDPOINTS, STATE_PAYLOAD } from "@/constants";
 import { handleStoreRequestError } from "@/utils";
 export const useCustomersStore = defineStore("customers", () => {
-  const customers = ref({});
-  const custommerDetails = ref({});
-  const unverifiedCustomers = ref({});
+  const customers = ref({ ...STATE_PAYLOAD });
+  const custommerDetails = ref({ ...STATE_PAYLOAD });
+  const unverifiedCustomers = ref({ ...STATE_PAYLOAD });
 
   const fetchCustomers = async (query?: any): Promise<boolean> => {
     try {

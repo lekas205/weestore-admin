@@ -1,16 +1,18 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import http from "@/lib/http";
-import { ENDPOINTS } from "@/constants";
+import { ENDPOINTS, STATE_PAYLOAD } from "@/constants";
 import { handleStoreRequestError } from "@/utils";
 import { useStorage } from "@vueuse/core";
 export const useOrderStore = defineStore("orders", () => {
-  const new_orders = ref({});
-  const return_requests = ref({});
-  const declined_orders = ref({});
-  const returned_orders = ref({});
-  const delivered_orders = ref({});
-  const completed_orders = ref({});
+  const new_orders = ref({
+    ...STATE_PAYLOAD,
+  });
+  const return_requests = ref({ ...STATE_PAYLOAD });
+  const declined_orders = ref({ ...STATE_PAYLOAD });
+  const returned_orders = ref({ ...STATE_PAYLOAD });
+  const delivered_orders = ref({ ...STATE_PAYLOAD });
+  const completed_orders = ref({ ...STATE_PAYLOAD });
 
   const orderDetails = ref({});
   useStorage("order-details", orderDetails);
