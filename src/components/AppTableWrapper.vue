@@ -68,6 +68,8 @@
       </div>
     </div>
     <slot />
+
+    <AppCustomDateRange v-model:openModal="openModal" @proceed="filterByCustom($event)" />
   </div>
 </template>
 
@@ -75,6 +77,7 @@
 import { ref } from 'vue';
 import { Plus, Trash2 ,Filter, X} from 'lucide-vue-next'
 import AppInput from '@/components/AppInput.vue'
+import AppCustomDateRange from "@/components/AppCustomDateRange.vue";
 import { getDateRange } from "@/utils";
 
 const emit = defineEmits(['create', 'search', 'delete', 'filter']);
@@ -96,6 +99,7 @@ defineProps({
 
 const search = ref("");
 const searched = ref(false);
+const openModal = ref(false)
 
 const submit = () => {
   searched.value = true;
@@ -110,15 +114,20 @@ const clear = () => {
 
 const  items =  ref([
   { title: 'Today', value: "today" },
-  { title: '3 days', value: "last3" },
-  { title: '7 days', value: "last7" },
-  { title: '2 weeks', value: "last14" },
+  { title: 'Past 3 days', value: "last3" },
+  { title: 'Past 7 days', value: "last7" },
+  { title: 'Past 2 weeks', value: "last14" },
   { title: 'Last 30 days', value: "lastmonth" },
-  // { title: 'Custom' },
+  { title: 'Custom' , value: 'custom'},
 ])
 
 const filterTable = (range:string) =>{
-  emit('filter',{ start_date: getDateRange(range), end_date: getDateRange('today')})
+  if(range === 'custom') return openModal.value = true;
+  emit('filter',{ start_date: getDateRange(range), end_date: getDateRange('today')});
+}
+const filterByCustom = (payload:any) => {
+  emit('filter',{ ...payload});
+  openModal.value = false
 }
 </script>
 

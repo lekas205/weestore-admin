@@ -11,6 +11,9 @@
                 loading-text="Loading... Please wait" 
                 class="custom-table"
             >
+                <template v-slot:item.amount="{ item }">
+                    <p> {{ formatAsMoney(item.wallet.balance) }} </p>
+                </template>
                 <template  v-slot:bottom>
                     <TableFooter v-bind="pagination"  @next="next($event)"/>
                 </template>
@@ -29,7 +32,7 @@ import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
 import { useCustomersStore, useAuthStore } from "@/stores";
 import StatCard from "./components/StatCard.vue";
-import { formatText } from "@/utils";
+import { formatText, formatAsMoney } from "@/utils";
 
 
 const router = useRouter()
@@ -62,6 +65,7 @@ const items = computed<any[]>(() => {
             id: elm.customer_id,
             name: `${formatText(elm.first_name)} ${formatText(elm.last_name)}`,
             phone_no: elm.phone,
+            wallet: elm.wallets.find((x: any)=> x.wallet_type === "TOPUP")
         }
     })
 })

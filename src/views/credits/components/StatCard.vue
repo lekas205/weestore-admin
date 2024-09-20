@@ -44,13 +44,13 @@
       title: 'Amount Repaid',
       amount: '40',
       color: 'tw-bg-lime',
-      link: '/customers/unverified'
+      link: null
     },
     {
       title: 'Pending Loan Repayment',
       amount: '40',
       color: 'tw-bg-wine',
-      link: '/customers/unverified'
+      link: null
     }
   ]);
 

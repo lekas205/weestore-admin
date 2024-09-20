@@ -1,6 +1,6 @@
 <template>
     <section>
-        <app-table-wrapper searchLabelText="Search by Order Number" hasDelete @search="search">
+        <app-table-wrapper searchLabelText="Search by Order Number" hasDelete @search="search($event)" @filter="emits('filter', $event)">
         <v-data-table 
             hide-default-footer 
             :items="items" 
@@ -28,7 +28,7 @@
             </template>
 
             <template  v-slot:bottom>
-                <TableFooter v-bind="pagination"  v-model:page="page"/>
+                <TableFooter v-bind="pagination"  @next="next($event)"/>
             </template>
         </v-data-table>
         </app-table-wrapper>
@@ -88,12 +88,10 @@ const headers = ref<any[]>([
     { key: 'action', title: 'Action' },
 ])
 
-watch(()=> page.value, (newPage)=>{
-    if(newPage){
-        payload.value.page = Number(newPage);
-        emits("fetchMore", payload.value);
-    }
-})
+const next = (page: number) => {
+    payload.value.page = Number(page);
+    emits("fetchMore", payload.value);
+}
 
 const search = (text: string) => {
     payload.value.search = text;

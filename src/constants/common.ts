@@ -47,3 +47,7 @@ export const STATE_PAYLOAD = {
   data: [],
   pagination: {},
 };
+
+export const LOAN_STATUSES = {
+  AWAITING_APPROVAL: "Pending",
+};

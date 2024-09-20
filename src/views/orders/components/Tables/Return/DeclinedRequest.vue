@@ -1,6 +1,6 @@
 <template>
     <section>
-        <app-table-wrapper searchLabelText="Search by Order Number" hasDelete>
+        <app-table-wrapper searchLabelText="Search by Order Number" hasDelete @search="search($event)" @filter="emits('filter', $event)">
         <v-data-table 
             hide-default-footer 
             :items="items" 
@@ -81,6 +81,12 @@ const headers = ref<any[]>([
 
 const next = (page: number) => {
     payload.value.page = Number(page);
+    emits("fetchMore", payload.value)
+}
+
+const search = (text: string) => {
+    payload.value.search = text;
+    payload.value.page = 1;
     emits("fetchMore", payload.value)
 }
 

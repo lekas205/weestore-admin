@@ -6,15 +6,17 @@
                 <CreditTable
                     :items="creditRequestData"
                     :loading="loading"
-                    @showDetails="openModal = true"
+                    @showDetails="proceed($event)"
                     class="elevation-1 custom-table"
+                    @filter="fetchPendingRequest($event)"
+                    @fetchMore="fetchPendingRequest($event)"
                 >
                 </CreditTable>
             </template>
 
             <template #active_credits>
                 <CreditTable
-                    :items="creditRequestData"
+                    :items="approveRequestData"
                     :loading="loading"
                     class="elevation-1 custom-table"
                 >
@@ -23,14 +25,14 @@
 
             <template #paid_credits>
                 <CreditTable
-                    :items="creditRequestData"
+                    :items="paidRequestData"
                     :loading="loading"
                     class="elevation-1 custom-table"
                 >
                 </CreditTable>
             </template>
         </app-tab>
-        <LoanDetails :openModal="openModal" @close="openModal = false" />
+        <LoanDetails :openModal="openModal" :loading="loading" :loanDetails="loanDeetails" @action="approveDeclineLoan($event)" @close="openModal = false" />
     </section>
 </template>
 
@@ -44,34 +46,111 @@ import AppTab from '@/components/AppTab.vue';
 import CreditTable from "./components/Tables/CreditTable.vue";
 import LoanDetails from "./components/LoanDetails.vue";
 
+import { formatAsMoney, openToastNotification } from "@/utils";
+import { LOAN_STATUSES } from "@/constants";
 import { useCreditStore, useAuthStore } from "@/stores";
 
 const authStore = useAuthStore()
 const creditStore = useCreditStore()
 
-const { credit_request } = storeToRefs(creditStore)
+const { paid_request, credit_request, approved_request } = storeToRefs(creditStore)
 
 
 const loading = ref(false);
-const openModal = ref(false)
+const openModal = ref(false);
+const loanDeetails = ref({});
 const tabTitles = markRaw([ "credit requests", "active credits", "paid credits"])
 
-const creditRequestData = ref([
-    {
-        "name": "Ela John",
-        "phone_no": "May 16 2024",
-        "amount": "Nivea Roll on",
-        "duration": 2000,
-        "balance": 3000,
-        "request_date": 2400,
-        "next_payment": "BANK TRANSFER",
-        "status": "Full Delivery",
+const proceed = (item: any) => {    
+    loanDeetails.value = item;
+    openModal.value = true
+}
+ 
+const approveDeclineLoan = async (query: any) => {
+    loading.value = true;
+    const res = await creditStore.approveDeclineRequest(query);
+    loading.value = false
+
+    if(res){
+        openToastNotification({
+          message:  `Loan request has been ${query.action === 'approve' ? 'approved': 'declined'}`,
+          variant: 'success'
+        });
+
+        openModal.value = false
     }
-])
+
+}
+
+const creditRequestData = computed<any[]>(()=>{
+    return credit_request.value.data.map((elm:any)=> {
+        return  {
+            id: elm.request_id,
+            name: elm.first_name + " "+ elm.last_name,
+            phone_no: elm.phone ,
+            amount: formatAsMoney(elm.amount),
+            duration: elm.duration,
+            balance: formatAsMoney(elm.balance),
+            request_date: elm.created_at,
+            next_payment: elm.payment_date,
+            warehouse: elm.warehouse,
+            status: LOAN_STATUSES[elm.status]
+        }
+    })
+})
+
+const approveRequestData = computed<any[]>(()=>{
+    return approved_request.value.data.map((elm:any)=> {
+        return  {
+            id: elm.request_id,
+            name: elm.first_name + " "+ elm.last_name,
+            phone_no: elm.phone ,
+            amount: formatAsMoney(elm.amount),
+            duration: elm.duration,
+            balance: formatAsMoney(elm.balance),
+            request_date: elm.created_at,
+            next_payment: elm.payment_date,
+            warehouse: elm.warehouse,
+            status: LOAN_STATUSES[elm.status]
+        }
+    })
+})
+
+const paidRequestData = computed<any[]>(()=>{
+    return paid_request.value.data.map((elm:any)=> {
+        return  {
+            id: elm.request_id,
+            name: elm.first_name + " "+ elm.last_name,
+            phone_no: elm.phone ,
+            amount: formatAsMoney(elm.amount),
+            duration: elm.duration,
+            balance: formatAsMoney(elm.balance),
+            request_date: elm.created_at,
+            next_payment: elm.payment_date,
+            warehouse: elm.warehouse,
+            status: LOAN_STATUSES[elm.status]
+        }
+    })
+})
 
 const pagination = computed(()=> credit_request.value?.pagination)
 
+const fetchPendingRequest = async (query: any) => {
+   await creditStore.fetchCreditRequest(query)
+};
+
+const fetchApprvedRequest = async (query: any) => {
+   await creditStore.fetchApprovedRequest(query)
+};
+
+const fetchPaidRequest = async (query: any) => {
+   await creditStore.fetchPaidRequest(query)
+};
 onMounted(async ()=>{
-   await creditStore.fetchCreditRequest();
+    await Promise.all([
+        creditStore.fetchCreditRequest(),
+        creditStore.fetchApprovedRequest(),
+        creditStore.fetchPaidRequest()
+    ])
 })
 </script>
