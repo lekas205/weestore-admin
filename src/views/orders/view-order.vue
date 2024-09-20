@@ -1,6 +1,8 @@
 <template>
     
     <section class="mt-6 px-5  pb-5">
+      <v-btn color="primary" @click="$router.back()" class="mb-5"> <ChevronLeft/> Back </v-btn>
+
       <div id="invoice-area" >
         <div  class="tw-p-5 tw-rounded-[30px] tw-bg-white">
             <h1 class="tw-text-[30px] tw-font-bold tw-mb-4">Order Invoice</h1>
@@ -85,6 +87,7 @@ import { computed, onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
 import VueHtml2pdf from "vue3-html2pdf";
+import { ChevronLeft } from 'lucide-vue-next'
 
 import OrderInvoice from "./components/downloadd-invouce.vue";
 

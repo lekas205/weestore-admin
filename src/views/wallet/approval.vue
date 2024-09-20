@@ -12,7 +12,7 @@
             >
 
                 <template v-slot:item.payment_proof="{ item }">
-                    <ZoomIn class="cursor-pointer" />
+                    <ZoomIn class="cursor-pointer" @click="view(item.payment_url)"/>
                 </template>
                 <template v-slot:item.action="{ item }">
                     <div class="tw-flex tw-items-center tw-gap-4">
@@ -75,12 +75,17 @@ const items = computed<any[]>(()=> {
     return pending_requests.value?.data?.map((elm:any)=> {
         return {
             id: elm.request_id,
-            name: `${formatText(elm.customer.first_name)} ${formatText(elm.customer.last_name)}`,
+            name: `${formatText(elm.first_name)} ${formatText(elm.last_name)}`,
             amount: formatAsMoney(elm.amount),
-            phone_no: elm.customer.phone,
+            phone_no: elm.phone,
+            payment_url: elm.paymentUrl
         }
     })
 })
+
+const view = (image_url: string) => {    
+    window.open(image_url, "_blank");
+}
 
 const fetcheData = async (query?: any) => {
     loading.value = true

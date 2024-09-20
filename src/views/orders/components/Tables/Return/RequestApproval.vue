@@ -1,6 +1,6 @@
 <template>
     <section>
-        <app-table-wrapper searchLabelText="Search by Order Number" hasDelete>
+        <app-table-wrapper searchLabelText="Search by Order Number" hasDelete @search="search($event)" @filter="emits('filter', $event)">
         <v-data-table 
             hide-default-footer 
             :items="items" 
@@ -14,7 +14,7 @@
             </template>
 
             <template  v-slot:bottom>
-                <TableFooter v-bind="pagination" />
+                <TableFooter v-bind="pagination" @next="next($event)" />
             </template>
         </v-data-table>
         </app-table-wrapper>
@@ -39,6 +39,15 @@ const props = defineProps<{
     pagination?: any
 }>()
 
+const emits = defineEmits<{
+    (e: "fetchMore", page: any): void;
+    (e: "updateStatus", select: any): void;
+}>()
+
+const payload= ref({
+    page: 1,
+    search: "",
+})
 const openModal = ref(false)
 const headers = ref<any[]>([
     {
@@ -55,4 +64,15 @@ const headers = ref<any[]>([
     { key: 'amount_retain', title: 'Amount to Retain' },
     { key: 'action', title: 'Action' },
 ])
+
+const next = (page: number) => {
+    payload.value.page = Number(page);
+    emits("fetchMore", payload.value);
+}
+
+const search = (text: string) => {
+    payload.value.search = text;
+    payload.value.page = 1;
+    emits("fetchMore", payload.value)
+}
 </script>

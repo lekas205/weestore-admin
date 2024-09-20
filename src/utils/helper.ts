@@ -56,7 +56,10 @@ export const formatDate = (date) => {
 //   const date = new Date();
 //   date.setDate(date.getDate() - numWeeks * 7)
 // };
-const formatDate2 = (date: string | dayjs.Dayjs, format?: string): string => {
+export const formatDate2 = (
+  date: string | dayjs.Dayjs,
+  format?: string
+): string => {
   if (!date) {
     return "-";
   }

@@ -1,6 +1,6 @@
 <template>
     <section class="mt-5">
-        <app-table-wrapper searchLabelText="Search by Order Number">
+        <app-table-wrapper searchLabelText="Search by Order Number" @search="search" @filter="emits('filter', $event)">
         <v-data-table 
             hide-default-footer 
             :items="items" 
@@ -16,7 +16,7 @@
             </template>
 
             <template v-slot:item.action="{ item }">
-                <ZoomIn class="tw-cursor-pointer" @click="emits('showDetails')" />
+                <ZoomIn class="tw-cursor-pointer" @click="emits('showDetails', item)" />
             </template>
 
             <template  v-slot:bottom>
@@ -42,8 +42,14 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
-    (e: "showDetails"): void
+    (e: "showDetails"): void;
+    (e: "fetchMore", page: any): void;
 }>()
+
+const payload= ref({
+    page: 1,
+    search: "",
+});
 
 const headers = ref<any[]>([
     {
@@ -61,4 +67,15 @@ const headers = ref<any[]>([
     { key: 'status', title: 'Loan Status' },
     { key: 'action', title: 'Action' },
 ])
+
+const next = (page: number) => {
+    payload.value.page = Number(page);
+    emits("fetchMore", payload.value)
+}
+
+const search = (text: string) => {
+    payload.value.search = text;
+    payload.value.page = 1;
+    emits("fetchMore", payload.value)
+}
 </script>

@@ -13,6 +13,8 @@ export const useOrderStore = defineStore("orders", () => {
   const returned_orders = ref({ ...STATE_PAYLOAD });
   const delivered_orders = ref({ ...STATE_PAYLOAD });
   const completed_orders = ref({ ...STATE_PAYLOAD });
+  const declined_return_requests = ref({ ...STATE_PAYLOAD });
+  const approved_return_requests = ref({ ...STATE_PAYLOAD });
 
   const orderDetails = ref<any>({});
   useStorage("order-details", orderDetails);
@@ -156,6 +158,48 @@ export const useOrderStore = defineStore("orders", () => {
     }
   };
 
+  const fetchApprovedReturnRequest = async (query?: any): Promise<boolean> => {
+    try {
+      const { data } = await http.get(
+        ENDPOINTS.GET_ORDERS + `/return/request/approved`,
+        {
+          params: { ...query },
+        }
+      );
+      const { paging, rows } = data.payload;
+
+      approved_return_requests.value = {
+        data: rows,
+        pagination: paging,
+      };
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
+  const fetchDeclinedReturnRequest = async (query?: any): Promise<boolean> => {
+    try {
+      const { data } = await http.get(
+        ENDPOINTS.GET_ORDERS + `/return/request/declined`,
+        {
+          params: { ...query },
+        }
+      );
+      const { paging, rows } = data.payload;
+
+      declined_return_requests.value = {
+        data: rows,
+        pagination: paging,
+      };
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
   const getSingleOrder = async (id: string): Promise<boolean> => {
     try {
       const { data } = await http.get(ENDPOINTS.GET_ORDERS + `/${id}`);
@@ -207,6 +251,8 @@ export const useOrderStore = defineStore("orders", () => {
     delivered_orders,
     returned_orders,
     declined_orders,
+    declined_return_requests,
+    approved_return_requests,
     getSingleOrder,
     fetchReturnRequest,
     updateOrderDetails,
@@ -217,5 +263,7 @@ export const useOrderStore = defineStore("orders", () => {
     updateOrderStatus,
     initiateOrderReturn,
     ApproveDeclineReturn,
+    fetchApprovedReturnRequest,
+    fetchDeclinedReturnRequest,
   };
 });

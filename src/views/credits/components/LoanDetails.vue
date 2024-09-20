@@ -9,53 +9,66 @@
             <div class="tw-w-[70%] tw-mt-[30px]">
                 <div class="tw-flex tw-justify-between mb-3 tw-items-center">
                     <p class="tw-text-[#00000094] tw-font-[700] tw-text-[21px]"> Amount </p>
-                    <p class="tw-text-[20px] tw-font-[700]"> N200,000</p>
+                    <p class="tw-text-[20px] tw-font-[700]"> {{loanDetails.amount }} </p>
                 </div>
                 <div class="tw-flex tw-justify-between mb-3 tw-items-center">
                     <p class="tw-text-[#00000094] tw-font-[700] tw-text-[21px]"> Duration </p>
-                    <p class="tw-text-[20px] tw-font-[700]"> 3 Months</p>
+                    <p class="tw-text-[20px] tw-font-[700]"> {{ loanDetails.duration }} Month(s)</p>
                 </div>
                 <div class="tw-flex tw-justify-between mb-3 tw-items-center">
                     <p class="tw-text-[#00000094] tw-font-[700] tw-text-[21px]"> Disbursement </p>
-                    <p class="tw-text-[20px] tw-font-[700]"> N200,000</p>
+                    <p class="tw-text-[20px] tw-font-[700]"> {{ loanDetails.balance }} </p>
                 </div>
                 <div class="tw-flex tw-justify-between mb-3 tw-items-center mt-5">
                     <p class="tw-text-[#00000094] tw-font-[700] tw-text-[21px]"> Weekly Repayment </p>
-                    <p class="tw-text-[20px] tw-font-[700]"> N200,000</p>
+                    <p class="tw-text-[20px] tw-font-[700]"> {{ loanDetails.balance }} </p>
                 </div>
 
-                <div class="tw-flex tw-justify-between mb-3 tw-items-center mt-4">
-                    <p class="tw-text-[#00000094] tw-font-[700] tw-text-[21px]"> Amount Paid </p>
-                    <p class="tw-text-[20px] tw-font-[700]"> N200,000</p>
-                </div>
-                <div class="tw-flex tw-justify-between mb-3 tw-items-center mt-4">
-                    <p class="tw-text-[#00000094] tw-font-[700] tw-text-[21px]"> Amount Left </p>
-                    <p class="tw-text-[20px] tw-font-[700]"> N200,000</p>
-                </div>
+                <!-- <div >
+                    <div class="tw-flex tw-justify-between mb-3 tw-items-center mt-4">
+                        <p class="tw-text-[#00000094] tw-font-[700] tw-text-[21px]"> Amount Paid </p>
+                        <p class="tw-text-[20px] tw-font-[700]"> N200,000</p>
+                    </div>
+                    <div class="tw-flex tw-justify-between mb-3 tw-items-center mt-4">
+                        <p class="tw-text-[#00000094] tw-font-[700] tw-text-[21px]"> Amount Left </p>
+                        <p class="tw-text-[20px] tw-font-[700]"> N200,000</p>
+                    </div>
+                </div> -->
+               
             </div>
 
-            <p class="tw-text-[20px] tw-px-[40px] text-center mt-5">
+            <p class="tw-text-[18px] tw-px-[40px] text-center mt-5">
                 Note: By clicking  <b>Approve</b>, you approve the sum of N200,000 to be paid into Rita Alex’s bank account
             </p>
 
             <div class="tw-flex tw-justify-center mt-5 tw-gap-[30px] mb-3">
-                <v-btn color="green" size="large" > Approve </v-btn>
-                <v-btn color="primary" size="large" > Decline </v-btn>
+                <v-btn color="green" size="large" :loading="loading" @click="emits('action', {id: loanDetails.id, action: 'approve' })"> Approve </v-btn>
+                <v-btn color="primary" size="large" @click="emits('action', {id: loanDetails.id, action: 'decline' })"> Decline </v-btn>
             </div>
         </v-card>  
     </v-dialog>
 </template>
 
 <script lang="ts" setup>
-import { X } from 'lucide-vue-next'
+  import { X } from 'lucide-vue-next';
+  import { formatAsMoney } from "@/utils";
 
   const emits = defineEmits<{
-        (e: "close"): void
+    (e: "close"): void;
+    (e: "action", val: any): void
   }>()
+
   const props = defineProps({
     openModal: {
       type: Boolean,
       default: false,
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    loanDetails: {
+        type: Object,
+    }
 })
 </script>
