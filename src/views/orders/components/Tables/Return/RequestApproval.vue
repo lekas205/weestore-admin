@@ -41,6 +41,7 @@ const props = defineProps<{
 
 const emits = defineEmits<{
     (e: "fetchMore", page: any): void;
+    (e: "filter", val: any): void;
     (e: "updateStatus", select: any): void;
 }>()
 
