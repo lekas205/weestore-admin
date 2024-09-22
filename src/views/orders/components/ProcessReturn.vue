@@ -123,7 +123,7 @@ const fetchContent = async (query?: any) => {
     loading.value = false;
 }
 
-const getNewRequests = async (query: any) => {
+const getNewRequests = async (query?: any) => {
     loading.value = true;
     await  orderStores.fetchReturnRequest(query)
     loading.value = false;

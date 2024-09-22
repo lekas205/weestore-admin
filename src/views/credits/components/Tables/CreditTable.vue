@@ -42,8 +42,9 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
-    (e: "showDetails"): void;
+    (e: "filter", val: any): void;
     (e: "fetchMore", page: any): void;
+    (e: "showDetails", val: any): void;
 }>()
 
 const payload= ref({

@@ -69,6 +69,9 @@
     },
     loanDetails: {
         type: Object,
+        default:() => {
+            return {}
+        }
     }
 })
 </script>

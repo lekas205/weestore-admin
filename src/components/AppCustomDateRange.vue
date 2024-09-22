@@ -29,7 +29,7 @@
             </div>
 
             <div class="tw-flex tw-justify-end tw-mt-[40px]">
-                <v-btn variant="outline" color="red" size="large" @click="setShow = false"> Cancel</v-btn>
+                <v-btn variant="outlined" color="red" size="large" @click="setShow = false"> Cancel</v-btn>
                 <v-btn  color="red" size="large" @click="proceed" :disabled="disableBtn"> Proceed</v-btn>
             </div>
         </v-card>
