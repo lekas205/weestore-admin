@@ -125,7 +125,7 @@ const headers = ref<any[]>([
 ])
 
 const orderedItems = computed<any[]>(()=>{
-    return orderDetails.value?.order_items?.map((elm:any, index:number)=> {
+    return orderDetails.value?.orderItems?.map((elm:any, index:number)=> {
         return {
             sr: index + 1,
             product_name: capitalizeFirstLeters(elm.product_name),
