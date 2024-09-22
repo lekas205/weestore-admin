@@ -92,7 +92,7 @@ import AppTab from "@/components/AppTab.vue";
 import AppTable from "@/components/AppTable.vue";
 import TableFooter from '@/components/AppTableFooter.vue'
 
-import { ROUTES } from "@/constants";
+import { ROUTES, PAYMENT_METHOD } from "@/constants";
 import { openToastNotification } from '@/utils'
 
 import { useOrderStore } from "@/stores";
@@ -127,7 +127,7 @@ const newOrdersTableData = computed(() => {
       "date": `${formatDate(elm.created_data)}` ,
       "reseller_name": capitalizeFirstLeters(elm.customer_name),
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
-      "channel": formatText(elm.payment_method),
+      "channel": PAYMENT_METHOD[elm.payment_method],
       "amount": formatAsMoney(elm.amount) ,
       "status": elm.status,
     }
@@ -142,7 +142,7 @@ const  deliveredOrderTableData = computed(() => {
       "date": `${formatDate(elm.created_data)}` ,
       "reseller_name": capitalizeFirstLeters(elm.customer_name),
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
-      "channel": formatText(elm.payment_method),
+      "channel": PAYMENT_METHOD[elm.payment_method],
       "amount": formatAsMoney(elm.amount) ,
       "status": elm.status,
    }
@@ -157,7 +157,7 @@ const declinedOrderTableData = computed(() => {
       "date": `${formatDate(elm.created_data)}` ,
       "reseller_name": capitalizeFirstLeters(elm.customer_name),
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
-      "channel": formatText(elm.payment_method),
+      "channel": PAYMENT_METHOD[elm.payment_method],
       "amount": formatAsMoney(elm.amount) ,
       "status": elm.status,
    }
@@ -172,7 +172,7 @@ const completedOrderTableData = computed(() => {
       "date": `${formatDate(elm.created_data)}` ,
       "reseller_name": capitalizeFirstLeters(elm.customer_name),
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
-      "channel": formatText(elm.payment_method),
+      "channel": PAYMENT_METHOD[elm.payment_method],
       "amount": formatAsMoney(elm.amount) ,
       "status": elm.status,
    }
@@ -187,7 +187,7 @@ const returnedOrderTableData = computed(() => {
       "date": `${formatDate(elm.created_data)}` ,
       "reseller_name": capitalizeFirstLeters(elm.customer_name),
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
-      "channel": formatText(elm.payment_method),
+      "channel": PAYMENT_METHOD[elm.payment_method],
       "amount": formatAsMoney(elm.amount) ,
       "status": elm.status,
       is_return_processed: elm.is_return_processed,
