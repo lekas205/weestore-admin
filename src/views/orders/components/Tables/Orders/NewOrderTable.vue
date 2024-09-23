@@ -18,7 +18,7 @@
                 <app-select
                     :value="item.status"
                     @update="updateStatus($event, item.id)"
-                    :options="actionOptions"
+                    :options="actionOptions.slice(0, 3)"
                     item-title="label"
                     item-value="value"
                     label="Select"
@@ -29,7 +29,7 @@
             </template>
 
             <template v-slot:item.pop="{ item }">
-                <ZoomIn class="tw-cursor-pointer" />
+                <ZoomIn class="tw-cursor-pointer" @click="viewPOP(item.payment_proof)" />
             </template>
             <template v-slot:item.view_order="{ item }">
                 <ZoomIn class="tw-cursor-pointer" @click="router.push(`/order/${item.id}`)" />
@@ -49,11 +49,12 @@ import { useRouter } from "vue-router";
 import { ZoomIn } from 'lucide-vue-next'
 
 import AppChip from "@/components/AppChip.vue";
+import AppSelect from "@/components/AppSelect.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
+import { openToastNotification } from '@/utils'
 import { ORDER_STATUS_OPTION } from "@/constants/common.ts";
-import AppSelect from "@/components/AppSelect.vue";
 
 const props = defineProps<{
     items: any[],
@@ -97,6 +98,16 @@ const headers = ref<any[]>([
 
 const updateStatus = (event, id) => {
     emits("updateStatus", {orderId: id, status: event.value})    
+}
+
+const viewPOP = (image_url: string) => {    
+    if(!image_url) {
+        return openToastNotification({
+          message: "This order doesn't have a proof of payment",
+          variant: 'error'
+        });
+    }
+    window.open(image_url, "_blank");
 }
 
 const next = (page: number) => {

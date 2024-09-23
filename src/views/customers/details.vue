@@ -1,6 +1,7 @@
 <template>
     <div class="pa-5">
-        <div class="tw-flex">
+        <v-btn color="primary" @click="$router.back()"> <ChevronLeft/> Back </v-btn>
+        <div class="tw-flex mt-3">
             <h2 class="tw-text-[32px] tw-font-bold tw-mr-auto"> {{ formatText(customer.first_name) }} {{ formatText(customer.last_name) }}  </h2>
             <v-btn color="primary"> Edit </v-btn>
 
@@ -88,6 +89,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
+import { ChevronLeft } from 'lucide-vue-next'
 import { ref, markRaw, onMounted, computed } from "vue";
 
 import AppTab from "@/components/AppTab.vue";

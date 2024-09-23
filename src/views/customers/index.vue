@@ -12,8 +12,8 @@
             >
                 <template v-slot:item.action="{ item }">
                     <div class="tw-flex tw-items-center tw-gap-4">
-                        <ZoomIn @click="router.push('/customers/'+item.id)" />
-                        <Trash2 />
+                        <ZoomIn class="tw-cursor-pointer" @click="router.push('/customers/'+item.id)" />
+                        <Trash2  class="tw-cursor-pointer"  />
                     </div>
                 </template>
 

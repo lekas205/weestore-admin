@@ -13,7 +13,7 @@
                 </app-chip>
             </template>
 
-            <template v-slot:item.action="{ item }">
+            <!-- <template v-slot:item.action="{ item }">
                 <v-select
                     v-model="select"
                     :items="actionOptions"
@@ -24,9 +24,12 @@
                     return-object
                     single-line
                 ></v-select>
-            </template>
+            </template> -->
             <template v-slot:item.view_order="{ item }">
                 <ZoomIn class="tw-cursor-pointer" @click="router.push(`/order/${item.id}`)"/>
+            </template>
+            <template v-slot:item.pop="{ item }">
+                <ZoomIn class="tw-cursor-pointer" @click="viewPOP(item.payment_proof)" />
             </template>
 
             <template  v-slot:bottom>
@@ -45,6 +48,8 @@ import { useRouter } from "vue-router";
 import AppChip from "@/components/AppChip.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
+
+import { openToastNotification } from '@/utils'
 
 const router = useRouter()
 
@@ -87,13 +92,23 @@ const headers = ref<any[]>([
     { key: 'channel', title: 'Channel' },
     { key: 'amount', title: 'Amount' },
     { key: 'status', title: 'Status' },
+    { key: 'pop', title: 'View Pop' },
     { key: 'view_order', title: 'View' },
-    { key: 'action', title: 'Action', width: "20%" },
 ])
 
 const next = (page: number) => {
     payload.value.page = Number(page);
     emits("fetchMore", payload.value)
+}
+
+const viewPOP = (image_url: string) => {    
+    if(!image_url) {
+        return openToastNotification({
+          message: "This order doesn't have a proof of payment",
+          variant: 'error'
+        });
+    }
+    window.open(image_url, "_blank");
 }
 
 const search = (text: string) => {
