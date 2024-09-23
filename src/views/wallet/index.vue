@@ -11,6 +11,10 @@
                 loading-text="Loading... Please wait" 
                 class="custom-table"
             >
+
+                <template v-slot:item.name="{ item }">
+                    <p @click="router.push('/customers/'+item.id)"  class=" tw-underline tw-cursor-pointer" >  {{item.name }}</p>
+                </template>
                 <template v-slot:item.amount="{ item }">
                     <p> {{ formatAsMoney(item.wallet.balance) }} </p>
                 </template>

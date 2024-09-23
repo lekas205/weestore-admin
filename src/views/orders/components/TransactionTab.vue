@@ -57,7 +57,7 @@
         <!-- Declined Orders Table -->
         <template #declined_orders>
            <declined-order-table
-            :items="completedOrderTableData"
+            :items="declinedOrderTableData"
             :loading="loading"
             class="elevation-1 custom-table"
             @fetchMore="fetchDeclinedOrders"
@@ -123,13 +123,14 @@ const newOrdersTableData = computed(() => {
   return new_orders.value?.data?.map((elm:any)=>{    
     return {
       id: elm.order_id,
-      "order_number": elm.customer_name,
-      "date": `${formatDate(elm.created_data)}` ,
-      "reseller_name": capitalizeFirstLeters(elm.customer_name),
-      "warehouse": capitalizeFirstLeters(elm.warehouse_name),
-      "channel": PAYMENT_METHOD[elm.payment_method],
-      "amount": formatAsMoney(elm.amount) ,
-      "status": elm.status,
+      order_number: elm.order_no,
+      date: `${formatDate(elm.created_data)}` ,
+      reseller_name: capitalizeFirstLeters(elm.customer_name),
+      warehouse: capitalizeFirstLeters(elm.warehouse_name),
+      channel: PAYMENT_METHOD[elm.payment_method],
+      amount: formatAsMoney(elm.amount) ,
+      status: elm.status,
+      payment_proof: elm.payment_proof,
     }
   })
 })
@@ -138,13 +139,14 @@ const  deliveredOrderTableData = computed(() => {
   return delivered_orders.value?.data?.map((elm:any)=> {
     return  {
       id: elm.order_id,
-      "order_number": elm.customer_name,
+      "order_number": elm.order_no,
       "date": `${formatDate(elm.created_data)}` ,
       "reseller_name": capitalizeFirstLeters(elm.customer_name),
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
       "channel": PAYMENT_METHOD[elm.payment_method],
       "amount": formatAsMoney(elm.amount) ,
       "status": elm.status,
+      payment_proof: elm.payment_proof,
    }
   })
 })
@@ -153,13 +155,14 @@ const declinedOrderTableData = computed(() => {
   return declined_orders.value?.data?.map((elm:any)=> {
     return  {
       id: elm.order_id,
-      "order_number": elm.customer_name,
+      "order_number": elm.order_no,
       "date": `${formatDate(elm.created_data)}` ,
       "reseller_name": capitalizeFirstLeters(elm.customer_name),
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
       "channel": PAYMENT_METHOD[elm.payment_method],
       "amount": formatAsMoney(elm.amount) ,
       "status": elm.status,
+      payment_proof: elm.payment_proof,
    }
   })
 })
@@ -168,13 +171,14 @@ const completedOrderTableData = computed(() => {
   return completed_orders.value?.data?.map((elm:any)=> {
     return  {
       id: elm.order_id,
-      "order_number": elm.customer_name,
+      "order_number": elm.order_no,
       "date": `${formatDate(elm.created_data)}` ,
       "reseller_name": capitalizeFirstLeters(elm.customer_name),
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
       "channel": PAYMENT_METHOD[elm.payment_method],
       "amount": formatAsMoney(elm.amount) ,
       "status": elm.status,
+      payment_proof: elm.payment_proof,
    }
   })
 })
@@ -190,6 +194,7 @@ const returnedOrderTableData = computed(() => {
       "channel": PAYMENT_METHOD[elm.payment_method],
       "amount": formatAsMoney(elm.amount) ,
       "status": elm.status,
+      payment_proof: elm.payment_proof,
       is_return_processed: elm.is_return_processed,
    }
   })

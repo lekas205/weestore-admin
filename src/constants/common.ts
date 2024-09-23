@@ -21,8 +21,8 @@ export const ORDER_STATUS_OPTION = [
 
 export const ORDER_STATUS = {
   PENDING: "Pending",
-  IN_TRANSIT: "In Transit",
   PROCESSING: "Processing",
+  IN_TRANSIT: "In Transit",
   CANCELLED: "Cancelled",
   COMPLETED: "Completed",
   DELIVERED: "Delivered",
@@ -33,6 +33,7 @@ export const PAYMENT_METHOD = {
   WALLET: "Wallet",
   PAY_ON_DELIVERY: "Pay on Delivery",
   TRANSFER: "Transfer",
+  PAY_NOW: "Pay Now",
   wallet_to_system: "Wallet",
 };
 

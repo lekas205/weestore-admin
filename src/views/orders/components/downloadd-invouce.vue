@@ -38,7 +38,7 @@
 
         <div class="tw-flex tw-justify-between tw-bg-[#EFEEEE] tw-border tw-border-[#A4A9AE75] tw-py-[20px] tw-px-[60px] tw-mt-[40px]">
                 <div class="tw-text-center">
-                    <h4 class="tw-font-bold tw-mb-2">OPAYMENT METHOD</h4>
+                    <h4 class="tw-font-bold tw-mb-2">PAYMENT METHOD</h4>
                     <p> {{PAYMENT_METHOD[orderDetails.payment_method]  }} </p>
                 </div>
 
@@ -81,14 +81,14 @@ const headers = ref<any[]>([
    sortable: false,
    title: 'SR',
    },
-   { key: 'product_name', title: 'Product Title' },
+   { key: 'product_name', title: 'Product Name' },
    { key: 'quantity', title: 'Quantity' },
-   { key: 'price', title: 'Item Price' },
+   { key: 'price', title: 'Unit Price' },
    { key: 'amount', title: 'Amount' },
 ])
 
 const orderedItems = computed<any[]>(()=>{
-   return orderDetails.value?.order_items?.map((elm:any, index:number)=> {
+   return orderDetails.value?.orderItems?.map((elm:any, index:number)=> {
        return {
            sr: index + 1,
            product_name: capitalizeFirstLeters(elm.product_name),

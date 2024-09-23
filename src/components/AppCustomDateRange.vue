@@ -28,8 +28,8 @@
                 </v-menu>
             </div>
 
-            <div class="tw-flex tw-justify-end tw-mt-[40px]">
-                <v-btn variant="outlined" color="red" size="large" @click="setShow = false"> Cancel</v-btn>
+            <div class="tw-flex tw-gap-2 tw-justify-end tw-mt-[40px]">
+                <v-btn variant="text" color="red" size="large" @click="setShow = false"> Cancel</v-btn>
                 <v-btn  color="red" size="large" @click="proceed" :disabled="disableBtn"> Proceed</v-btn>
             </div>
         </v-card>

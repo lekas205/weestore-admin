@@ -3,13 +3,13 @@
     <div class="table-top">
       <div class="search-container">
         <div v-if="searchLabelText" class="search-input">
-          <AppInput :label="searchLabelText" v-model:value="search"/>
+          <AppInput :label="searchLabelText" v-model:value="search" @keyup.enter="submit"/>
         </div>
         <button
           v-if="searchLabelText"
           :disabled="!search.length"
           class="table-btn search-btn"
-          @click=" submit"
+          @click="submit"
         >
           Search
         </button>
