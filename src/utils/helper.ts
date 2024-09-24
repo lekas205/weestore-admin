@@ -130,7 +130,7 @@ export const getDateRange = (range: string) => {
         format: "y-m-d",
       });
 
-    case "lastweek":
+    case "last7":
       return getPastDate({
         date: dayjs(),
         unit: "day",
@@ -138,7 +138,7 @@ export const getDateRange = (range: string) => {
         format: "y-m-d",
       });
 
-    case "lasttwoweek":
+    case "last14":
       return getPastDate({
         date: dayjs(),
         unit: "day",

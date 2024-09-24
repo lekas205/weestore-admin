@@ -13,7 +13,7 @@
                 <template v-slot:item.action="{ item }">
                     <div class="tw-flex tw-items-center tw-gap-4">
                         <ZoomIn class="tw-cursor-pointer" @click="router.push('/customers/'+item.id)" />
-                        <Trash2  class="tw-cursor-pointer"  />
+                        <Trash2  class="tw-cursor-pointer"  @click="deleteCustomer(item.id)"/>
                     </div>
                 </template>
 
@@ -22,6 +22,7 @@
                 </template>
             </v-data-table>
         </app-table-wrapper>
+        <DeleteModdal :openModal="openDeleteModal" @close="openDeleteModal = false" @delete="proceedToDelete" />
     </section>
 </template>
 
@@ -34,6 +35,8 @@ import { Trash2, ZoomIn } from 'lucide-vue-next'
 import StatCard from "./components/StatCard.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
+import DeleteModdal from '../../components/AppDeleteModal.vue';
+
 import { useCustomersStore, useAuthStore } from "@/stores";
 import { formatDate, formatText } from "@/utils";
 
@@ -46,6 +49,8 @@ const { customers } = storeToRefs(customerStore)
 
 const page = ref(1)
 const loading = ref(false);
+const openDeleteModal = ref(false);
+const itemToDelete = ref<string | null>(null);
 const payload = ref({
     page: 1,
     search: ""
@@ -86,6 +91,11 @@ const fetchCustomer = async (query:any)=>{
     loading.value = false
 }
 
+const deleteCustomer = (customerId:string) => {
+    itemToDelete.value = customerId;
+    openDeleteModal.value = true
+}
+
 watch(()=> page.value, (newPage)=>{
     if(newPage) {
         payload.value.page = newPage;
@@ -99,6 +109,7 @@ const search = (text: string) => {
 
     fetchCustomer(payload.value)
 }
+const proceedToDelete = () => {}
 
 onMounted( async()=>{
     authStore.toggleLoader();

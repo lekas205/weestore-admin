@@ -3,7 +3,7 @@
         <v-btn color="primary" @click="$router.back()"> <ChevronLeft/> Back </v-btn>
         <div class="tw-flex mt-3">
             <h2 class="tw-text-[32px] tw-font-bold tw-mr-auto"> {{ formatText(customer.first_name) }} {{ formatText(customer.last_name) }}  </h2>
-            <v-btn color="primary"> Edit </v-btn>
+            <v-btn color="primary" @click="showEditCustomerModal = true"> Edit </v-btn>
 
             <!-- <div class="tw-bg-[#FF0F00AD] tw-text-white pa-4 tw-w-[300px] tw-ml-[40px] rounded-lg">
                 <h4 class="tw-text-[24px] tw-underline" >Bank Details</h4>
@@ -83,6 +83,12 @@
                 <TransactionHistory :loading="loading" :items="transactionistoryData" />
             </template>
         </app-tab>
+
+        <EditCustomerModal 
+            :details="customer" 
+            :openModal="showEditCustomerModal" 
+            @close="showEditCustomerModal = false" 
+        />
     </div>
 </template>
 
@@ -95,6 +101,7 @@ import { ref, markRaw, onMounted, computed } from "vue";
 import AppTab from "@/components/AppTab.vue";
 import OrderHistoryTable from "./components/OrderHistoryTable.vue";
 import TransactionHistory from "./components/TransactionHistory.vue";
+import EditCustomerModal from "./components/EditCustomerModal.vue";
 
 import { PAYMENT_METHOD } from "@/constants/common";
 import { useCustomersStore, useAuthStore } from "@/stores";
@@ -104,13 +111,15 @@ const route = useRoute();
 const authStore = useAuthStore()
 const customerStore = useCustomersStore()
 
-const { custommerDetails: customer }:any = storeToRefs(customerStore)
+const { custommerDetails: customer, customerOrders, customerTransactions }:any = storeToRefs(customerStore)
 
-const loading = ref(false)
-const tabTitles =markRaw(["order history", "transaction history"])
+const loading = ref(false);
+const showEditCustomerModal = ref(false);
+const tabTitles =markRaw(["order history", "transaction history"]);
 
+const customerId = computed<string>(()=> route.params.id as string);
 const orderhistoryData = computed(()=> {
-    return customer.value.orders?.map((elm:any)=> {
+    return customerOrders.value.data?.map((elm:any)=> {
         return   {
             order_number: elm.order_no ?? "--",
             date:  formatDate(elm.created_data),
@@ -119,10 +128,10 @@ const orderhistoryData = computed(()=> {
             status: elm.status,
         }
     })
-})
+});
 
 const transactionistoryData = computed<any>(()=> {
-    return customer.value.transactions?.map((elm:any)=> {
+    return customerTransactions.value.data?.map((elm:any)=> {
         return   {
             order_no: elm.order_no ?? "--",
             date:  elm.transaction_date,
@@ -132,11 +141,19 @@ const transactionistoryData = computed<any>(()=> {
             purpose: elm.purpose
         }
     })
-})
+});
+
+const getCustomer = async () => {
+    authStore.toggleLoader();
+    await Promise.all([
+        customerStore.getSingleCustomer(route.params.id as string),
+        customerStore.getCustomerOrders({customerId: customerId.value}),
+        customerStore.getCustomerTransactions({customerId: customerId.value})
+    ])
+    authStore.toggleLoader();
+}
 
 onMounted(async ()=>{
-    authStore.toggleLoader();
-    await customerStore.getSingleCustomer(route.params.id as string)
-    authStore.toggleLoader();
+    getCustomer()
 })
 </script>
