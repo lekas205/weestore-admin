@@ -26,7 +26,7 @@
             :openModal="openDeleteModal" 
             @close="openDeleteModal = false" 
             @proceed="proceedToDelete" 
-            title="Are You Sure You Want To Delete?"
+            title="Are you sure you want to delete?"
         />
     </section>
 </template>
