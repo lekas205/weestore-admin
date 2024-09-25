@@ -22,7 +22,12 @@
                 </template>
             </v-data-table>
         </app-table-wrapper>
-        <DeleteModdal :openModal="openDeleteModal" @close="openDeleteModal = false" @delete="proceedToDelete" />
+        <DeleteModal 
+            :openModal="openDeleteModal" 
+            @close="openDeleteModal = false" 
+            @proceed="proceedToDelete" 
+            title="Are You Sure You Want To Delete?"
+        />
     </section>
 </template>
 
@@ -35,7 +40,7 @@ import { Trash2, ZoomIn } from 'lucide-vue-next'
 import StatCard from "./components/StatCard.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
-import DeleteModdal from '../../components/AppDeleteModal.vue';
+import DeleteModal from '@/components/AppConfirmModal.vue';
 
 import { useCustomersStore, useAuthStore } from "@/stores";
 import { formatDate, formatText } from "@/utils";

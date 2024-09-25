@@ -1,17 +1,18 @@
 <template>
     <div>
-      <v-dialog persistent v-model="props.openModal" class="dialog" scrollable max-width="600px">
-        <v-card class="px-4 py-7">
+      <v-dialog persistent v-model="props.openModal" class="dialog" scrollable max-width="500px">
+        <v-card class="tw-px-[40px] py-7">
           <div class="wrapper">
-            <Trash2 :size="40" class="mb-3" color="red" />
-            <h2 class="tw-text-2xl">Are You Sure You Want To Delete?</h2>
+            <Trash2 :size="40" class="mb-3" color="red" v-if="title.includes('delete')" />
+            <CircleOff :size="40" class="mb-3" color="red" v-else />
+            <h2 class="tw-text-2xl text-center">{{ title }}</h2>
             <div class="btn-container">
               <AppButton :disabled="isLoading" secondary class="mr-4" @click="closeModal">
-                No, Keep It
+                No, Cancel
               </AppButton>
   
-              <AppButton :disabled="isLoading" :loading="isLoading" @click="emit('delete')">
-                Yes, Delete It
+              <AppButton :disabled="isLoading" :loading="isLoading" @click="emit('proceed')">
+                Yes, Proceed
               </AppButton>
             </div>
           </div>
@@ -22,16 +23,20 @@
   
   <script setup lang="ts">
   import { ref } from 'vue'
-  import { Trash2 } from 'lucide-vue-next'
+  import { Trash2, CircleOff } from 'lucide-vue-next'
   import { openToastNotification } from '@/utils'
   
   import AppButton from '@/components/AppButton.vue'
   
-  const emit = defineEmits(['close', 'delete']);
+  const emit = defineEmits(['close', 'proceed']);
   const props = defineProps({
     openModal: {
       type: Boolean,
       default: false,
+    },
+    title: {
+      type: String,
+      required: true,
     }
   });
   

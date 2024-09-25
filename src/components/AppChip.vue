@@ -21,7 +21,7 @@ const chipColors = ref({
     "return order": 'red',
     "delivered": "success",
     "completed": 'success',
-    "cancelled": "primary"
+    "declined": "primary"
 })
 </script>
 

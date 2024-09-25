@@ -67,7 +67,12 @@
            </declined-order-table>
        </template>
    </app-tab>
-
+   <ConfirmCancelModal
+      :openModal="openConfirmModal" 
+      @close="openConfirmModal = false" 
+      @proceed="proceedToDecline" 
+      title="Are You Sure You Want To decline this order?"
+   />
    <DriverList v-model:openModal="openDriverModal"  @procced="proceedToTransit($event)" />
   </section>
 </template>
@@ -90,7 +95,9 @@ import DeclinedOrderTable from "./Tables/Orders/DeclinedOrderTable.vue";
 // ============ Componeents ============//
 import AppTab from "@/components/AppTab.vue";
 import AppTable from "@/components/AppTable.vue";
-import TableFooter from '@/components/AppTableFooter.vue'
+import TableFooter from '@/components/AppTableFooter.vue';
+import ConfirmCancelModal from '@/components/AppConfirmModal.vue';
+
 
 import { ROUTES, PAYMENT_METHOD } from "@/constants";
 import { openToastNotification } from '@/utils'
@@ -109,8 +116,10 @@ const {
 const router = useRouter()
 
 const loading = ref(false);
+const openConfirmModal = ref(false);
 const ouderToUpdate = ref<any>({})
 const openDriverModal = ref(false)
+
 const tabTitles = ref([ 
   "new orders", 
   "delivered orders",
@@ -236,7 +245,7 @@ const fetchReturnedOrders = async(payload: any) => {
   await orderStore.fetchReturnedOrders(payload); 
   loading.value = false
 }
-const fetchDeclinedOrders = async(payload: any) => {
+const fetchDeclinedOrders = async(payload?: any) => {
   loading.value = true
   await orderStore.fetchDeclinedOrders(payload); 
   loading.value = false
@@ -246,6 +255,12 @@ const processStatusUpdate = (payload: any) => {
      openDriverModal.value = true
      ouderToUpdate.value  = payload
      return false
+  }
+
+  if(payload.status.toLowerCase()  ===  "declined" && !ouderToUpdate.value.status ){
+    ouderToUpdate.value  = payload
+    openConfirmModal.value = true
+    return false
   }
   return true
 }
@@ -257,8 +272,13 @@ const proceedToTransit = async(driverId: string) => {
 
 const fetchContent = async () => {
   loading.value = true
- await  orderStore.fetchNewOrders()
+  await  orderStore.fetchNewOrders()
   loading.value = false
+}
+
+const proceedToDecline = () => {
+  openConfirmModal.value = false;
+  updateOrderStatus(ouderToUpdate.value)
 }
 
 const updateOrderStatus = async(payload: any) => {
@@ -267,15 +287,18 @@ const updateOrderStatus = async(payload: any) => {
   const data = await orderStore.updateOrderStatus(payload); 
 
   if(data){
-
     await fetchContent();
     openToastNotification({
       message: `Order has been updated successfully`,
       variant: 'success'
     });
 
+    if(payload.status === "decline"){
+      fetchDeclinedOrders()
+    }
   }
  
   loading.value = false
+  ouderToUpdate.value = {}
 }
 </script>

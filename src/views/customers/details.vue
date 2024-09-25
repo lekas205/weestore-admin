@@ -122,8 +122,8 @@ const orderhistoryData = computed(()=> {
     return customerOrders.value.data?.map((elm:any)=> {
         return   {
             order_number: elm.order_no ?? "--",
-            date:  formatDate(elm.created_data),
-            method: PAYMENT_METHOD[elm.payment_method],
+            date:  formatDate(elm.date),
+            method: PAYMENT_METHOD[elm.method],
             amount: formatAsMoney(elm.amount),
             status: elm.status,
         }
@@ -134,10 +134,10 @@ const transactionistoryData = computed<any>(()=> {
     return customerTransactions.value.data?.map((elm:any)=> {
         return   {
             order_no: elm.order_no ?? "--",
-            date:  elm.transaction_date,
-            method: PAYMENT_METHOD[elm.transaction_purpose],
+            date:  elm.date,
+            method: PAYMENT_METHOD[elm.payment_by],
             amount: formatAsMoney(elm.amount),
-            position: elm.transaction_mode,
+            position: elm.position,
             purpose: elm.purpose
         }
     })
