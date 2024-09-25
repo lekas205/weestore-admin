@@ -71,7 +71,7 @@
       :openModal="openConfirmModal" 
       @close="openConfirmModal = false" 
       @proceed="proceedToDecline" 
-      title="Are You Sure You Want To decline this order?"
+      title="Are you sure you want to decline this order?"
    />
    <DriverList v-model:openModal="openDriverModal"  @procced="proceedToTransit($event)" />
   </section>
