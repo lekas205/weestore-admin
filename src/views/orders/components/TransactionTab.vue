@@ -293,7 +293,7 @@ const updateOrderStatus = async(payload: any) => {
       variant: 'success'
     });
 
-    if(payload.status === "decline"){
+    if(payload.status.toLowerCase() === "declined"){
       fetchDeclinedOrders()
     }
   }

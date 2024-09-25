@@ -4,6 +4,7 @@ import http from "@/lib/http";
 import { ENDPOINTS, STATE_PAYLOAD } from "@/constants";
 import { handleStoreRequestError } from "@/utils";
 export const useCustomersStore = defineStore("customers", () => {
+  const dashboardStats = ref<any>({});
   const customers: any = ref({ ...STATE_PAYLOAD });
   const custommerDetails = ref({ ...STATE_PAYLOAD });
   const unverifiedCustomers = ref({ ...STATE_PAYLOAD });
@@ -140,16 +141,30 @@ export const useCustomersStore = defineStore("customers", () => {
     }
   };
 
+  const getDashboardStats = async (): Promise<boolean> => {
+    try {
+      const { data } = await http.get(ENDPOINTS.GET_CUSTOMERS + `/summary`);
+
+      dashboardStats.value = data.payload;
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
   return {
     customers,
     fetchCustomers,
     verifyCustomer,
     updateCustomer,
+    dashboardStats,
     custommerDetails,
     customerOrders,
     customerTransactions,
     getCustomerOrders,
     getSingleCustomer,
+    getDashboardStats,
     unverifiedCustomers,
     getUnverifiedCustomer,
     getCustomerTransactions,

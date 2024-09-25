@@ -177,7 +177,8 @@
         formData.value.email  = props.details.email;
         formData.value.phoneNo = props.details.phone;
         formData.value.warehouse = props.details.warehouse_id;
-        formData.value.state = props.details.state_id;
+        formData.value.state = props.details.state_code;
+        formData.value.address = props.details.address;
     }
   })
 

@@ -36,20 +36,23 @@
                 </div> -->
                
             </div>
+            <div class="" v-if="loanDetails.status == 'Pending' ">
+                <p class="tw-text-[18px] tw-px-[40px] text-center mt-5" >
+                    Note: By clicking  <b>Approve</b>, you approve the sum of N200,000 to be paid into Rita Alex’s bank account
+                </p>
 
-            <p class="tw-text-[18px] tw-px-[40px] text-center mt-5">
-                Note: By clicking  <b>Approve</b>, you approve the sum of N200,000 to be paid into Rita Alex’s bank account
-            </p>
-
-            <div class="tw-flex tw-justify-center mt-5 tw-gap-[30px] mb-3">
-                <v-btn color="green" size="large" :loading="loading" @click="emits('action', {id: loanDetails.id, action: 'approve' })"> Approve </v-btn>
-                <v-btn color="primary" size="large" @click="emits('action', {id: loanDetails.id, action: 'decline' })"> Decline </v-btn>
+                <div class="tw-flex tw-justify-center mt-5 tw-gap-[30px] mb-3">
+                    <v-btn color="green" size="large" :disabled="loading" :loading="loading && status === 'approve' " @click="proceed('approve')"> Approve </v-btn>
+                    <v-btn color="primary" size="large" @click="proceed('reject')" :disabled="loading" :loading="loading && status === 'reject'"> Decline </v-btn>
+                </div>
             </div>
+           
         </v-card>  
     </v-dialog>
 </template>
 
 <script lang="ts" setup>
+  import { ref } from "vue";
   import { X } from 'lucide-vue-next';
   import { formatAsMoney } from "@/utils";
 
@@ -73,5 +76,12 @@
             return {}
         }
     }
-})
+ })
+
+ const status = ref("")
+
+ const proceed = (action: string) => {
+    status.value = action
+    emits('action', {id: props.loanDetails.id, action })
+ }
 </script>
