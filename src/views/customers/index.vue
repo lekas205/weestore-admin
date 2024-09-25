@@ -1,6 +1,6 @@
 <template>
     <section class="px-4 py-5">
-        <StatCard />
+        <StatCard  :stats="dashboardStats"/>
         <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]"  @search="search" @filter="fetchCustomer($event)">
             <v-data-table 
                 hide-default-footer 
@@ -50,7 +50,7 @@ const router = useRouter();
 const authStore = useAuthStore()
 const customerStore = useCustomersStore()
 
-const { customers } = storeToRefs(customerStore)
+const { customers, dashboardStats } = storeToRefs(customerStore)
 
 const page = ref(1)
 const loading = ref(false);
@@ -118,7 +118,10 @@ const proceedToDelete = () => {}
 
 onMounted( async()=>{
     authStore.toggleLoader();
-    await fetchCustomer({page: page.value})
+    await Promise.all([
+        fetchCustomer({page: page.value}),
+        customerStore.getDashboardStats()
+    ])
     authStore.toggleLoader();
 })
 </script>

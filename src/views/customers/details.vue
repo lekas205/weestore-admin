@@ -46,7 +46,7 @@
             <v-col col="6" :md="3">
                 <p>CASH POINTS</p>
                 <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
-                    {{ customer.phone_no }}
+                    {{ formatAsMoney(customer.cashpoint) }}
                 </div>
             </v-col>
         </v-row>
@@ -55,6 +55,7 @@
             <v-col col="6" :md="3">
                 <p>CREDIT WALLET</p>
                 <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                    {{ formatAsMoney(customer.credit_wallet) }}
                 </div>
             </v-col>
             <v-col col="6" :md="3">
@@ -70,6 +71,7 @@
             <v-col col="6" :md="3">
                 <p>MY ACCOUNT</p>
                 <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                    {{ formatAsMoney(customer.account) }}
                 </div>
             </v-col>
         </v-row>

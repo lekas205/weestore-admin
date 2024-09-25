@@ -63,7 +63,7 @@ export const useCreditStore = defineStore("credit", () => {
   const approveDeclineRequest = async (params?: any): Promise<boolean> => {
     try {
       const { data } = await http.put(
-        ENDPOINTS.PENDING_TOPUP_REQUEST +
+        ENDPOINTS.PENDDNG_CREDIT_REQUEST +
           `/${params.id}?action=${params.action}`
       );
       return true;

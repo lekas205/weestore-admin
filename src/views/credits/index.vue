@@ -19,6 +19,7 @@
                     :items="approveRequestData"
                     :loading="loading"
                     class="elevation-1 custom-table"
+                    @showDetails="proceed($event)"
                 >
                 </CreditTable>
             </template>
@@ -69,14 +70,21 @@ const proceed = (item: any) => {
 const approveDeclineLoan = async (query: any) => {
     loading.value = true;
     const res = await creditStore.approveDeclineRequest(query);
-    loading.value = false
 
     if(res){
+        await creditStore.fetchCreditRequest(),
         openToastNotification({
           message:  `Loan request has been ${query.action === 'approve' ? 'approved': 'declined'}`,
           variant: 'success'
         });
 
+        if(query.action === 'approve'){
+            creditStore.fetchApprovedRequest()
+        }else{
+            creditStore.fetchPaidRequest()
+        }
+
+        loading.value = false
         openModal.value = false
     }
 
@@ -147,10 +155,12 @@ const fetchPaidRequest = async (query: any) => {
    await creditStore.fetchPaidRequest(query)
 };
 onMounted(async ()=>{
+    authStore.toggleLoader();
     await Promise.all([
         creditStore.fetchCreditRequest(),
         creditStore.fetchApprovedRequest(),
         creditStore.fetchPaidRequest()
     ])
+    authStore.toggleLoader();
 })
 </script>

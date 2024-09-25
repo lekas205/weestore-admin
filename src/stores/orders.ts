@@ -8,9 +8,11 @@ export const useOrderStore = defineStore("orders", () => {
   const new_orders = ref({
     ...STATE_PAYLOAD,
   });
+  const dashboardStats = ref<any>({});
   const return_requests = ref({ ...STATE_PAYLOAD });
   const declined_orders = ref({ ...STATE_PAYLOAD });
   const returned_orders = ref({ ...STATE_PAYLOAD });
+
   const delivered_orders = ref({ ...STATE_PAYLOAD });
   const completed_orders = ref({ ...STATE_PAYLOAD });
   const declined_return_requests = ref({ ...STATE_PAYLOAD });
@@ -242,6 +244,18 @@ export const useOrderStore = defineStore("orders", () => {
     }
   };
 
+  const getDashboardStats = async (): Promise<boolean> => {
+    try {
+      const { data } = await http.get(ENDPOINTS.GET_ORDERS + `/summary`);
+
+      dashboardStats.value = data.payload;
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
   return {
     new_orders,
     orderDetails,
@@ -251,9 +265,11 @@ export const useOrderStore = defineStore("orders", () => {
     delivered_orders,
     returned_orders,
     declined_orders,
+    dashboardStats,
     declined_return_requests,
     approved_return_requests,
     getSingleOrder,
+    getDashboardStats,
     fetchReturnRequest,
     updateOrderDetails,
     fetchReturnedOrders,

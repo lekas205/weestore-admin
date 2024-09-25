@@ -17,36 +17,42 @@
   </template>
   
   <script setup lang="ts">
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   import { useRouter } from "vue-router";
   
   const router = useRouter()
-  const summaryData = ref([
-    {
-      title: ' All Customers',
-      amount: '0',
-      color: 'tw-bg-primary',
-      link: null
-    },
-    {
-      title: 'Active Customers',
-      amount: '320',
-      color: 'tw-bg-blue',
-      link: null
-    },
-    {
-      title: 'In Active Customers',
-      amount: '322',
-      color: 'tw-bg-lime',
-      link: null
-    },
-    {
-      title: 'Unverified Customers',
-      amount: '40',
-      color: 'tw-bg-wine',
-      link: '/customers/unverified'
-    }
-  ]);
+
+  const props = defineProps<{
+    stats: any
+  }>()
+  const summaryData = computed(()=> {
+    return [
+      {
+        title: ' All Customers',
+        amount: props.stats.totalCustomer,
+        color: 'tw-bg-primary',
+        link: null
+      },
+      {
+        title: 'Active Customers',
+        amount: props.stats.activeCustomer,
+        color: 'tw-bg-blue',
+        link: null
+      },
+      {
+        title: 'In Active Customers',
+        amount: props.stats.inactiveCustomer,
+        color: 'tw-bg-lime',
+        link: null
+      },
+      {
+        title: 'Unverified Customers',
+        amount: props.stats.unverifiedCustomer,
+        color: 'tw-bg-wine',
+        link: '/customers/unverified'
+      }
+    ]
+  });
 
   const redirect = (item:any) => {
     item.link ? router.push(item.link) : ''

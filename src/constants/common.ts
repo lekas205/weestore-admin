@@ -51,4 +51,5 @@ export const STATE_PAYLOAD = {
 
 export const LOAN_STATUSES = {
   AWAITING_APPROVAL: "Pending",
+  disbursed: "Disbursed",
 };

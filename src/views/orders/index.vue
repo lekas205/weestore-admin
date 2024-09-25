@@ -1,6 +1,6 @@
 <template>
     <section class="mt-5 tw-p-5">
-        <stat-card/>
+        <stat-card :stats="dashboardStats" />
         <transaction-tab />
     </section>
 </template>
@@ -14,8 +14,8 @@
     import { useOrderStore , useAuthStore} from "@/stores";
 
     const orderStore = useOrderStore();
-    const authStore = useAuthStore()
-    const { new_orders } = storeToRefs(orderStore)
+    const authStore = useAuthStore();
+    const { dashboardStats } = storeToRefs(orderStore)
 
     onMounted( async ()=>{
         try{
@@ -25,7 +25,8 @@
                 orderStore.fetchCompletedOrders(),
                 orderStore.fetchDeliveredOrders() ,
                 orderStore.fetchReturnedOrders(),
-                orderStore.fetchDeclinedOrders()
+                orderStore.fetchDeclinedOrders(),
+                orderStore.getDashboardStats(), 
             ])     
             authStore.toggleLoader();        
         }catch(err:any){

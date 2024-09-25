@@ -17,43 +17,49 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from "vue-router";
   
-  const router = useRouter()
+const router = useRouter();
 
-const summaryData = ref([
-  {
-    title: 'Number of New Order',
-    amount: '0',
-    color: 'tw-bg-primary',
-    link: null
-  },
-  {
-    title: 'Orders in Processing',
-    amount: '320',
-    color: 'tw-bg-blue',
-    link: null
-  },
-  {
-    title: 'Orders in Transit',
-    amount: '322',
-    color: 'tw-bg-lime',
-    link: null
-  },
-  {
-    title: 'Orders Completed',
-    amount: '40',
-    color: 'tw-bg-wine',
-    link: null
-  },
-  {
-    title: 'Orders Returned',
-    amount: '10',
-    color: 'tw-bg-orange',
-    link: "/orders/returned-order"
-  },
-]);
+const props = defineProps<{
+  stats: any
+}>()
+
+const summaryData = computed(()=>{
+  return  [
+    {
+      title: 'Number of New Order',
+      amount: props.stats.newOrdersNo,
+      color: 'tw-bg-primary',
+      link: null
+    },
+    {
+      title: 'Orders in Processing',
+      amount: props.stats.inProcessingOrdersNo,
+      color: 'tw-bg-blue',
+      link: null
+    },
+    {
+      title: 'Orders in Transit',
+      amount: props.stats.inTransitOrdersNo,
+      color: 'tw-bg-lime',
+      link: null
+    },
+    {
+      title: 'Orders Completed',
+      amount: props.stats.completedOrdersNo,
+      color: 'tw-bg-wine',
+      link: null
+    },
+    {
+      title: 'Orders Returned',
+      amount: props.stats.returnedOrdersNo,
+      color: 'tw-bg-orange',
+      link: "/orders/returned-order"
+    },
+  ]
+});
 
 const redirect = (item:any) => {
     item.link ? router.push(item.link) : ''
