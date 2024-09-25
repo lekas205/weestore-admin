@@ -94,7 +94,7 @@ const headers = ref<any[]>([
     { key: 'channel', title: 'Channel' },
     { key: 'amount', title: 'Amount' },
     { key: 'status', title: 'Status' },
-    { key: 'action', title: 'Action' , width: "25%"},
+    // { key: 'action', title: 'Action' , width: "25%"},
 ])
 
 const next = (page: number) => {

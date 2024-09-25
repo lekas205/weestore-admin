@@ -11,9 +11,9 @@ export const PHONE_NUMBER_REGEX = /^(?:\+?234|0)(?:\d{10})$/;
 
 export const ORDER_STATUS_OPTION = [
   { label: "Pending", value: "PENDING" },
-  { label: "In Transit", value: "IN_TRANSIT" },
   { label: "Processing", value: "PROCESSING" },
-  { label: "Cancelled", value: "CANCELLED" },
+  { label: "In Transit", value: "IN_TRANSIT" },
+  { label: "Decline", value: "DECLINED" },
   { label: "Completed", value: "COMPLETED" },
   { label: "Delivered", value: "DELIVERED" },
   { label: "Return Order", value: "RETURN_ORDER" },
@@ -23,7 +23,7 @@ export const ORDER_STATUS = {
   PENDING: "Pending",
   PROCESSING: "Processing",
   IN_TRANSIT: "In Transit",
-  CANCELLED: "Cancelled",
+  DECLINED: "Declined",
   COMPLETED: "Completed",
   DELIVERED: "Delivered",
   RETURN_ORDER: "Return Order",
@@ -34,7 +34,7 @@ export const PAYMENT_METHOD = {
   PAY_ON_DELIVERY: "Pay on Delivery",
   TRANSFER: "Transfer",
   PAY_NOW: "Pay Now",
-  wallet_to_system: "Wallet",
+  wallet_payment: "Wallet Payment",
 };
 
 export const DEFAULT_PAGINATION: Pagination = {

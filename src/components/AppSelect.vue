@@ -6,7 +6,6 @@
         item-value="value"
         label="Select"
         persistent-hint
-        return-object
         single-line
     ></v-select>
 </template>

@@ -8,6 +8,9 @@ export const useCustomersStore = defineStore("customers", () => {
   const custommerDetails = ref({ ...STATE_PAYLOAD });
   const unverifiedCustomers = ref({ ...STATE_PAYLOAD });
 
+  const customerOrders = ref({ ...STATE_PAYLOAD });
+  const customerTransactions = ref({ ...STATE_PAYLOAD });
+
   const fetchCustomers = async (query?: any): Promise<boolean> => {
     try {
       const { data } = await http.get(ENDPOINTS.GET_CUSTOMERS, {
@@ -30,6 +33,76 @@ export const useCustomersStore = defineStore("customers", () => {
     try {
       const { data } = await http.get(ENDPOINTS.GET_CUSTOMERS + `/${id}`);
       custommerDetails.value = data.payload;
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
+  const updateCustomer = async ({
+    customerId,
+    payload,
+  }: {
+    customerId: string;
+    payload: any;
+  }): Promise<boolean> => {
+    try {
+      await http.patch(ENDPOINTS.GET_CUSTOMERS + `/${customerId}`, payload);
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
+  const getCustomerTransactions = async ({
+    customerId,
+    query,
+  }: {
+    customerId: string;
+    query?: any;
+  }): Promise<boolean> => {
+    try {
+      const { data } = await http.get(
+        ENDPOINTS.GET_CUSTOMERS + `/${customerId}/transactions`,
+        {
+          params: { ...query },
+        }
+      );
+
+      const { paging, rows } = data.payload;
+      customerTransactions.value = {
+        data: rows,
+        pagination: paging,
+      };
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
+  const getCustomerOrders = async ({
+    customerId,
+    query,
+  }: {
+    customerId: string;
+    query?: any;
+  }): Promise<boolean> => {
+    try {
+      const { data } = await http.get(
+        ENDPOINTS.GET_CUSTOMERS + `/${customerId}/orders`,
+        {
+          params: { ...query },
+        }
+      );
+
+      const { paging, rows } = data.payload;
+      customerOrders.value = {
+        data: rows,
+        pagination: paging,
+      };
       return true;
     } catch (error) {
       handleStoreRequestError(error);
@@ -71,9 +144,14 @@ export const useCustomersStore = defineStore("customers", () => {
     customers,
     fetchCustomers,
     verifyCustomer,
+    updateCustomer,
     custommerDetails,
+    customerOrders,
+    customerTransactions,
+    getCustomerOrders,
     getSingleCustomer,
     unverifiedCustomers,
     getUnverifiedCustomer,
+    getCustomerTransactions,
   };
 });
