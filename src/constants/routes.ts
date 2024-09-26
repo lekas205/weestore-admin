@@ -94,6 +94,12 @@ export const ROUTES = {
     requiresAuth: true,
     title: "Credits Management",
   },
+  credit_repayment: {
+    path: "/credits/pending-repayment",
+    name: "Credits Repayment",
+    requiresAuth: true,
+    title: "Credits Repayment Requests",
+  },
   payment: {
     path: "/payments",
     name: "Payments",

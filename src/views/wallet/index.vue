@@ -1,7 +1,7 @@
 <template>
     <section class="tw-p-[30px]">
         <!-- <v-btn color="primary" @click="$router.back()"> <ChevronLeft/> Back </v-btn> -->
-        <stat-card />
+        <stat-card :stats="dashboardStats" />
         <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]" @search="search" @filter="fetchCustomer($event)">
             <v-data-table 
                 hide-default-footer 
@@ -34,16 +34,18 @@ import { ChevronLeft } from 'lucide-vue-next'
 
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
-import { useCustomersStore, useAuthStore } from "@/stores";
+import { useCustomersStore, useAuthStore, useWalletStore } from "@/stores";
 import StatCard from "./components/StatCard.vue";
 import { formatText, formatAsMoney } from "@/utils";
 
 
 const router = useRouter()
 const authStore = useAuthStore()
+const walletStore = useWalletStore()
 const customerStore = useCustomersStore()
 
-const { customers } = storeToRefs(customerStore)
+const { customers } = storeToRefs(customerStore);
+const { dashboardStats } = storeToRefs(walletStore);
 
 const page = ref(1)
 const payload = ref({
@@ -96,7 +98,10 @@ const next = (page: number) =>{
 
 onMounted(async ()=>{
     authStore.toggleLoader();
-    await fetchCustomer({page: page.value})
+    await Promise.all([
+     fetchCustomer({page: page.value}),
+     walletStore.getDashboardStats()
+    ])
     authStore.toggleLoader();
 })
 </script>

@@ -19,7 +19,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-defineEmits(['next']);
+defineEmits<{
+  (e: "next", val: number)
+}>()
 
 const props = defineProps({
   total: {

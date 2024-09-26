@@ -17,42 +17,49 @@
   </template>
   
   <script setup lang="ts">
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { useRouter } from "vue-router";
   
-  const router = useRouter()
-  const summaryData = ref([
+  const router = useRouter();
+
+  const props = defineProps<{
+    stats: any
+  }>()
+
+  const summaryData = computed(()=>{
+    return  [
     {
       title: 'No of Disbursement',
-      amount: '0',
+      amount: props.stats.totalNoOfDisbursement,
       color: 'tw-bg-primary',
       link: null
     },
     {
       title: 'Active Credit',
-      amount: '320',
+      amount: props.stats.activeCredit,
       color: 'tw-bg-blue',
       link: null
     },
     {
       title: 'Amount Disbursed',
-      amount: '322',
+      amount: props.stats.amountDisbursed,
       color: 'tw-bg-orange',
       link: null
     },
     {
       title: 'Amount Repaid',
-      amount: '40',
+      amount: props.stats.amountRepaid,
       color: 'tw-bg-lime',
       link: null
     },
     {
       title: 'Pending Loan Repayment',
-      amount: '40',
+      amount: props.stats.pendingLoanRepayment,
       color: 'tw-bg-wine',
-      link: null
+      link: "/credits/pending-repayment"
     }
-  ]);
+  ]
+  });
 
   const redirect = (item:any) => {
     item.link ? router.push(item.link) : ''
