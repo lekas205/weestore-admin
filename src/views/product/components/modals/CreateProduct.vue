@@ -122,7 +122,8 @@
               <AppInput
                 label="Value Of Quantity In Stock"
                 type="number"
-                :disabled="isLoading"
+                :value="valOfQtyInStock"
+                disabled
               />
             </v-col>
           </v-row>
@@ -252,6 +253,10 @@ const warehouses = ref<WarehouseByState>([]);
 const productSizes = ['S', 'M', 'L', 'XL', 'XXL', 'NIL'];
 const states = computed(() => warehouseStore.states);
 const categories = computed(() => categoryStore.categories);
+const valOfQtyInStock = computed(() => {
+  const result = formData.value.price.value * formData.value.quantity.value;
+  return result || null;
+});
 const createProductPayload = ref<CreateProductDto>({} as CreateProductDto);
 
 const formData = ref<CustomFormData>({

@@ -199,7 +199,7 @@ async function editCategory(payload: UpdateCategoryDto) {
       payload.id
     );
 
-    if (!success) {
+    if (success) {
       emit('completed');
       clearFormData();
       isLoading.value = false;

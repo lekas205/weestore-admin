@@ -97,6 +97,7 @@ export const CreateProductSchema = z.object({
   quantity: z
     .number({
       message: 'Quantity is required',
+      coerce: true
     })
     .min(1, {
       message: 'Quantity cannot be less than 1'

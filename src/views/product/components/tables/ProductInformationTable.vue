@@ -1,6 +1,7 @@
 <template>
   <TableWrapper
     searchLabelText="Search product by name"
+    @search="searchProducts"
   >
     <v-data-table
       :headers="headers"
@@ -104,7 +105,7 @@ const headers = ref<any[]>([
   { title: 'SALES PRICE', key: 'price' },
   { title: 'QTY-A', key: 'stock_quantity' },
   { title: 'STATUS', key: 'status' },
-  { title: 'VIEW', key: 'view' },
+  // { title: 'VIEW', key: 'view' },
   { title: 'PUBLISHED', key: 'published' },
   { title: 'ACTION', key: 'action', align: 'center' },
 ]);
@@ -133,7 +134,7 @@ function handleEditAction(item: Product) {
 async function handlePublishToggle(value: any, item: Product) {
   isLoading.value = true;
   let success = false;
-  if (value == true) {
+  if (value === true) {
     success = await productStore.publishProduct(item.product_id);
   }
   else {
@@ -151,6 +152,14 @@ async function handlePublishToggle(value: any, item: Product) {
 
 function handleNextPage(page: number) {
   queryFilter.value.page = page;
+  loadProducts();
+}
+
+function searchProducts(val: string) {
+  queryFilter.value = {
+    page: 1,
+    search: val,
+  }
   loadProducts();
 }
 

@@ -124,7 +124,8 @@
               <AppInput
                 label="Value Of Quantity In Stock"
                 type="number"
-                :disabled="isLoading"
+                :value="valOfQtyInStock"
+                disabled
               />
             </v-col>
           </v-row>
@@ -261,6 +262,10 @@ const productSizes = ['S', 'M', 'L', 'XL', 'XXL', 'NIL'];
 const states = computed(() => warehouseStore.states);
 const categories = computed(() => categoryStore.categories);
 const selectedProduct = computed<Product>(() => productStore.selectedProduct as Product);
+const valOfQtyInStock = computed(() => {
+  const result = formData.value.price.value! * formData.value.quantity.value!;
+  return result || null;
+});
 
 const defaultFormValue: CustomFormData<UpdateProductDto> = {
   productId: {
