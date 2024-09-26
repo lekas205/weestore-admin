@@ -17,23 +17,23 @@
                 </div>
                 <div class="tw-flex tw-justify-between mb-3 tw-items-center">
                     <p class="tw-text-[#00000094] tw-font-[700] tw-text-[21px]"> Disbursement </p>
-                    <p class="tw-text-[20px] tw-font-[700]"> {{ loanDetails.balance }} </p>
+                    <p class="tw-text-[20px] tw-font-[700]"> {{ loanDetails.amount }} </p>
                 </div>
                 <div class="tw-flex tw-justify-between mb-3 tw-items-center mt-5">
                     <p class="tw-text-[#00000094] tw-font-[700] tw-text-[21px]"> Weekly Repayment </p>
-                    <p class="tw-text-[20px] tw-font-[700]"> {{ loanDetails.balance }} </p>
+                    <p class="tw-text-[20px] tw-font-[700]"> {{ loanDetails.weekly_repayment }} </p>
                 </div>
 
-                <!-- <div >
+                <div v-if="loanDetails.status === 'Disbursed'">
                     <div class="tw-flex tw-justify-between mb-3 tw-items-center mt-4">
                         <p class="tw-text-[#00000094] tw-font-[700] tw-text-[21px]"> Amount Paid </p>
-                        <p class="tw-text-[20px] tw-font-[700]"> N200,000</p>
+                        <p class="tw-text-[20px] tw-font-[700]"> {{ loanDetails.amount_paid }} </p>
                     </div>
                     <div class="tw-flex tw-justify-between mb-3 tw-items-center mt-4">
                         <p class="tw-text-[#00000094] tw-font-[700] tw-text-[21px]"> Amount Left </p>
-                        <p class="tw-text-[20px] tw-font-[700]"> N200,000</p>
+                        <p class="tw-text-[20px] tw-font-[700]"> {{ loanDetails.amount_left }} </p>
                     </div>
-                </div> -->
+                </div>
                
             </div>
             <div class="" v-if="loanDetails.status == 'Pending' ">

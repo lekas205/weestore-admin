@@ -21,12 +21,15 @@ export const ENDPOINTS = {
     status: string;
   }) => `${ADMIN_BASE}/order/${orderId}/status/${status}`,
 
+  WALLET: `${ADMIN_BASE}/wallet`,
   GET_ALL_DRIVERS: `${ADMIN_BASE}/driver?limit=200`,
   GET_CUSTOMERS: `${ADMIN_BASE}/customer`,
   PENDING_TOPUP_REQUEST: `${ADMIN_BASE}/topup/request`,
   PENDDNG_CREDIT_REQUEST: `${ADMIN_BASE}/credit/request`,
+  CREDIT_REQUEST: `${ADMIN_BASE}/credit`,
   APPROVED_LOAN_REQUEST: `${ADMIN_BASE}/loan/active`,
   PAID_LOAN_REQUEST: `${ADMIN_BASE}/loan/paid`,
+  LOAN_REPAYMENT_REQUEST: `${ADMIN_BASE}/credit/repayment/request`,
   PRODUCT_METRICS: `${ADMIN_BASE}/product/metrics`,
   PRODUCT_BY_ID: (id: any) => `${ADMIN_BASE}/product/${id}`,
   PUBLISH_PRODUCT: (id: any) => `${ADMIN_BASE}/product/${id}/publish`,

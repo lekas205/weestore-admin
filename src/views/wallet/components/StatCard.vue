@@ -19,26 +19,34 @@
   </template>
   
   <script setup lang="ts">
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
   import { useRouter } from "vue-router";
+  import { formatAsMoney } from "@/utils";
+
     
-    const router = useRouter()
+  const router = useRouter();
+
+  const props = defineProps<{
+    stats: any
+  }>()
   
-  const summaryData = ref([
-    {
-      title: ' Total Amount in Wallet',
-      amount: '0',
-      color: 'tw-bg-primary',
-      link: null
-    },
-    {
-      title: 'Pending Topup Approval',
-      amount: '320',
-      color: 'tw-bg-blue',
-      link: "/wallets/topup-approval",
-      sub_text: "Click Here to View Request"
-    },
-  ]);
+  const summaryData = computed(()=>{
+    return  [
+      {
+        title: ' Total Amount in Wallet',
+        amount:  formatAsMoney(props.stats.totalAmountInWallet) ,
+        color: 'tw-bg-primary',
+        link: null
+      },
+      {
+        title: 'Pending Topup Approval',
+        amount:  props.stats.pendingTopUpApproval,
+        color: 'tw-bg-blue',
+        link: "/wallets/topup-approval",
+        sub_text: "Click Here to View Request"
+      },
+    ]
+  });
   
   const redirect = (item:any) => {
       item.link ? router.push(item.link) : ''

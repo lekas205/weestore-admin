@@ -1,6 +1,6 @@
 <template>
     <section class="pa-5">
-        <StatCard />
+        <StatCard :stats="dashboardStats" />
         <app-tab :tabTitles="tabTitles" class="mt-5">
             <template #credit_requests>
                 <CreditTable
@@ -54,7 +54,7 @@ import { useCreditStore, useAuthStore } from "@/stores";
 const authStore = useAuthStore()
 const creditStore = useCreditStore()
 
-const { paid_request, credit_request, approved_request } = storeToRefs(creditStore)
+const { paid_request, credit_request, approved_request, dashboardStats } = storeToRefs(creditStore)
 
 
 const loading = ref(false);
@@ -102,7 +102,8 @@ const creditRequestData = computed<any[]>(()=>{
             request_date: elm.created_at,
             next_payment: elm.payment_date,
             warehouse: elm.warehouse,
-            status: LOAN_STATUSES[elm.status]
+            status: LOAN_STATUSES[elm.status],
+            weekly_repayment: formatAsMoney(elm.expected_weekly_payment)
         }
     })
 })
@@ -119,7 +120,10 @@ const approveRequestData = computed<any[]>(()=>{
             request_date: elm.created_at,
             next_payment: elm.payment_date,
             warehouse: elm.warehouse,
-            status: LOAN_STATUSES[elm.status]
+            status: LOAN_STATUSES[elm.status],
+            amount_paid: formatAsMoney(elm.amount_paid),
+            amount_left: formatAsMoney(elm.amount_left),
+            weekly_repayment: formatAsMoney(elm.expected_weekly_payment)
         }
     })
 })
@@ -159,7 +163,8 @@ onMounted(async ()=>{
     await Promise.all([
         creditStore.fetchCreditRequest(),
         creditStore.fetchApprovedRequest(),
-        creditStore.fetchPaidRequest()
+        creditStore.fetchPaidRequest(),
+        creditStore.getDashboardStats()
     ])
     authStore.toggleLoader();
 })

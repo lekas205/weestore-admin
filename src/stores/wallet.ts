@@ -4,7 +4,8 @@ import http from "@/lib/http";
 import { ENDPOINTS } from "@/constants";
 import { handleStoreRequestError } from "@/utils";
 export const useWalletStore = defineStore("wallet", () => {
-  const pending_requests: any = ref({});
+  const pending_requests = ref<any>({});
+  const dashboardStats = ref<any>({});
 
   const fetchPendingRequest = async (query?: any): Promise<boolean> => {
     try {
@@ -41,8 +42,22 @@ export const useWalletStore = defineStore("wallet", () => {
     }
   };
 
+  const getDashboardStats = async (): Promise<boolean> => {
+    try {
+      const { data } = await http.get(ENDPOINTS.WALLET + `/summary`);
+
+      dashboardStats.value = data.payload;
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
   return {
     pending_requests,
+    dashboardStats,
+    getDashboardStats,
     fetchPendingRequest,
     approveDeclineRequest,
   };
