@@ -117,6 +117,7 @@ const search = (text: string) => {
 const proceedToDelete = () => {}
 
 onMounted( async()=>{
+    if(customers.value.data.length) return;
     authStore.toggleLoader();
     await Promise.all([
         fetchCustomer({page: page.value}),

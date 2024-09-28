@@ -159,6 +159,7 @@ const fetchPaidRequest = async (query: any) => {
    await creditStore.fetchPaidRequest(query)
 };
 onMounted(async ()=>{
+    if(credit_request.value.data.length) return
     authStore.toggleLoader();
     await Promise.all([
         creditStore.fetchCreditRequest(),

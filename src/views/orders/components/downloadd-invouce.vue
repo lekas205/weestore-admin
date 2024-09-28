@@ -15,12 +15,12 @@
 
                 <div class="tw-text-center">
                     <h4 class="tw-font-bold">ORDER NUMBER</h4>
-                    <p>#{{orderDetails.order_no }}</p>
+                    <p>{{orderDetails.order_no }}</p>
                 </div>
 
                 <div class="tw-text-center tw-w-[300px]">
                     <h4 class="tw-font-bold"> INVOICE TO </h4>
-                    <p> {{ orderDetails.customer_name }} 912423432 Adekunle@gmail.com 23 Ire Akari Estte, Ajoa Lgos Warehouse 1 Ibadan</p>
+                    <p> {{ orderDetails.customer_name }} {{ orderDetails.customer_phone }} {{ orderDetails.customer_email }} {{ orderDetails.customer_address }} </p>
                 </div>
             </div>
 
