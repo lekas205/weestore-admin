@@ -22,7 +22,7 @@ export function handleStoreRequestError(error: any): any {
           message: "You are not logged in",
           variant: "error",
         });
-        router.push({ name: "login" });
+        router.push({ name: "Login" });
         return;
       }
     }

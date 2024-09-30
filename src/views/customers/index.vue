@@ -55,7 +55,7 @@ const { customers, dashboardStats } = storeToRefs(customerStore)
 const page = ref(1)
 const loading = ref(false);
 const openDeleteModal = ref(false);
-const itemToDelete = ref<string | null>(null);
+const itemToDelete = ref<string>('');
 const payload = ref({
     page: 1,
     search: ""
@@ -114,19 +114,19 @@ const search = (text: string) => {
 
     fetchCustomer(payload.value)
 }
+
 const proceedToDelete = async () => {
     loading.value = true;
-    openDeleteModal.value = false
+    openDeleteModal.value = false;
     const res =  await customerStore.deleteCustomer(itemToDelete.value);
     await  fetchCustomer({page: page.value}),
     loading.value = false;
     if(res){
         openToastNotification({
         message: "Customer deleted successfully",
-        variant: "succes",
+        variant: "success",
     });
     }
-  
 }
 
 onMounted( async()=>{
