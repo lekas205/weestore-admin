@@ -141,6 +141,16 @@ export const useCustomersStore = defineStore("customers", () => {
     }
   };
 
+  const deleteCustomer = async (id: string): Promise<boolean> => {
+    try {
+      const { data } = await http.delete(ENDPOINTS.GET_CUSTOMERS + `/${id}`);
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
   const getDashboardStats = async (): Promise<boolean> => {
     try {
       const { data } = await http.get(ENDPOINTS.GET_CUSTOMERS + `/summary`);
@@ -159,6 +169,7 @@ export const useCustomersStore = defineStore("customers", () => {
     verifyCustomer,
     updateCustomer,
     dashboardStats,
+    deleteCustomer,
     custommerDetails,
     customerOrders,
     customerTransactions,

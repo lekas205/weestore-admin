@@ -15,10 +15,11 @@
 
     const orderStore = useOrderStore();
     const authStore = useAuthStore();
-    const { dashboardStats } = storeToRefs(orderStore)
+    const { dashboardStats, new_orders } = storeToRefs(orderStore)
 
     onMounted( async ()=>{
         try{
+            if(new_orders.value.data.length) return
             authStore.toggleLoader();
             await Promise.all([
                 orderStore.fetchNewOrders(), 

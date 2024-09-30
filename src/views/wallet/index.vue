@@ -97,6 +97,7 @@ const next = (page: number) =>{
 };
 
 onMounted(async ()=>{
+    if(customers.value.data.length) return
     authStore.toggleLoader();
     await Promise.all([
      fetchCustomer({page: page.value}),

@@ -24,6 +24,7 @@
             @filter="fetchDeliveredOrders($event)"
             class="elevation-1 custom-table"
             @fetchMore="fetchDeliveredOrders"
+            @updateStatus="updateOrderStatus($event)"
            >
            </delivered-order-table>
        </template>
@@ -230,7 +231,7 @@ const fetchNewOrders = async(payload: any) => {
   await orderStore.fetchNewOrders(payload); 
   loading.value = false
 }
-const fetchDeliveredOrders = async(payload:any) => {
+const fetchDeliveredOrders = async(payload?:any) => {
   loading.value = true
   await orderStore.fetchDeliveredOrders(payload); 
   loading.value = false
@@ -295,6 +296,9 @@ const updateOrderStatus = async(payload: any) => {
 
     if(payload.status.toLowerCase() === "declined"){
       fetchDeclinedOrders()
+    }
+    if(payload.status.toLowerCase() === "return_order"){
+      fetchDeliveredOrders()
     }
   }
  

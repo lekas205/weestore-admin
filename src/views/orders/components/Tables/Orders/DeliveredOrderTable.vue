@@ -13,18 +13,28 @@
                 </app-chip>
             </template>
 
-            <!-- <template v-slot:item.action="{ item }">
-                <v-select
+            <template v-slot:item.action="{ item }">
+                <!-- <v-select
                     v-model="select"
-                    :items="actionOptions"
+                    :items="actionOptions.slice(5, 7)"
                     item-title="label"
                     item-value="value"
                     label="Select"
                     persistent-hint
                     return-object
                     single-line
-                ></v-select>
-            </template> -->
+                ></v-select> -->
+                <app-select
+                    @update="updateStatus($event, item.id)"
+                    :options="actionOptions.slice(5, 7)"
+                    item-title="label"
+                    item-value="value"
+                    label="Select"
+                    persistent-hint
+                    return-object
+                    single-line
+                ></app-select>
+            </template>
             <template v-slot:item.view_order="{ item }">
                 <ZoomIn class="tw-cursor-pointer" @click="router.push(`/order/${item.id}`)"/>
             </template>
@@ -46,10 +56,13 @@ import { ZoomIn } from 'lucide-vue-next'
 import { useRouter } from "vue-router";
 
 import AppChip from "@/components/AppChip.vue";
+import AppSelect from "@/components/AppSelect.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
-import { openToastNotification } from '@/utils'
+import { openToastNotification } from '@/utils';
+import { ORDER_STATUS_OPTION } from "@/constants/common.ts";
+
 
 const router = useRouter()
 
@@ -67,17 +80,17 @@ const emits = defineEmits<{
 
 const select = ref<any>();
 const page = ref<number>(1);
+const actionOptions = ref(ORDER_STATUS_OPTION)
+
 const payload= ref({
     page: 1,
     search: "",
 });
-const actionOptions = ref([
-    { label: 'Pending', value: 'pending' },
-    { label: 'In Transit', value: 'transit' },
-    { label: 'processing', value: 'processing' },
-    { label: 'Cancelled', value: 'cancelled' },
-    { label: 'Delivered', value: 'delivered' },
-]);
+
+const updateStatus = (event:any, id:string) => {
+    emits("updateStatus", {orderId: id, status: event.value})    
+}
+
 
 const headers = ref<any[]>([
     {
@@ -94,6 +107,7 @@ const headers = ref<any[]>([
     { key: 'status', title: 'Status' },
     { key: 'pop', title: 'View Pop' },
     { key: 'view_order', title: 'View' },
+    { key: 'action', title: 'Action' },
 ])
 
 const next = (page: number) => {

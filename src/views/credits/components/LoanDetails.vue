@@ -38,7 +38,7 @@
             </div>
             <div class="" v-if="loanDetails.status == 'Pending' ">
                 <p class="tw-text-[18px] tw-px-[40px] text-center mt-5" >
-                    Note: By clicking  <b>Approve</b>, you approve the sum of N200,000 to be paid into Rita Alex’s bank account
+                    Note: By clicking  <b>Approve</b>, you approve the sum of {{loanDetails.amount}} to be paid into {{ loanDetails.name }}'s' bank account
                 </p>
 
                 <div class="tw-flex tw-justify-center mt-5 tw-gap-[30px] mb-3">
