@@ -1,9 +1,9 @@
-import { useAuthStore } from '@/stores'
-import router from '@/router'
-import { openToastNotification } from '@/utils'
+import { useAuthStore } from "@/stores";
+import router from "@/router";
+import { openToastNotification } from "@/utils";
 
 export function handleStoreRequestError(error: any): any {
-  let message = 'There was a problem processing your request';
+  let message = "There was a problem processing your request";
   let errorObj: any = {};
 
   if (error.response) {
@@ -12,29 +12,27 @@ export function handleStoreRequestError(error: any): any {
 
     if (status === 400) {
       message = errorObj.message || message;
-    }
-    else if (status === 401) {
-      const isLoginPage = document.location.pathname.includes('/login');
+    } else if (status === 401) {
+      const isLoginPage = document.location.pathname.includes("/login");
       const authStore = useAuthStore();
       message = errorObj.message || message;
       authStore.removeSavedAuthToken();
       if (!isLoginPage) {
         openToastNotification({
-          message: 'You are not logged in',
-          variant: 'error'
+          message: "You are not logged in",
+          variant: "error",
         });
-        router.push({ name: 'login' });
+        router.push({ name: "login" });
         return;
       }
     }
-
   } else if (error.request) {
-    message = 'Network Error';
+    message = "Network Error";
   }
-  
+
   openToastNotification({
     message,
-    variant: 'error'
+    variant: "error",
   });
 
   return errorObj;

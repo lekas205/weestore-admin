@@ -96,7 +96,7 @@ const headers = ref<any[]>([
     { key: 'view_order', title: 'View Order' },
 ])
 
-const updateStatus = (event, id) => {
+const updateStatus = (event:any, id:string) => {
     emits("updateStatus", {orderId: id, status: event.value})    
 }
 

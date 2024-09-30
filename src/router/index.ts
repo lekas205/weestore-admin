@@ -26,7 +26,11 @@ router.beforeEach((to, _from, next) => {
   let isUserLoggedIn = !!localStorage.getItem(SAVED_AUTH_TOKEN_KEY);
 
   for (const key in ROUTES) {
-    if (ROUTES[key as keyof typeof ROUTES].name === to.name) validRoute = true;
+    if (
+      ROUTES[key as keyof typeof ROUTES].name?.toLowerCase() ===
+      to.name.toLowerCase()
+    )
+      validRoute = true;
   }
 
   const { requiresAuth } = to.meta;

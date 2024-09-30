@@ -43,7 +43,7 @@ import AppTableWrapper from "@/components/AppTableWrapper.vue";
 import DeleteModal from '@/components/AppConfirmModal.vue';
 
 import { useCustomersStore, useAuthStore } from "@/stores";
-import { formatDate, formatText } from "@/utils";
+import { formatDate, formatText,openToastNotification } from "@/utils";
 
 
 const router = useRouter();
@@ -114,7 +114,20 @@ const search = (text: string) => {
 
     fetchCustomer(payload.value)
 }
-const proceedToDelete = () => {}
+const proceedToDelete = async () => {
+    loading.value = true;
+    openDeleteModal.value = false
+    const res =  await customerStore.deleteCustomer(itemToDelete.value);
+    await  fetchCustomer({page: page.value}),
+    loading.value = false;
+    if(res){
+        openToastNotification({
+        message: "Customer deleted successfully",
+        variant: "succes",
+    });
+    }
+  
+}
 
 onMounted( async()=>{
     if(customers.value.data.length) return;

@@ -14,7 +14,7 @@
             </template>
 
             <template v-slot:item.action="{ item }">
-                <v-select
+                <!-- <v-select
                     v-model="select"
                     :items="actionOptions.slice(5, 7)"
                     item-title="label"
@@ -23,7 +23,17 @@
                     persistent-hint
                     return-object
                     single-line
-                ></v-select>
+                ></v-select> -->
+                <app-select
+                    @update="updateStatus($event, item.id)"
+                    :options="actionOptions.slice(5, 7)"
+                    item-title="label"
+                    item-value="value"
+                    label="Select"
+                    persistent-hint
+                    return-object
+                    single-line
+                ></app-select>
             </template>
             <template v-slot:item.view_order="{ item }">
                 <ZoomIn class="tw-cursor-pointer" @click="router.push(`/order/${item.id}`)"/>
@@ -46,6 +56,7 @@ import { ZoomIn } from 'lucide-vue-next'
 import { useRouter } from "vue-router";
 
 import AppChip from "@/components/AppChip.vue";
+import AppSelect from "@/components/AppSelect.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
@@ -75,6 +86,10 @@ const payload= ref({
     page: 1,
     search: "",
 });
+
+const updateStatus = (event:any, id:string) => {
+    emits("updateStatus", {orderId: id, status: event.value})    
+}
 
 
 const headers = ref<any[]>([
