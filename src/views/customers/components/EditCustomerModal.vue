@@ -17,7 +17,7 @@
                 <AppInput
                   v-model:value="formData.firstName"
                   id="warehouse-name"
-                  label="Name of Warehouse"
+                  label="Enter first name"
                   type="text"
                 />
               </div>
@@ -29,7 +29,7 @@
                 <AppInput
                   v-model:value="formData.lastName"
                   id="warehouse-name"
-                  label="Name of Warehouse"
+                  label="Enter last name"
                   type="text"
                 />
               </div>
@@ -41,7 +41,7 @@
                 <AppInput
                   v-model:value="formData.phoneNo"
                   id="warehouse-name"
-                  label="Name of Warehouse"
+                  label="Enter Address"
                   type="number"
                 />
               </div>
@@ -53,7 +53,7 @@
                 <AppInput
                   v-model:value="formData.address"
                   id="warehouse-name"
-                  label="Name of Warehouse"
+                  label="Enter Address"
                   type="text"
                 />
               </div>

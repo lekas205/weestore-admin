@@ -18,7 +18,7 @@
                 v-for="n in tabTitles" 
                 :key="n + '1'"
             >
-                <slot :name="n.split(' ').join('_')" />
+                <slot :name="n.toLowerCase().replaceAll(' ', '_')" />
             </v-tabs-window-item>
         </v-tabs-window>
     </v-card>
