@@ -1,7 +1,7 @@
 <template>
     <section class="tw-p-[30px]">
         <v-btn color="primary" @click="$router.back()"> <ChevronLeft/> Back </v-btn>
-        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]" @search="search" @filter="fetcheData($event)">
+        <app-table-wrapper searchLabelText="Search by Name" class="tw-mt-[50px]" @search="search" @filter="fetcheData($event)">
             <v-data-table 
                 hide-default-footer 
                 :items="items" 
@@ -103,7 +103,7 @@ const procceed = async(action: string, requestId: string) => {
     if(res){
         await  fetcheData({page: page.value});
         openToastNotification({
-            message: `Laon repayment request was ${action} successfully`,
+            message: `Laon repayment request was ${action  === 'approve' ? 'approved' : 'declined'} successfully`,
             variant: 'success'
         });
     }

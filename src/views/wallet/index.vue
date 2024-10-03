@@ -97,7 +97,7 @@ const next = (page: number) =>{
 };
 
 onMounted(async ()=>{
-    if(customers.value.data.length) return
+    if(customers.value.data.length && dashboardStats.value.pendingTopUpApproval) return
     authStore.toggleLoader();
     await Promise.all([
      fetchCustomer({page: page.value}),
