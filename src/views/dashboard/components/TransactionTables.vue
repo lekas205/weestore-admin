@@ -1,8 +1,8 @@
 <template>
-     <app-tab :tabTitles="tabTitles">
+     <app-tab :tabTitles="tabTitles" >
         <!-- Sales Tnflow Table -->
         <template #sales_inflow>
-          <app-table-wrapper searchLabelText="Search for client">
+          <app-table-wrapper searchLabelText="Search for client" @search="fetchSalesInflow($event)">
             <app-table
                 :items="salesTableData"
                 :loading="loading"
@@ -14,7 +14,7 @@
 
         <!-- Cash Tnflow Table -->
         <template #cash_inflow>
-          <app-table-wrapper searchLabelText="Search for client">
+          <app-table-wrapper searchLabelText="Search for client"  @search="fetchCashInflow($event)">
             <app-table
                 :items="cashInflowTableData"
                 :loading="loading"
@@ -26,7 +26,7 @@
 
          <!-- Cash Outflow Table -->
         <template #cash_outflow>
-          <app-table-wrapper searchLabelText="Search for client">
+          <app-table-wrapper searchLabelText="Search for client"  @search="fetchCashOutflow($event)">
             <app-table
                 :items="cashOutflowTableData"
                 :loading="loading"
@@ -39,7 +39,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed} from "vue"
+import { ref, computed, onMounted} from "vue"
+import {storeToRefs } from "pinia";
 
 import { Pagination } from '@/types'
 
@@ -49,46 +50,63 @@ import AppTable from "@/components/AppTable.vue";
 import TableFooter from '@/components/AppTableFooter.vue'
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
-const loading = ref(false)
-const salesTableData = ref<any[]>([
-    {
-        "RESELLER NAME": "Ela John",
-        "NUMBER": "09138208161",
-        "Ordered Item": "Nivea Roll on",
-        "Order Amount": 2000,
-        "Amount Paid": 2400,
-        "Channel": "BANK TRANSFER",
-        "Order ID": "463612More3421543",
-        "Date": "May 16 2024 ",
-        "Status": "Full Delivery"
-    },
-])
+import { useDashboardStore } from "@/stores";
+import { PAYMENT_METHOD } from "@/constants";
+import { formatText, formatAsMoney } from "@/utils";
 
-const cashInflowTableData = ref<any>([
-    {
-        "Reseller Name": "Ela John",
-        "Number": "09138208161",
-        "Product": "Nivea Roll on",
-        "Amount": 2000,
-        "Payment Channel": "BANK TRANSFER",
-        "Reference": "463612More3421543",
-        "Date": "May 16 2024 ",
-    },
-])
+const dashboadStore = useDashboardStore();
 
-const cashOutflowTableData = ref<any>([
-    {
-        "Reseller Name": "Ela John",
-        "Number": "09138208161",
-        "Product": "Nivea Roll on",
-        "Amount": 2000,
-        "Payment Channel": "BANK TRANSFER",
-        "Reference": "463612More3421543",
-        "Date": "May 16 2024 ",
-    },
-])
+const { sales_inflow, cash_inflow, cash_outflow, dashboardStats } = storeToRefs(dashboadStore);
 
+
+const loading = ref(false);
 const tabTitles = ref([ "sales inflow", "cash inflow", "cash outflow"])
+
+const salesTableData = computed<any[]>(() => {
+  return sales_inflow.value.data.map((elm:any)=>{
+    return {
+        "Reswller Name": elm.resellerName,
+        "Number": elm.phone,
+        // "Ordered Item": elm.,
+        "Order Amount": formatAsMoney(elm.orderAmount),
+        "Amount Paid": formatAsMoney(elm.amountPaid),
+        "Channel": PAYMENT_METHOD[elm.channel],
+        "Order ID": elm.orderNo,
+        "Date": elm.date,
+        "Status": elm.status,
+    }
+  })
+ 
+});
+
+const cashInflowTableData = computed<any[]>(() => {
+  return cash_inflow.value.data.map((elm:any)=>{
+    return {
+        "Reseller Name": elm.resellerName,
+        "Number": elm.phone,
+        // "Product": "Nivea Roll on",
+        "Amount": formatAsMoney(elm.amount),
+        "Payment Channel": PAYMENT_METHOD[elm.paymentChannel],
+        "Reference": elm.reference,
+        "Date": elm.date,
+    }
+  })
+})
+
+const cashOutflowTableData = computed<any[]>(() => {
+  return cash_outflow.value.data.map((elm:any)=>{
+    return {
+        "Reseller Name": elm.resellerName,
+        "Number": elm.phone,
+        // "Product": "Nivea Roll on",
+        "Amount": formatAsMoney(elm.amount),
+        "Payment Channel": PAYMENT_METHOD[elm.paymentChannel],
+        "Reference": elm.reference,
+        "Date": elm.date,
+    }
+  })
+})
+
 
 const pagination = computed<Pagination>(() => {
   return {
@@ -98,4 +116,32 @@ const pagination = computed<Pagination>(() => {
     totalNoPages: 1
   }
 });
+
+const fetchSalesInflow = (query?:any) => {
+  loading.value = true;
+  dashboadStore.fetchSalesInflow(query);
+  loading.value = false;
+};
+
+const fetchCashInflow = (query?:any) => {
+  loading.value = true;
+  dashboadStore.fetchCashInflow(query);
+  loading.value = false;
+};
+
+const fetchCashOutflow = (query?:any) => {
+  loading.value = true;
+  dashboadStore.fetchCashOutflow(query);
+  loading.value = false;
+};
+
+
+
+onMounted(async () => {
+  await Promise.all([
+    fetchSalesInflow(),
+    fetchCashInflow(),
+    fetchCashOutflow(),
+  ]);
+})
 </script>

@@ -1,7 +1,8 @@
 <template>
     <section class="mt-6 px-5  pb-5">
         <div  class="tw-p-5 tw-rounded-[30px] tw-bg-white">
-            <h1 class="tw-text-[30px] tw-font-bold tw-mb-4">Order Invoice</h1>
+           
+            <h1 class="tw-text-[30px] tw-font-bold tw-mb-4"> More Marketplace Ltd - <span class="tw-text-[25px]">Order Invoice</span> </h1>
             <div class="tw-flex tw-items-center tw-gap-3">
                 <span>STATUS</span>
                 <app-chip :status="orderDetails.status"></app-chip>

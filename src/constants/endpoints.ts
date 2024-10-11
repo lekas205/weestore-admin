@@ -20,9 +20,17 @@ export const ENDPOINTS = {
     orderId: string;
     status: string;
   }) => `${ADMIN_BASE}/order/${orderId}/status/${status}`,
+  UPDATE_DRIVER_ORDER_STATUS: ({
+    orderId,
+    status,
+  }: {
+    orderId: string;
+    status: string;
+  }) => `${ADMIN_BASE}/driver/order/${orderId}/status/${status}`,
 
   WALLET: `${ADMIN_BASE}/wallet`,
-  GET_ALL_DRIVERS: `${ADMIN_BASE}/driver?limit=200`,
+  DASHBOARD: `${ADMIN_BASE}/dashboard`,
+  GET_DRIVERS: `${ADMIN_BASE}/driver`,
   GET_CUSTOMERS: `${ADMIN_BASE}/customer`,
   PENDING_TOPUP_REQUEST: `${ADMIN_BASE}/topup/request`,
   PENDDNG_CREDIT_REQUEST: `${ADMIN_BASE}/credit/request`,

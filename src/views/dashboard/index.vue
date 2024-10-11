@@ -9,8 +9,8 @@
     <div class="dashboard-banner tw-text-lg mb-3">
       At MoreBuy, we Pride ourselves to excellent customer satisfaction.
     </div>
-    <summary-cards />
-    <stat-cards />
+    <summary-cards :stats="dashboardStats" />
+    <stat-cards :stats="dashboardStats" />
     <div class="tw-flex tw-gap-4 tw-mb-[40px]">
       <performance-card :performanceStats="performanceData" class="tw-w-[50%]"/>
       <performance-card :performanceStats="performanceData" class="tw-w-[50%]"/>
@@ -20,19 +20,37 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import {storeToRefs } from "pinia";
 import SummaryCards from './components/SummaryCard.vue'
 import StatCards from './components/StatCard.vue'
 import PerformanceCard from "./components/PerformanceCard.vue";
 import TransactionTables from "./components/TransactionTables.vue";
 
-import { ref } from 'vue'
+import { useAuthStore, useDashboardStore } from "@/stores";
 
-const proValue = ref(21)
+const authStore = useAuthStore();
+const dashboadStore = useDashboardStore();
+
+const { dashboardStats } = storeToRefs(dashboadStore);
+
+const proValue = ref(21);
+const payload = ref({
+    page: 1,
+    search: ""
+});
 
 const performanceData = ref<any[]>([
   {label: 'Top Performing Product', data: [{name: 'Molfix Diaper', percentage: 30},  {name: 'Nutrilac', percentage: 30},  {name: 'Nutrilac', percentage: 30}]},
   {label: 'Worst Performing Product', data: [{name: 'Molfix Diaper', percentage: 30},  {name: 'Nutrilac', percentage: 30},  {name: 'Nutrilac', percentage: 30}]},
-])
+]);
+
+onMounted(async () => {
+  if(dashboardStats.value.noOfWarehouse) return
+  authStore.toggleLoader();
+  await  dashboadStore.getDashboardStats();
+  authStore.toggleLoader();
+})
 
 </script>
 
