@@ -73,6 +73,6 @@
     }
 
     onMounted(async ()=>{
-        await driverStore.fetchAllDrivers()
+        await driverStore.fetchAllDrivers({liimit: 200})
     })
 </script>

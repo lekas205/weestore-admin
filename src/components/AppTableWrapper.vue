@@ -147,7 +147,7 @@ const filterByCustom = (payload:any) => {
 }
 
 .action-container {
-  flex: 0 0 40%;
+  flex: 0 0 50%;
   display: flex;
   justify-content: flex-end;
 }

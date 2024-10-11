@@ -5,10 +5,13 @@ import { ENDPOINTS, STATE_PAYLOAD } from "@/constants";
 import { handleStoreRequestError } from "@/utils";
 export const useDriverStore = defineStore("drivers", () => {
   const drivers = ref({ ...STATE_PAYLOAD });
+  const declined_orders = ref({ ...STATE_PAYLOAD });
+  const completed_orders = ref({ ...STATE_PAYLOAD });
+  const in_transit_orders = ref({ ...STATE_PAYLOAD });
 
   const fetchAllDrivers = async (query?: any): Promise<boolean> => {
     try {
-      const { data } = await http.get(ENDPOINTS.GET_ALL_DRIVERS, {
+      const { data } = await http.get(ENDPOINTS.GET_DRIVERS, {
         params: {
           ...query,
         },
@@ -18,8 +21,105 @@ export const useDriverStore = defineStore("drivers", () => {
         data: rows,
         pagination: paging,
       };
-      console.log(data);
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
 
+  const createDriver = async (payload: any): Promise<boolean | any> => {
+    try {
+      const { data } = await http.post(ENDPOINTS.GET_DRIVERS, payload);
+      return data;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
+  const updateDriver = async ({ payload, driverId }: any): Promise<boolean> => {
+    try {
+      const { data } = await http.patch(
+        ENDPOINTS.GET_DRIVERS + `/${driverId}`,
+        { payload }
+      );
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
+  const fetchInTransitOrders = async (query?: any): Promise<boolean> => {
+    try {
+      const { data } = await http.get(ENDPOINTS.GET_DRIVERS + "/order/new", {
+        params: {
+          ...query,
+        },
+      });
+
+      const { paging, rows } = data.payload;
+      in_transit_orders.value = {
+        data: rows,
+        pagination: paging,
+      };
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
+  const fetchCompletedOrders = async (query?: any): Promise<boolean> => {
+    try {
+      const { data } = await http.get(
+        ENDPOINTS.GET_DRIVERS + "/order/completed",
+        {
+          params: {
+            ...query,
+          },
+        }
+      );
+      const { paging, rows } = data.payload;
+      completed_orders.value = {
+        data: rows,
+        pagination: paging,
+      };
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
+  const fetchDeclinedOrders = async (query?: any): Promise<boolean> => {
+    try {
+      const { data } = await http.get(
+        ENDPOINTS.GET_DRIVERS + "/order/declined",
+        {
+          params: {
+            ...query,
+          },
+        }
+      );
+      const { paging, rows } = data.payload;
+      declined_orders.value = {
+        data: rows,
+        pagination: paging,
+      };
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
+  const updateOrderStatus = async (payload?: any): Promise<boolean> => {
+    try {
+      const { data } = await http.patch(
+        ENDPOINTS.UPDATE_DRIVER_ORDER_STATUS(payload)
+      );
       return true;
     } catch (error) {
       handleStoreRequestError(error);
@@ -29,6 +129,15 @@ export const useDriverStore = defineStore("drivers", () => {
 
   return {
     drivers,
+    declined_orders,
+    completed_orders,
+    in_transit_orders,
     fetchAllDrivers,
+    createDriver,
+    updateDriver,
+    updateOrderStatus,
+    fetchCompletedOrders,
+    fetchInTransitOrders,
+    fetchDeclinedOrders,
   };
 });

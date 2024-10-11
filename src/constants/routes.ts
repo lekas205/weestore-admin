@@ -70,11 +70,17 @@ export const ROUTES = {
     requiresAuth: true,
     title: "Customer Details",
   },
-  shipment: {
-    path: "/shipment",
-    name: "Shipment",
+  fleet: {
+    path: "/fleet-management",
+    name: "FleetManagement",
     requiresAuth: true,
-    title: "Shipment",
+    title: "Fleet Management",
+  },
+  driver: {
+    path: "/driver-management",
+    name: "Driver Management",
+    requiresAuth: true,
+    title: "Driver Management",
   },
   wallet: {
     path: "/wallets",

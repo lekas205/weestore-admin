@@ -59,13 +59,9 @@
                 </div>
             </v-col>
             <v-col col="6" :md="3">
-                <p>TOTAL PURCHASE</p>
+                <p>WAREHOUSE</p>
                 <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
-                </div>
-            </v-col>
-            <v-col col="6" :md="3">
-                <p>TOTAL RETURNS</p>
-                <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                    {{ customer.warehouse }}
                 </div>
             </v-col>
             <v-col col="6" :md="3">
@@ -74,6 +70,16 @@
                     {{ formatAsMoney(customer.account) }}
                 </div>
             </v-col>
+            <!-- <v-col col="6" :md="3">
+                <p>TOTAL PURCHASE</p>
+                <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                </div>
+            </v-col>
+            <v-col col="6" :md="3">
+                <p>TOTAL RETURNS</p>
+                <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                </div>
+            </v-col> -->
         </v-row>
 
         <!-- Customer Transaction History -->
