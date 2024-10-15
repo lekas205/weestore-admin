@@ -1,6 +1,12 @@
 <template>
     <section>
-        <app-table-wrapper searchLabelText="Search for client" @search="search" @filter="emits('filter', $event)">
+        <app-table-wrapper 
+            searchLabelText="Search for client" 
+            tableName="orders"  
+            @search="search" 
+            @export="emits('export', $event)" 
+            @filter="emits('filter', $event)"
+        >
         <v-data-table 
             hide-default-footer 
             :items="items" 
@@ -44,6 +50,7 @@ const props = defineProps<{
 
 const emits = defineEmits<{
     (e: "filter", item: any):void;
+    (e: "export", item: any):void;
     (e: "fetchMore", page: any): void;
     (e: "updateStatus", select: any): void;
 }>()

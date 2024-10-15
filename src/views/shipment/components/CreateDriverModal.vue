@@ -182,6 +182,7 @@
         formData.value.lastName = props.driver.last_name;
         formData.value.email  = props.driver.email;
         formData.value.phoneNo = props.driver.phone;
+        formData.value.license = props.driver.license;
         formData.value.warehouse = props.driver.warehouse_id;
         formData.value.state = props.driver.state_code;
         formData.value.address = props.driver.address;
@@ -206,21 +207,20 @@
 
     loading.value = false
     if(res){
-      if(props.action === 'create'){
-        console.log(res);
-        
+      if(props.action === 'create'){        
         loginData.value = res.payload
         showModal.value = true
 
       }else{
         openToastNotification({
-          message: "Customer's profile has been update successfully",
+          message: `Driver profile has been ${props.action === 'create' ? 'created': 'updated'} successfully`,
           variant: 'success'
         });
       }
         emit("completed")
+        closeModal()
     }
-    closeModal()
+   
   }
 
   onMounted(async()=>{

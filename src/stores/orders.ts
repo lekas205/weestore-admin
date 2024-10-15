@@ -1,10 +1,14 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import http from "@/lib/http";
+
+import { useExportStore } from "./export";
 import { ENDPOINTS, STATE_PAYLOAD } from "@/constants";
 import { handleStoreRequestError } from "@/utils";
 import { useStorage } from "@vueuse/core";
 export const useOrderStore = defineStore("orders", () => {
+  const exportStore = useExportStore();
+
   const new_orders = ref({
     ...STATE_PAYLOAD,
   });
@@ -33,6 +37,10 @@ export const useOrderStore = defineStore("orders", () => {
       });
       const { paging, rows } = data.payload;
 
+      if (query?.limit) {
+        exportStore.storeData(rows);
+        return true;
+      }
       new_orders.value = {
         data: rows,
         pagination: paging,
@@ -53,6 +61,10 @@ export const useOrderStore = defineStore("orders", () => {
       });
       const { paging, rows } = data.payload;
 
+      if (query?.limit) {
+        exportStore.storeData(rows);
+        return true;
+      }
       delivered_orders.value = {
         data: rows,
         pagination: paging,
@@ -73,6 +85,10 @@ export const useOrderStore = defineStore("orders", () => {
       });
       const { paging, rows } = data.payload;
 
+      if (query?.limit) {
+        exportStore.storeData(rows);
+        return true;
+      }
       completed_orders.value = {
         data: rows,
         pagination: paging,
@@ -93,6 +109,10 @@ export const useOrderStore = defineStore("orders", () => {
       });
       const { paging, rows } = data.payload;
 
+      if (query?.limit) {
+        exportStore.storeData(rows);
+        return true;
+      }
       returned_orders.value = {
         data: rows,
         pagination: paging,
@@ -113,6 +133,10 @@ export const useOrderStore = defineStore("orders", () => {
       });
       const { paging, rows } = data.payload;
 
+      if (query?.limit) {
+        exportStore.storeData(rows);
+        return true;
+      }
       declined_orders.value = {
         data: rows,
         pagination: paging,

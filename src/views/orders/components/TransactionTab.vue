@@ -9,6 +9,7 @@
             :pagination="new_orders?.pagination"
             class="elevation-1 custom-table"
             @filter="fetchNewOrders($event)"
+            @export="fetchNewOrders($event)"
             @fetchMore="fetchNewOrders($event)"
             @updateStatus="updateOrderStatus($event)"
           >
@@ -22,6 +23,7 @@
             :loading="loading"
             :pagination="delivered_orders?.pagination"
             @filter="fetchDeliveredOrders($event)"
+            @export="fetchDeliveredOrders($event)"
             class="elevation-1 custom-table"
             @fetchMore="fetchDeliveredOrders"
             @updateStatus="updateOrderStatus($event)"
@@ -38,6 +40,7 @@
             @fetchMore="fetchReturnedOrders"
             :pagination="returned_orders?.pagination"
             @filter="fetchReturnedOrders($event)"
+            @export="fetchReturnedOrders($event)"
            >
            </returned-order-table>
        </template>
@@ -51,6 +54,7 @@
             :pagination="completed_orders?.pagination"
             @fetchMore="fetchCompletedOrders"
             @filter="fetchCompletedOrders($event)"
+            @export="fetchCompletedOrders($event)"
            >
            </completed-order-table>
        </template>
@@ -63,6 +67,7 @@
             class="elevation-1 custom-table"
             @fetchMore="fetchDeclinedOrders"
             @filter="fetchDeclinedOrders($event)"
+            @export="fetchDeclinedOrders($event)"
             :pagination="declined_orders?.pagination"
            >
            </declined-order-table>

@@ -13,11 +13,13 @@ import "./assets/style.scss";
 
 import html2pdf from "html2pdf.js";
 import VueHtml2pdf from "vue3-html2pdf";
+import JsonExcel from "vue-json-excel3";
 const app = createApp(App);
 
 // register layouts
 app.component(PRIVATE, Private);
 app.component(PUBLIC, Public);
+app.component("downloadExcel", JsonExcel);
 
 app.use(vuetify);
 app.use(html2pdf);

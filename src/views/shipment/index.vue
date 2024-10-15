@@ -13,6 +13,7 @@
                     :items="newOrdersTableData"
                     class="elevation-1 custom-table"
                     @filter="fetchInTransitOrders($event)"
+                    @export="fetchInTransitOrders($event)"
                     @fetchMore="fetchInTransitOrders($event)"
                     @updateStatus="updateOrderStatus($event)"
                     :pagination="in_transit_orders?.pagination"
@@ -25,6 +26,7 @@
                     :items="completedOrdersData"
                     class="elevation-1 custom-table"
                     @filter="fetchCompletedOrders($event)"
+                    @export="fetchCompletedOrders($event)"
                     @fetchMore="fetchCompletedOrders($event)"
                     :pagination="completed_orders?.pagination"
                 />
@@ -35,6 +37,7 @@
                     :loading="loading"
                     :items="declinedOrdersData"
                     class="elevation-1 custom-table"
+                    @export="fetchDeclinedOrders($event)"
                     @filter="fetchDeclinedOrders($event)"
                     @fetchMore="fetchDeclinedOrders($event)"
                     :pagination="declined_orders?.pagination"

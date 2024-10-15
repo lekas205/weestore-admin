@@ -1,9 +1,13 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import http from "@/lib/http";
+import { useExportStore } from "./export";
 import { ENDPOINTS, STATE_PAYLOAD } from "@/constants";
 import { handleStoreRequestError } from "@/utils";
+
 export const useDriverStore = defineStore("drivers", () => {
+  const exportStore = useExportStore();
+
   const drivers = ref({ ...STATE_PAYLOAD });
   const declined_orders = ref({ ...STATE_PAYLOAD });
   const completed_orders = ref({ ...STATE_PAYLOAD });
@@ -17,12 +21,18 @@ export const useDriverStore = defineStore("drivers", () => {
         },
       });
       const { paging, rows } = data.payload;
+      if (query?.limit) {
+        exportStore.storeData(rows);
+        return true;
+      }
       drivers.value = {
         data: rows,
         pagination: paging,
       };
       return true;
     } catch (error) {
+      console.log(error);
+
       handleStoreRequestError(error);
       return false;
     }
@@ -40,10 +50,22 @@ export const useDriverStore = defineStore("drivers", () => {
 
   const updateDriver = async ({ payload, driverId }: any): Promise<boolean> => {
     try {
-      const { data } = await http.patch(
+      const { data } = await http.put(
         ENDPOINTS.GET_DRIVERS + `/${driverId}`,
-        { payload }
+        payload
       );
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
+  const deleteDriver = async (driverIds: any[]): Promise<boolean> => {
+    try {
+      const { data } = await http.delete(ENDPOINTS.GET_DRIVERS, {
+        data: { drivers: driverIds },
+      });
       return true;
     } catch (error) {
       handleStoreRequestError(error);
@@ -60,6 +82,11 @@ export const useDriverStore = defineStore("drivers", () => {
       });
 
       const { paging, rows } = data.payload;
+
+      if (query?.limit) {
+        exportStore.storeData(rows);
+        return true;
+      }
       in_transit_orders.value = {
         data: rows,
         pagination: paging,
@@ -82,6 +109,11 @@ export const useDriverStore = defineStore("drivers", () => {
         }
       );
       const { paging, rows } = data.payload;
+
+      if (query?.limit) {
+        exportStore.storeData(rows);
+        return true;
+      }
       completed_orders.value = {
         data: rows,
         pagination: paging,
@@ -104,6 +136,11 @@ export const useDriverStore = defineStore("drivers", () => {
         }
       );
       const { paging, rows } = data.payload;
+
+      if (query?.limit) {
+        exportStore.storeData(rows);
+        return true;
+      }
       declined_orders.value = {
         data: rows,
         pagination: paging,
@@ -135,6 +172,7 @@ export const useDriverStore = defineStore("drivers", () => {
     fetchAllDrivers,
     createDriver,
     updateDriver,
+    deleteDriver,
     updateOrderStatus,
     fetchCompletedOrders,
     fetchInTransitOrders,

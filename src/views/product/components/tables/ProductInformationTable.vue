@@ -1,6 +1,10 @@
 <template>
   <TableWrapper
     searchLabelText="Search product by name"
+    tableName="productInfo"
+    @search="search"
+    @export="loadProducts($event)"
+    @filter="loadProducts($event)"
   >
     <v-data-table
       :headers="headers"
@@ -151,13 +155,19 @@ async function handlePublishToggle(value: any, item: Product) {
 
 function handleNextPage(page: number) {
   queryFilter.value.page = page;
-  loadProducts();
+  loadProducts(queryFilter.value);
 }
 
-async function loadProducts() {
+const search = (text: string) => {
+  queryFilter.value.search = text;
+  queryFilter.value.page = 1;
+  loadProducts(queryFilter.value)
+}
+
+async function loadProducts(query?:any) {
   isLoading.value = true;
   try {
-    await productStore.fetchProducts({ ...queryFilter.value });
+    await productStore.fetchProducts({ ...query });
   } catch (error) {
    console.log(error);
   }
@@ -166,7 +176,7 @@ async function loadProducts() {
 
 // ============ ON DEFORE MOUNTED ================ //
 (async function() {
-  loadProducts();
+  loadProducts(queryFilter.value);
 })()
 </script>
 

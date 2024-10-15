@@ -11,13 +11,16 @@
         </v-row>
        
         <app-table-wrapper 
-            hasDelete
+            :hasDelete="selected.length ? true : false"
             searchLabelText="Search by Name,email,phone" 
             class="tw-mt-[50px]" 
             createBtnText="Create Driver"
+            tableName="drivers"
             @create="openDriverModal = true"
             @search="search" 
+            @delete="openConfirmModal = true"
             @filter="fetchDrivers($event)"
+            @export="fetchDrivers($event)"
         >
             <v-data-table 
                 hide-default-footer 
@@ -26,6 +29,8 @@
                 :headers="headers"
                 loading-text="Loading... Please wait" 
                 class="custom-table"
+                show-select
+                v-model="selected"
             >
                 <template v-slot:item.action="{ item }">
                     <FilePenLine @click="editCustomer(item.id)" />
@@ -43,6 +48,12 @@
             @close="openDriverModal = false"
             @completed="fetchDrivers()"
         />
+        <ConfirmCancelModal
+            :openModal="openConfirmModal" 
+            @close="openConfirmModal = false" 
+            @proceed="deleteDriver" 
+            title="Are you sure you want to delete selected driver(s)?"
+        />
     </section>
 </template>
 
@@ -54,10 +65,13 @@ import { ChevronLeft } from 'lucide-vue-next';
 
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
+import ConfirmCancelModal from '@/components/AppConfirmModal.vue';
 import CreateDriverModal from "./components/CreateDriverModal.vue";
 
-import { useDriverStore, useAuthStore, useWalletStore } from "@/stores";
 import { PAYMENT_METHOD } from "@/constants";
+import { openToastNotification } from "@/utils";
+import { useDriverStore, useAuthStore, useWalletStore } from "@/stores";
+
 
 
 const authStore = useAuthStore();
@@ -66,6 +80,7 @@ const driverStore = useDriverStore();
 const { drivers } = storeToRefs(driverStore);
 
 const page = ref(1);
+const selected = ref([])
 const status = ref('create')
 const payload = ref({
     page: 1,
@@ -74,6 +89,7 @@ const payload = ref({
 
 const itemToEdit = ref<any>({});
 const loading = ref<boolean>(false);
+const openConfirmModal = ref<boolean>(false);
 const openDriverModal = ref<boolean>(false);
 
 const headers = ref<any[]>([
@@ -91,7 +107,7 @@ const headers = ref<any[]>([
     { key: 'action', title: "Action" },
 ])
 
-const pagination = computed<any>(()=> drivers.value?.pagination)
+const pagination = computed<any>(()=> drivers.value?.pagination);
 const items = computed<any[]>(() => {
     return []
 })
@@ -112,6 +128,23 @@ const driversTableData = computed(() => {
 const search = (text: string) => {
     payload.value.search = text;
     payload.value.page = 1;
+}
+
+const deleteDriver = async () => {
+    openConfirmModal.value = false
+    loading.value = true
+    const res = await driverStore.deleteDriver(selected.value);
+
+    if(res){
+        openToastNotification({
+            message:  `Driver(s) has been deleted successfully`,
+            variant: 'success'
+        });
+        selected.value = []
+    }
+    loading.value = false;
+ 
+    
 }
 
 
@@ -135,7 +168,7 @@ const fetchDrivers = async (query?:any) => {
 onMounted(async ()=>{
     if(drivers.value.data.length) return
     authStore.toggleLoader();
-    fetchDrivers();
+    await fetchDrivers();
     authStore.toggleLoader();
 })
 </script>
