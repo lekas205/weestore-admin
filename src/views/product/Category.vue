@@ -11,6 +11,8 @@
       searchLabelText="Search by Category Name"
       createBtnText="Add Category"
       @create="createCategoryModal = true"
+      @search="searchCategories"
+      @filter="filterCategories"
     >
       <v-data-table
         :headers="headers"
@@ -61,7 +63,7 @@
 import { ref, computed } from 'vue'
 import { Trash2, SquarePen, ZoomIn } from 'lucide-vue-next'
 import { useAuthStore, useCategoryStore } from '@/stores';
-import { Category, Pagination } from '@/types';
+import { Category, Pagination, QueryFilter } from '@/types';
 
 // ========= COMPONENTS =========== //
 import StatCard from './components/cards/ProductStatCard.vue'
@@ -90,7 +92,10 @@ const headers = ref<any[]>([
   // { title: "PUBLISHED", key: "isPublished" },
   // { title: "VIEW", key: "view", align: 'center' },
   { title: "ACTION", key: "action", align: 'center' },
-])
+]);
+const queryFilter = ref<QueryFilter>({
+  page: 1,
+});
 
 const items = computed<Category[]>(() => {
   return categoryStore.categories;
@@ -133,10 +138,26 @@ function handleDeleteCompleted() {
   fetchCategories();
 }
 
+async function searchCategories(value: string) {
+  queryFilter.value = {
+    search: value,
+    page: 1,
+  }
+  await fetchCategories();
+}
+
+async function filterCategories(filter: any) {
+  queryFilter.value = {
+    ...filter,
+    page: 1,
+  }
+  await fetchCategories();
+}
+
 async function fetchCategories() {
   isLoading.value = true;
   try {
-    await categoryStore.fetchAllCategories();
+    await categoryStore.fetchAllCategories({ ...queryFilter.value });
   } catch (error) {
     console.log(error);
   }
