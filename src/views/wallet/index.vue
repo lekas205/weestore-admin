@@ -2,7 +2,14 @@
     <section class="tw-p-[30px]">
         <!-- <v-btn color="primary" @click="$router.back()"> <ChevronLeft/> Back </v-btn> -->
         <stat-card :stats="dashboardStats" />
-        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]" @search="search" @filter="fetchCustomer($event)">
+        <app-table-wrapper 
+            tableName="wallet"
+            searchLabelText="Search by Name,email,phone" 
+            class="tw-mt-[50px]" 
+            @search="search" 
+            @export="fetchCustomer($event)"
+            @filter="fetchCustomer($event)"
+        >
             <v-data-table 
                 hide-default-footer 
                 :items="items" 

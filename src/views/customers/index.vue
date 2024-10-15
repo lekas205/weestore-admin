@@ -1,7 +1,14 @@
 <template>
     <section class="px-4 py-5">
         <StatCard  :stats="dashboardStats"/>
-        <app-table-wrapper searchLabelText="Search by Name,email,phone" class="tw-mt-[50px]"  @search="search" @filter="fetchCustomer($event)">
+        <app-table-wrapper 
+            tableName="customers"
+            searchLabelText="Search by Name,email,phone" 
+            class="tw-mt-[50px]"  
+            @search="search" 
+            @export="fetchCustomer($event)"
+            @filter="fetchCustomer($event)"
+        >
             <v-data-table 
                 hide-default-footer 
                 :items="items" 
@@ -123,14 +130,14 @@ const proceedToDelete = async () => {
     loading.value = false;
     if(res){
         openToastNotification({
-        message: "Customer deleted successfully",
-        variant: "success",
-    });
+            message: "Customer deleted successfully",
+            variant: "success",
+        });
     }
 }
 
 onMounted( async()=>{
-    if(customers.value.data.length) return;
+    if(customers.value.data.length && dashboardStats.value.totalCustomer ) return;
     authStore.toggleLoader();
     await Promise.all([
         fetchCustomer({page: page.value}),

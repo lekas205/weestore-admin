@@ -2,7 +2,13 @@
      <app-tab :tabTitles="tabTitles" >
         <!-- Sales Tnflow Table -->
         <template #sales_inflow>
-          <app-table-wrapper searchLabelText="Search for client" @search="fetchSalesInflow($event)">
+          <app-table-wrapper 
+            tableName="salesInflow"
+            searchLabelText="Search for client" 
+            @search="fetchSalesInflow($event)"
+            @export="fetchSalesInflow($event)"
+            @filter="fetchSalesInflow($event)"
+          >
             <app-table
                 :items="salesTableData"
                 :loading="loading"
@@ -14,7 +20,13 @@
 
         <!-- Cash Tnflow Table -->
         <template #cash_inflow>
-          <app-table-wrapper searchLabelText="Search for client"  @search="fetchCashInflow($event)">
+          <app-table-wrapper 
+            tableName="cashFlow"
+            searchLabelText="Search for client"  
+            @search="fetchCashInflow($event)"
+            @export="fetchCashInflow($event)"
+            @filter="fetchCashInflow($event)"
+          >
             <app-table
                 :items="cashInflowTableData"
                 :loading="loading"
@@ -26,7 +38,13 @@
 
          <!-- Cash Outflow Table -->
         <template #cash_outflow>
-          <app-table-wrapper searchLabelText="Search for client"  @search="fetchCashOutflow($event)">
+          <app-table-wrapper 
+            tableName="cashFlow"
+            searchLabelText="Search for client"  
+            @search="fetchCashOutflow($event)"
+            @export="fetchCashOutflow($event)"
+            @filter="fetchCashOutflow($event)"
+          >
             <app-table
                 :items="cashOutflowTableData"
                 :loading="loading"

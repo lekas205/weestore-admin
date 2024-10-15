@@ -27,10 +27,14 @@ export const ORDER_STATUS = {
   COMPLETED: "Completed",
   DELIVERED: "Delivered",
   RETURN_ORDER: "Return Order",
+  NEW: "In Transit",
+  PACKAGE_DELIVERED: "Completed",
+  PACKAGE_REJECTED: "Declined",
 };
 
 export const PAYMENT_METHOD = {
   WALLET: "Wallet",
+  wallet: "Wallet",
   PAY_ON_DELIVERY: "Pay on Delivery",
   TRANSFER: "Transfer",
   PAY_NOW: "Pay Now",

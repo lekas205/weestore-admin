@@ -1,9 +1,14 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import http from "@/lib/http";
+
+import { useExportStore } from "./export";
 import { ENDPOINTS, STATE_PAYLOAD } from "@/constants";
 import { handleStoreRequestError } from "@/utils";
+
 export const useCustomersStore = defineStore("customers", () => {
+  const exportStore = useExportStore();
+
   const dashboardStats = ref<any>({});
   const customers: any = ref({ ...STATE_PAYLOAD });
   const custommerDetails = ref({ ...STATE_PAYLOAD });
@@ -12,6 +17,16 @@ export const useCustomersStore = defineStore("customers", () => {
   const customerOrders = ref({ ...STATE_PAYLOAD });
   const customerTransactions = ref({ ...STATE_PAYLOAD });
 
+  const disableAllCustomers = async (status?: string): Promise<boolean> => {
+    try {
+      const { data } = await http.put(ENDPOINTS.GET_CUSTOMERS + `/${status}`);
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
   const fetchCustomers = async (query?: any): Promise<boolean> => {
     try {
       const { data } = await http.get(ENDPOINTS.GET_CUSTOMERS, {
@@ -19,6 +34,11 @@ export const useCustomersStore = defineStore("customers", () => {
       });
 
       const { paging, rows } = data.payload;
+
+      if (query?.limit) {
+        exportStore.storeData(rows);
+        return true;
+      }
       customers.value = {
         data: rows,
         pagination: paging,
@@ -176,6 +196,7 @@ export const useCustomersStore = defineStore("customers", () => {
     getCustomerOrders,
     getSingleCustomer,
     getDashboardStats,
+    disableAllCustomers,
     unverifiedCustomers,
     getUnverifiedCustomer,
     getCustomerTransactions,

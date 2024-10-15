@@ -1,6 +1,6 @@
 <template>
     <section>
-        <app-table-wrapper searchLabelText="Search by Order Number" @search="search" @filter="emits('filter', $event)">
+        <app-table-wrapper searchLabelText="Search by Order Number"  tableName="fleet" @export="emits('export', $event)" @search="search" @filter="emits('filter', $event)">
         <v-data-table 
             hide-default-footer 
             :items="items" 
@@ -33,6 +33,10 @@
                 <ZoomIn class="tw-cursor-pointer"  />
             </template>
 
+            <template v-slot:item.date="{ item }">
+                <p> {{ formatDate(item.date) }} </p>
+            </template>
+
             <template  v-slot:bottom>
                 <TableFooter v-bind="pagination" @next="next($event)" />
             </template>
@@ -51,6 +55,7 @@ import AppSelect from "@/components/AppSelect.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
+import { formatDate } from "@/utils";
 import { openToastNotification } from '@/utils'
 import { ORDER_STATUS_OPTION } from "@/constants/common.ts";
 
@@ -65,7 +70,8 @@ const emits = defineEmits<{
     (e: "filter", item: any):void
     (e: "fetchMore", page: any): void;
     (e: "updateStatus", select: any): void;
-    (e: "viewOrder", item: any):void
+    (e: "viewOrder", item: any):void;
+    (e: "export", item: any):void
 }>();
 
 const select = ref('');

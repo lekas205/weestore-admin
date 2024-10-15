@@ -13,7 +13,6 @@ export const shipmentRoutes = [
       requiresAuth: ROUTES.fleet.requiresAuth,
     },
   },
-
   {
     path: ROUTES.driver.path,
     name: ROUTES.driver.name,

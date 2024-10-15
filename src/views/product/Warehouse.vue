@@ -8,8 +8,11 @@
       </v-row>
     </div>
     <TableWrapper
+      tableName="warehouse"
       searchLabelText="Search By Warehouse Name"
       createBtnText="Create Warehouse"
+      @export="fetchWarehouse($event)"
+      @search="fetchWarehouse($event)"
       @create="createWarehouseModal = true"
     >
       <v-data-table
@@ -109,10 +112,10 @@ function handleEditCompleted() {
   fetchWarehouse();
 }
 
-async function fetchWarehouse() {
+async function fetchWarehouse(query?:any) {
   isLoading.value = true;
   try {
-    await warehouseStore.fetchAllWarehouses();
+    await warehouseStore.fetchAllWarehouses(query);
   } catch (error) {
     console.log(error);
   }

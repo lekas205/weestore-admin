@@ -1,6 +1,10 @@
 <template>
   <TableWrapper
     searchLabelText="Search product by name"
+    tableName="productMetrics"
+    @search="search"
+    @export="loadProductMetrics($event)"
+    @filter="loadProductMetrics($event)"
   >
     <v-data-table
       :headers="headers"
@@ -83,13 +87,19 @@ const headers = ref<any[]>([
 
 function handleNextPage(page: number) {
   queryFilter.value.page = page;
-  loadProductMetrics();
+  loadProductMetrics(queryFilter.value);
 }
 
-async function loadProductMetrics() {
+const search = (text: string) => {
+  queryFilter.value.search = text;
+  queryFilter.value.page = 1;
+  loadProductMetrics(queryFilter.value)
+}
+
+async function loadProductMetrics(query?:any) {
   isLoading.value = true;
   try {
-    await productStore.fetchProductMetrics();
+    await productStore.fetchProductMetrics(query);
   } catch (error) {
    console.log(error);
   }
@@ -98,7 +108,7 @@ async function loadProductMetrics() {
 
 // ============ ON DEFORE MOUNTED ================ //
 (async function() {
-  loadProductMetrics();
+  loadProductMetrics(queryFilter.value);
 })()
 
 </script>

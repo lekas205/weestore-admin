@@ -65,22 +65,39 @@
           <Trash2 class="mr-2" />
            Delete
         </button>
+
+        <button
+          class="table-btn search-btn"
+          v-if="!noExport"
+          @click="openExportModal= true"
+        >
+          <Upload class="mr-2"/>
+           Export
+        </button>
       </div>
     </div>
     <slot />
 
     <AppCustomDateRange v-model:openModal="openModal" @proceed="filterByCustom($event)" />
+    <AppExportModal v-model:openModal="openExportModal" @proceed="emit('export',$event)" :tableName="tableName" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Plus, Trash2 ,Filter, X} from 'lucide-vue-next'
+import { Plus, Trash2 ,Filter, X, Upload} from 'lucide-vue-next'
 import AppInput from '@/components/AppInput.vue'
 import AppCustomDateRange from "@/components/AppCustomDateRange.vue";
+import AppExportModal from "@/components/AppExportModal.vue";
 import { getDateRange } from "@/utils";
 
-const emit = defineEmits(['create', 'search', 'delete', 'filter']);
+const emit = defineEmits([
+  'create', 
+  'search', 
+  'delete', 
+  'export', 
+  'filter'
+]);
 
 defineProps({
   searchLabelText: {
@@ -91,7 +108,15 @@ defineProps({
     type: Boolean,
     default: false
   },
+  noExport: {
+    type: Boolean,
+    default: false
+  },
   createBtnText: {
+    type: String,
+    required: false,
+  },
+  tableName:{
     type: String,
     required: false,
   }
@@ -99,7 +124,8 @@ defineProps({
 
 const search = ref("");
 const searched = ref(false);
-const openModal = ref(false)
+const openModal = ref(false);
+const openExportModal = ref(false);
 
 const submit = () => {
   searched.value = true;
@@ -129,6 +155,8 @@ const filterByCustom = (payload:any) => {
   emit('filter',{ ...payload});
   openModal.value = false
 }
+
+
 </script>
 
 <style lang="scss" scoped>

@@ -1,10 +1,14 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import http from "@/lib/http";
+import { useExportStore } from "./export";
+
 import { ENDPOINTS, STATE_PAYLOAD } from "@/constants";
 import { handleStoreRequestError } from "@/utils";
 
 export const useDashboardStore = defineStore("dashboard", () => {
+  const exportStore = useExportStore();
+
   const sales_inflow = ref<any>({ ...STATE_PAYLOAD });
   const cash_inflow = ref<any>({ ...STATE_PAYLOAD });
   const cash_outflow = ref<any>({ ...STATE_PAYLOAD });
@@ -16,6 +20,11 @@ export const useDashboardStore = defineStore("dashboard", () => {
         params: { ...query },
       });
       const { paging, rows } = data.payload;
+
+      if (query?.limit) {
+        exportStore.storeData(rows);
+        return true;
+      }
       sales_inflow.value = {
         data: rows,
         pagination: paging,
@@ -33,6 +42,11 @@ export const useDashboardStore = defineStore("dashboard", () => {
         params: { ...query },
       });
       const { paging, rows } = data.payload;
+
+      if (query?.limit) {
+        exportStore.storeData(rows);
+        return true;
+      }
       cash_inflow.value = {
         data: rows,
         pagination: paging,
@@ -50,6 +64,11 @@ export const useDashboardStore = defineStore("dashboard", () => {
         params: { ...query },
       });
       const { paging, rows } = data.payload;
+
+      if (query?.limit) {
+        exportStore.storeData(rows);
+        return true;
+      }
       cash_outflow.value = {
         data: rows,
         pagination: paging,
