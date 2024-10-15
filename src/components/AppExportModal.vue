@@ -3,29 +3,14 @@
        <v-card class="px-4 py-7">
            <h2 class="tw-font-bold tw-text-[20px] mb-4">Select Dates</h2>
            <div class="tw-flex tw-gap-4">
-               <v-menu>
-                   <template v-slot:activator="{ props }">
-                       <div class="">
-                           <small class="tw-font-bold">Form:</small>
-                           <app-input v-bind="props"  placeholder="Please select start date" v-model:value="form.start_date"></app-input>
-                       </div>
-                   </template>
-                   <v-list>
-                       <v-date-picker v-model="start_date"></v-date-picker>
-                   </v-list>
-               </v-menu>
-
-               <v-menu>
-                   <template v-slot:activator="{ props }">
-                       <div class="">
-                           <small class="tw-font-bold">To:</small>
-                           <app-input v-bind="props" readonly placeholder="Please select end date" v-model:value="form.end_date"></app-input>
-                       </div>
-                   </template>
-                   <v-list>
-                       <v-date-picker v-model="end_date"></v-date-picker>
-                   </v-list>
-               </v-menu>
+                <div class="tw-w-[50%]">
+                    <small class="tw-font-bold">Form:</small>
+                    <app-input v-bind="props" type="date"  placeholder="Please select start date" v-model:value="start_date"></app-input>
+                </div>
+                <div class="tw-w-[50%]">
+                    <small class="tw-font-bold">To:</small>
+                    <app-input v-bind="props" type="date" placeholder="Please select end date" v-model:value="end_date"></app-input>
+                </div>
            </div>
 
            <div class="tw-flex tw-gap-2 tw-justify-end tw-mt-[40px]">
@@ -80,14 +65,14 @@ const json_fields= computed(()=>{
 
 const fileName = computed(()=> "more-buy-"+ props.tableName + '.csv')
 
-const exporting = ref(false)
-const start_date = ref(new Date())
-const end_date = ref(new Date())
+const exporting = ref(false);
+const start_date = ref("");
+const end_date = ref("");
 const form = ref<any>({
    start_date: "",
    end_date: "",
    limit: '10000'
-})
+});
 
 const setShow = computed({
    get() {
