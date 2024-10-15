@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { useCustomersStore } from "@/stores";
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 import { openToastNotification } from "@/utils";
 
@@ -35,12 +35,18 @@ const updateState = async () => {
     message: `All customers has ${disable.value ? "deactivated": "activated"} successfully`,
     variant: "success",
   });
+
+  localStorage.setItem('deacivateCustomers', JSON.stringify(disable.value))
 };
 
 watch(()=>disable.value, () => {
   updateState();
 });
 
+onMounted(() => {
+  const toggleSaate = localStorage.getItem('deacivateCustomers');
+  if(toggleSaate)  disable.value =JSON.parse(toggleSaate)
+})
 </script>
 
 <style scoped>
