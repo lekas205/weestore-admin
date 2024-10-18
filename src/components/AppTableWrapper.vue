@@ -68,7 +68,7 @@
 
         <button
           class="table-btn search-btn"
-          v-if="!noExport"
+          v-if="!noExport && !hasDelete"
           @click="openExportModal= true"
         >
           <Upload class="mr-2"/>
