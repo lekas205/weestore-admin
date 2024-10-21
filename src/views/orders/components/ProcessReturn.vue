@@ -9,7 +9,7 @@
             class="elevation-1 custom-table"
             @declineRequest="declineRequest($event)"
             @fetchMore="getNewRequests($event)"
-            @refreshData ="getNewRequests()"
+            @refreshData ="refreshData($event)"
             @filter="getNewRequests($event)"
            >
            </NewReturnedOrders>
@@ -123,27 +123,36 @@ const fetchContent = async (query?: any) => {
     loading.value = false;
 }
 
+const refreshData = (status: string | undefined) => {
+    if(status === 'approve') getApprovedRequests()
+    else getDeclinedRequests()
+
+    getNewRequests()
+}
+
 const getNewRequests = async (query?: any) => {
     loading.value = true;
     await  orderStores.fetchReturnRequest(query)
     loading.value = false;
 }
 
-const getApprovedRequests = async (query: any) => {
+const getApprovedRequests = async (query?: any) => {
     loading.value = true;
     await  orderStores.fetchApprovedReturnRequest(query)
     loading.value = false;
 }
 
-const getDeclinedRequests = async (query: any) => {
+const getDeclinedRequests = async (query?: any) => {
     loading.value = true;
     await  orderStores.fetchApprovedReturnRequest(query)
     loading.value = false;
 }
 
 const declineRequest = async(requestId: string) => {
+    loading.value = true;
     await orderStores.ApproveDeclineReturn({requestId, action: "decline"});
-    orderStores.fetchReturnRequest();
+    getNewRequests()
+    getDeclinedRequests()
 }
 
 onMounted( async ()=>{

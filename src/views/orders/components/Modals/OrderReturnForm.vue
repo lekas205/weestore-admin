@@ -7,12 +7,12 @@
               <p 
                 @click="returnType= 'half' "
                 class="tw-font-[700] tw-text-[20px] tw-text-[#A5A1A8] tw-cursor-pointer" 
-                :class="{'tw-underline tw-text-[#000]': returnType === 'half'}"
+                :class="{'tw-underline tw-text-[#000000]': returnType === 'half'}"
              >Half return </p>
                 <p 
                     @click="returnType= 'full' "
                     class="tw-font-[700] tw-text-[20px] tw-text-[#A5A1A8] tw-cursor-pointer" 
-                    :class="{'tw-underline tw-text-[#000]': returnType === 'full'}"
+                    :class="{'tw-underline tw-text-[#000000]': returnType === 'full'}"
                 >Full Return</p>
             </div>
   
@@ -70,7 +70,7 @@
 
             <hr/>
 
-            <v-row class="mt-4">
+            <v-row class="mt-4" v-if="formData.orders.length">
                 <v-col cols="12" md="6" v-for="(i, index ) in formData.orders">
                     <v-row>
                         <v-col cols="12" md="3">
@@ -182,7 +182,6 @@
                         <v-textarea
                             v-model="formData.reason"
                             variant="outlined"
-                            readonly
                         ></v-textarea>
                         <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                     </v-col>
@@ -207,14 +206,12 @@
           </v-row>
 
           <div class="btn-container">
-            <v-btn  @click="closeModal" size="large" readonly variant="text" color="primary">
+            <v-btn  @click="closeModal()" size="large"  variant="text" color="primary">
               Cancel
             </v-btn>
             <v-btn @click="submit" class="mr-3" size="large" color="primary" type="submit" :loading="isLoading" :disabled="disabledBtn || isLoading">
               {{ status === 'request' ?" Submit request": "Approve"}}
             </v-btn>
-  
-
           </div>
         </v-card>
       </v-dialog>
@@ -222,7 +219,7 @@
   </template>
   
   <script setup lang="ts">
-  import { computed, ref, watch } from 'vue'
+  import { computed, onMounted, ref, watch } from 'vue'
   import AppInput from '@/components/AppInput.vue'
   import AppButton from '@/components/AppButton.vue'
   import AppFileUpload from '@/components/AppFileUpload.vue'
@@ -273,7 +270,7 @@
     wharehouse: "",
     reseller_name: "",
     orders: [{
-      Porduct_name: "",
+      porduct_name: "",
       price: "",
       quantity: "",
       amount: "",
@@ -290,21 +287,16 @@
     if (isLoading.value === true) return;
     for (const key in formData.value) {
       if (Object.prototype.hasOwnProperty.call(formData.value, key)) {
-        if (formData.value[key].clear) {
-          formData.value[key].clear();
+        if (formData.value[key] === 'string') {
+          formData.value[key] = "";
         }
       }
     }
     emit('close');
   }
 
-  watch(()=> props.openModal, (newval: boolean)=>{
-    if(newval){
-      formData.value.reason = props.order.reason;
-      formData.value.wharehouse = props.order.warehouse_name || props.order.warehouse;
-      formData.value.order_id = props.order.order_no;
-      formData.value.reseller_name = props.order.first_name + " " +  props.order.last_name;
-      formData.value.orders = props.order.orderItems.map((elm:any)=>{
+  const formatOrder = computed(()=> {
+    return props.order?.orderItems?.map((elm:any)=>{
         return {
           id: elm.product_id,
           product_name: elm.product_name,
@@ -314,12 +306,29 @@
           initial_quantity:  Number(elm.quantity),
         }
       })
+  })
+
+  watch(()=> props.openModal, (newval: boolean)=>{
+    if(newval){
+      formData.value.reason = props.order.reason;
+      formData.value.wharehouse = props.order.warehouse_name || props.order.warehouse;
+      formData.value.order_id = props.order.order_no;
+      formData.value.reseller_name = props.order.first_name + " " +  props.order.last_name;
+      formData.value.orders = formatOrder.value
       formData.value.amount_paid = props.order.amount ||  props.order.total_amount;      
+
+      // check return type
+      if(!props.order.return_type) return
+      if(props.order.return_type === "FULL_RETURN"){
+        returnType.value = "full"
+      }else{
+        returnType.value = "half"
+      }
     }
   } )
 
   watch(
-    () => formData,
+    () => formData.value.orders,
     (newValue:any) => {
       if(newValue){
         recalculateORders()
@@ -366,8 +375,20 @@
       : await orderStore.ApproveDeclineReturn({requestId : props.order.request_id, action: "approve"});
     isLoading.value = false;
 
+    if(props.status === 'request'){
+      openToastNotification({
+          message: "Return order request submitted",
+          variant: 'success'
+        });
+    }else{
+      openToastNotification({
+          message: "Return order has been approved",
+          variant: 'success'
+        });
+    }
+
     closeModal()
-    emit("refreshData")
+    emit("refreshData", "approve")
   }
   </script>
   

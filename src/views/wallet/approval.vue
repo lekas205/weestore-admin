@@ -12,6 +12,7 @@
                 :items="items" 
                 :loading="loading" 
                 :headers="headers"
+                :items-per-page="pagination?.currentPageTotal"
                 loading-text="Loading... Please wait" 
                 class="custom-table"
             >
