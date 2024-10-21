@@ -18,7 +18,7 @@
                 <app-select
                     :value="item.status"
                     @update="updateStatus($event, item.id)"
-                    :options="actionOptions.slice(5, 7)"
+                    :options="actionOptions"
                     item-title="label"
                     item-value="value"
                     label="Select"
@@ -57,7 +57,7 @@ import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
 import { formatDate } from "@/utils";
 import { openToastNotification } from '@/utils'
-import { ORDER_STATUS_OPTION } from "@/constants/common.ts";
+import { DRIVER_STATUS_OPTIONS } from "@/constants/common.ts";
 
 const props = defineProps<{
     items: any[],
@@ -77,7 +77,7 @@ const emits = defineEmits<{
 const select = ref('');
 const page = ref(1)
 const router = useRouter()
-const actionOptions = ref(ORDER_STATUS_OPTION)
+const actionOptions = ref(DRIVER_STATUS_OPTIONS)
 
 const payload= ref({
     page: 11,

@@ -19,6 +19,11 @@ export const ORDER_STATUS_OPTION = [
   { label: "Return Order", value: "RETURN_ORDER" },
 ];
 
+export const DRIVER_STATUS_OPTIONS = [
+  { label: "Return Order", value: "PACKAGE_REJECTED" },
+  { label: "Completed", value: "PACKAGE_DELIVERED" },
+];
+
 export const ORDER_STATUS = {
   PENDING: "Pending",
   PROCESSING: "Processing",
