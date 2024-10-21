@@ -11,6 +11,7 @@
             :items="items" 
             :loading="loading" 
             :headers="headers"
+            :items-per-page="pagination?.currentPageTotal"
             loading-text="Loading... Please wait" 
         >
 
@@ -38,7 +39,7 @@
         </v-data-table>
         </app-table-wrapper>
 
-        <OrderReturnForm :openModal="openModal" @close="openModal = false"  @refreshData="emits('refreshData')" status="Approval" :order="itemToProcess" />
+        <OrderReturnForm :openModal="openModal" @close="openModal = false"  @refreshData="emits('refreshData', $event)" status="Approval" :order="itemToProcess" />
     </section>
 </template>
 
@@ -67,7 +68,7 @@ const emits = defineEmits<{
     (e: "filter", val: any): void;
     (e: "fetchMore", page: any): void;
     (e: "updateStatus", select: any): void;
-    (e: "refreshData"): void;
+    (e: "refreshData", val: string): void;
     (e: "declineRequest", id: string): void
 }>()
 

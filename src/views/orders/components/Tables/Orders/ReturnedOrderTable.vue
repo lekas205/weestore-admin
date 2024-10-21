@@ -6,6 +6,7 @@
             :items="items" 
             :loading="loading" 
             :headers="headers"
+            :items-per-page="pagination?.currentPageTotal"
             loading-text="Loading... Please wait" 
         >
 
@@ -15,29 +16,16 @@
             </template>
 
             <template v-slot:item.action="{ item }">
-                <div class="tw-flex tw-gap-3">
-                    <!-- <v-select
-                        v-model="select"
-                        :items="actionOptions"
-                        item-title="label"
-                        item-value="value"
-                        label="Select"
-                        persistent-hint
-                        return-object
-                        single-line
-                    ></v-select> -->
-
-                    <p class="tw-text-[18px] tw-underline tw-w-[30%]" v-if="!item.is_return_processed" @click="processReturn(item)">Process Return</p>
-                </div>
+                <p class="tw-text-[18px] tw-underline" v-if="!item.is_return_processed" @click="processReturn(item)">Process Return</p>
             </template>
 
             <template  v-slot:bottom>
                 <TableFooter v-bind="pagination"  @next="next($event)"/>
             </template>
         </v-data-table>
-
-        <OrderReturnForm :openModal="openModal" @close="openModal = false" :order="itemToProcess" />
         </app-table-wrapper>
+        
+        <OrderReturnForm :openModal="openModal" @close="openModal = false" :order="itemToProcess" />
     </section>
 </template>
 
@@ -95,7 +83,7 @@ const headers = ref<any[]>([
     { key: 'channel', title: 'Channel' },
     { key: 'amount', title: 'Amount' },
     { key: 'status', title: 'Status' },
-    // { key: 'action', title: 'Action' , width: "25%"},
+    { key: 'action', title: 'Action' , width: "20%"},
 ])
 
 const next = (page: number) => {
@@ -105,7 +93,7 @@ const next = (page: number) => {
 
 const processReturn = (item: any) => {
     itemToProcess.value = returned_orders.value.data.find((elm:any)=> elm.order_id === item.id);
-    openModal.value =true;
+    openModal.value = true;
 }
 
 const search = (text: string) => {

@@ -5,6 +5,7 @@
             :items="items" 
             :loading="loading" 
             :headers="headers"
+            :items-per-page="pagination?.currentPageTotal"
             class="custom-table"
             loading-text="Loading... Please wait" 
         >
@@ -26,16 +27,28 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, ref } from "vue";
 import { ZoomIn } from 'lucide-vue-next'
 
 import AppChip from "@/components/AppChip.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 
+import { useCustomersStore } from "@/stores";
+
+const customerStore = useCustomersStore()
+
+const { customerOrders }:any = storeToRefs(customerStore)
+
+
 const props = defineProps<{
     items: any[],
-    loading: boolean 
+    loading: boolean ,
 }>()
+
+const pagination = computed<any>(()=>{
+    return customerOrders.value.data?.pagination
+})
 
 const headers = ref<any[]>([
     {
