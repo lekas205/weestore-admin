@@ -12,15 +12,15 @@
     <summary-cards :stats="dashboardStats" />
     <stat-cards :stats="dashboardStats" />
     <div class="tw-flex tw-gap-4 tw-mb-[40px]">
-      <performance-card :performanceStats="performanceData" class="tw-w-[50%]"/>
-      <performance-card :performanceStats="performanceData" class="tw-w-[50%]"/>
+      <performance-card :performanceStats="performanceData.slice(0, 2)" class="tw-w-[50%]"/>
+      <performance-card :performanceStats="performanceData.slice(2, 4)" class="tw-w-[50%]"/>
     </div>
     <transaction-tables />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import {storeToRefs } from "pinia";
 import SummaryCards from './components/SummaryCard.vue'
 import StatCards from './components/StatCard.vue'
@@ -40,10 +40,14 @@ const payload = ref({
     search: ""
 });
 
-const performanceData = ref<any[]>([
-  {label: 'Top Performing Product', data: [{name: 'Molfix Diaper', percentage: 30},  {name: 'Nutrilac', percentage: 30},  {name: 'Nutrilac', percentage: 30}]},
-  {label: 'Worst Performing Product', data: [{name: 'Molfix Diaper', percentage: 30},  {name: 'Nutrilac', percentage: 30},  {name: 'Nutrilac', percentage: 30}]},
-]);
+const performanceData = computed<any[]>(()=>{
+  return [
+    {label: 'Top Performing Product', data: dashboardStats.value.topPerformingProduct },
+    {label: 'Worst Performing Product', data: dashboardStats.value.worstPerformingProduct},
+    {label: 'Top Performing Categories', data: dashboardStats.value.topPerformingCategory},
+    {label: 'Top Performing Warehouse', data: dashboardStats.value.topPerformingWarehouse},
+  ]
+})
 
 onMounted(async () => {
   if(dashboardStats.value.noOfWarehouse) return

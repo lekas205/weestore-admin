@@ -19,6 +19,11 @@ export const ORDER_STATUS_OPTION = [
   { label: "Return Order", value: "RETURN_ORDER" },
 ];
 
+export const DRIVER_STATUS_OPTIONS = [
+  { label: "Return Order", value: "PACKAGE_REJECTED" },
+  { label: "Completed", value: "PACKAGE_DELIVERED" },
+];
+
 export const ORDER_STATUS = {
   PENDING: "Pending",
   PROCESSING: "Processing",
@@ -35,10 +40,14 @@ export const ORDER_STATUS = {
 export const PAYMENT_METHOD = {
   WALLET: "Wallet",
   wallet: "Wallet",
+  manual: "Manual",
   PAY_ON_DELIVERY: "Pay on Delivery",
   TRANSFER: "Transfer",
   PAY_NOW: "Pay Now",
+  transfer: "Transfer",
   wallet_payment: "Wallet Payment",
+  cashpoint_wallet: "Cashpoint",
+  credit_wallet: "Cashpoint",
 };
 
 export const DEFAULT_PAGINATION: Pagination = {

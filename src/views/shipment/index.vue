@@ -1,11 +1,6 @@
 <template>
     <section class="mt-5 tw-p-5">
         <app-tab :tabTitles="tabTitles" class="mt-5">
-             <!-- :items="newOrdersTableData"
-                    :pagination="new_orders?.pagination"
-                    @filter="fetchNewOrders($event)"
-                    @fetchMore="fetchNewOrders($event)"
-                    @updateStatus="updateOrderStatus($event)" -->
             <template #in_transit> 
                 <ShipmentTable
                     action
@@ -153,7 +148,7 @@
     }
 
     const processStatusUpdate = (payload: any) => {
-        if(payload.status.toLowerCase()  ===  "return_order" && !ouderToUpdate.value.status ){
+        if(payload.status.toLowerCase()  ===  "package_rejected" && !ouderToUpdate.value.status ){
             ouderToUpdate.value  = payload
             openConfirmModal.value = true
             return false
@@ -177,6 +172,9 @@
 
             if(payload.status.toLowerCase() === "completed"){
                 fetchCompletedOrders()
+            }
+            if(payload.status.toLowerCase() === "package_rejected"){
+                fetchDeclinedOrders()
             }
         }
         
