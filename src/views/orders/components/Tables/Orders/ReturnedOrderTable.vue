@@ -1,6 +1,6 @@
 <template>
     <section>
-        <app-table-wrapper searchLabelText="Search for client" hasDelete  tableName="orders" @search="search" @export="emits('export', $event)" @filter="emits('filter', $event)">
+        <app-table-wrapper searchLabelText="Search for client"  tableName="orders" @search="search" @export="emits('export', $event)" @filter="emits('filter', $event)">
         <v-data-table 
             hide-default-footer 
             :items="items" 

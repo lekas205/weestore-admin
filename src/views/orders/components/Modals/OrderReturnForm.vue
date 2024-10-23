@@ -100,7 +100,7 @@
                     </v-row>
                     <v-row>
                       <v-col cols="12" md="3">
-                          <p class="tw-text-lg tw-font-medium">Quantity in Stock</p>
+                          <p class="tw-text-lg tw-font-medium">Quantity Bought</p>
                       </v-col>
                       <v-col cols="12" md="9">
                           <AppInput
@@ -115,7 +115,7 @@
                     </v-row>
                     <v-row class="mb-3">
                         <v-col cols="12" md="3">
-                            <p class="tw-text-lg tw-font-medium">Value of Quantity In Stock</p>
+                            <p class="tw-text-lg tw-font-medium">Value of Quantity Bought</p>
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
@@ -338,6 +338,7 @@
   )
 
   const disabledBtn = computed(()=>{
+    if(!formData.value.reason?.length) return true
     return formData.value.orders.some((elm:any)=> elm.quantity > elm.initial_quantity)
   })
 

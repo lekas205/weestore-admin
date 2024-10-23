@@ -10,9 +10,9 @@
             @filter="fetchSalesInflow($event)"
           >
             <app-table
-                :items="salesTableData"
-                :loading="loading"
-                class="elevation-1 custom-table"
+              :items="salesTableData"
+              :loading="loading"
+              class="elevation-1 custom-table"
             >
             </app-table>
           </app-table-wrapper>
@@ -28,9 +28,9 @@
             @filter="fetchCashInflow($event)"
           >
             <app-table
-                :items="cashInflowTableData"
-                :loading="loading"
-                class="elevation-1 custom-table"
+              :items="cashInflowTableData"
+              :loading="loading"
+              class="elevation-1 custom-table"
             >
             </app-table>
           </app-table-wrapper>
@@ -46,9 +46,9 @@
             @filter="fetchCashOutflow($event)"
           >
             <app-table
-                :items="cashOutflowTableData"
-                :loading="loading"
-                class="elevation-1 custom-table"
+              :items="cashOutflowTableData"
+              :loading="loading"
+              class="elevation-1 custom-table"
             >
             </app-table>
           </app-table-wrapper>
@@ -135,21 +135,21 @@ const pagination = computed<Pagination>(() => {
   }
 });
 
-const fetchSalesInflow = (query?:any) => {
+const fetchSalesInflow = async (query?:any) => {
   loading.value = true;
-  dashboadStore.fetchSalesInflow(query);
+  await dashboadStore.fetchSalesInflow(query);
   loading.value = false;
 };
 
-const fetchCashInflow = (query?:any) => {
+const fetchCashInflow = async (query?:any) => {
   loading.value = true;
-  dashboadStore.fetchCashInflow(query);
+  await dashboadStore.fetchCashInflow(query);
   loading.value = false;
 };
 
-const fetchCashOutflow = (query?:any) => {
+const fetchCashOutflow = async (query?:any) => {
   loading.value = true;
-  dashboadStore.fetchCashOutflow(query);
+  await dashboadStore.fetchCashOutflow(query);
   loading.value = false;
 };
 

@@ -38,6 +38,7 @@ export const ENDPOINTS = {
   APPROVED_LOAN_REQUEST: `${ADMIN_BASE}/loan/active`,
   PAID_LOAN_REQUEST: `${ADMIN_BASE}/loan/paid`,
   LOAN_REPAYMENT_REQUEST: `${ADMIN_BASE}/credit/repayment/request`,
+  PRODUCTS: `${ADMIN_BASE}/product`,
   PRODUCT_METRICS: `${ADMIN_BASE}/product/metrics`,
   PRODUCT_BY_ID: (id: any) => `${ADMIN_BASE}/product/${id}`,
   PUBLISH_PRODUCT: (id: any) => `${ADMIN_BASE}/product/${id}/publish`,

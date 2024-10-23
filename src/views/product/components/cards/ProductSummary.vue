@@ -33,8 +33,8 @@
       </v-col>
       <v-col cols="12" md="3">
         <StatCard
-          title="Quantity Out Of Stock"
-          :value="$formatAsMoney(quantityOutOfStock)"
+          title="Value of Qty out stock"
+          :value="$formatAsMoney(valueOfQtyOutStock)"
           type="red"
         />
       </v-col>
@@ -59,6 +59,10 @@ const props = defineProps({
     required: true,
   },
   quantityOutOfStock: {
+    type: Number,
+    required: true,
+  },
+  valueOfQtyOutStock: {
     type: Number,
     required: true,
   },

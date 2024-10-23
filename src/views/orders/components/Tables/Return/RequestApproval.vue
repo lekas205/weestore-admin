@@ -69,7 +69,7 @@ const headers = ref<any[]>([
     { key: 'return_type', title: 'Return Type' },
     { key: 'amount_return', title: 'Amount to Return' },
     { key: 'amount_retain', title: 'Amount to Retain' },
-    { key: 'action', title: 'Action' },
+    // { key: 'action', title: 'Action' },
 ])
 
 const next = (page: number) => {

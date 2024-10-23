@@ -26,7 +26,7 @@
                             <v-btn color="green" variant="text" @click="approveReturn(item)"> Approve </v-btn>
                         </v-list-item>
                         <v-list-item>
-                            <v-btn color="red" variant="text" @click="emits('declineRequest', item.request_id)"> Decline </v-btn>
+                            <v-btn color="red" variant="text" @click="emits('declineRequest', item.id)"> Decline </v-btn>
                         </v-list-item>
                     </v-list>
                     </v-menu>

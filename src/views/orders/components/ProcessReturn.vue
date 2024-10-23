@@ -53,7 +53,7 @@ import OrderRequestApproval from "./Tables/Return/RequestApproval.vue";
 import DeclinedRequest from "./Tables/Return/DeclinedRequest.vue";
 
 import { useOrderStore, useAuthStore } from "@/stores";
-import { formatDate, formatTime, formatAsMoney, formatText, capitalizeFirstLeters } from "@/utils";
+import { formatDate, formatTime, formatAsMoney, formatText, openToastNotification, capitalizeFirstLeters } from "@/utils";
 
 
 const orderStores  = useOrderStore()
@@ -74,6 +74,7 @@ const tabTitles = ref([ "new return request", "approved", "declined"]);
 const newOrdersTableData = computed(()=>{
     return return_requests.value?.data?.map((elm:any)=>{
         return  {
+            id: elm.request_id,
             order_number: elm.order_no,
             date: formatDate(elm.created_at),
             reseller_name: `${formatText(elm.first_name)} ${formatText(elm.last_name)}`,
@@ -88,6 +89,7 @@ const newOrdersTableData = computed(()=>{
 const approvedOrdersRReturnRequest= computed(()=>{
     return approved_return_requests.value?.data?.map((elm:any)=>{
         return  {
+            id: elm.request_id,
             order_number: elm.order_no,
             date: formatDate(elm.created_at),
             reseller_name: `${formatText(elm.first_name)} ${formatText(elm.last_name)}`,
@@ -102,6 +104,7 @@ const approvedOrdersRReturnRequest= computed(()=>{
 const declinedOrdersRReturnRequest= computed(()=>{
     return declined_return_requests.value?.data?.map((elm:any)=>{
         return  {
+            id: elm.request_id,
             order_number: elm.order_no,
             date: formatDate(elm.created_at),
             reseller_name: `${formatText(elm.first_name)} ${formatText(elm.last_name)}`,
@@ -150,9 +153,18 @@ const getDeclinedRequests = async (query?: any) => {
 
 const declineRequest = async(requestId: string) => {
     loading.value = true;
-    await orderStores.ApproveDeclineReturn({requestId, action: "decline"});
-    getNewRequests()
-    getDeclinedRequests()
+    let res =await orderStores.ApproveDeclineReturn({requestId, action: "reject"});
+    if(res){
+        await getNewRequests()
+        orderStores.fetchApprovedReturnRequest()
+        openToastNotification({
+          message: "Return order request declined successfully",
+          variant: 'success'
+        });
+
+       
+    }
+  
 }
 
 onMounted( async ()=>{

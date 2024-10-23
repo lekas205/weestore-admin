@@ -24,6 +24,7 @@ interface State {
   product: Product | null;
   selectedProduct: Product | null;
   exportStore: any;
+  dashboardStats: any;
 }
 
 export const useProductStore = defineStore("product", {
@@ -32,6 +33,7 @@ export const useProductStore = defineStore("product", {
     productMetricsData: null,
     product: null,
     selectedProduct: null,
+    dashboardStats: {},
     exportStore: useExportStore(),
   }),
 
@@ -132,6 +134,21 @@ export const useProductStore = defineStore("product", {
     async unpublishProduct(id: string): Promise<boolean> {
       try {
         await http.get<ApiResponseDto>(ENDPOINTS.UNPUBLISH_PRODUCT(id));
+        return true;
+      } catch (error) {
+        handleStoreRequestError(error);
+      }
+
+      return false;
+    },
+    async getDashboardStats(): Promise<boolean> {
+      try {
+        let { data } = await http.get<ApiResponseDto>(
+          ENDPOINTS.PRODUCTS + "/summary"
+        );
+        this.dashboardStats = data.payload;
+        console.log(data);
+
         return true;
       } catch (error) {
         handleStoreRequestError(error);
