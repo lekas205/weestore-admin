@@ -21,7 +21,7 @@ export const ORDER_STATUS_OPTION = [
 
 export const DRIVER_STATUS_OPTIONS = [
   { label: "Return Order", value: "PACKAGE_REJECTED" },
-  { label: "Completed", value: "PACKAGE_DELIVERED" },
+  { label: "Delivered", value: "PACKAGE_DELIVERED" },
 ];
 
 export const ORDER_STATUS = {

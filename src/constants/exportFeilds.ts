@@ -27,6 +27,12 @@ export const feilds = {
         return PAYMENT_METHOD[value];
       },
     },
+    "Amount Paid": {
+      field: "amount",
+      callback: (value) => {
+        return formatAsMoney(value);
+      },
+    },
     Status: {
       field: "status",
       callback: (value) => {
@@ -39,7 +45,7 @@ export const feilds = {
     "Order No": "order_no",
     Warehouse: "warehouse_name",
     "Reseller Name": "customer_name",
-    Amount: {
+    "Amount Paid": {
       field: "amount",
       callback: (value) => {
         return formatAsMoney(value);
@@ -147,7 +153,6 @@ export const feilds = {
     "Order No": "orderNo",
     "Reseller Name": "resellerName",
     "Phone No": "phone",
-    "Quantity Sold": "quantity_bought",
     "Order Amount": {
       field: "orderAmount",
       callback: (value) => {

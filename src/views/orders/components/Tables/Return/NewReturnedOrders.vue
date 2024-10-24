@@ -107,7 +107,10 @@ const search = (text: string) => {
 }
 
 const approveReturn = (item: any) => {
-    itemToProcess.value = return_requests.value.data.find((elm:any)=> elm.order_id === item.id);
+  
+    
+    itemToProcess.value = return_requests.value.data.find((elm:any)=> elm.request_id === item.id);
+    console.log( item.id,  return_requests.value.data );
     openModal.value =true;
 }
 </script>
