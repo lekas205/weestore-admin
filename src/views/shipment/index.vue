@@ -15,7 +15,7 @@
                 />
             </template>
 
-            <template #deliveered> 
+            <template #delivered> 
                 <ShipmentTable
                     :loading="loading"
                     :items="completedOrdersData"

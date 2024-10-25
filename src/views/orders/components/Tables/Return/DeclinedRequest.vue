@@ -39,7 +39,6 @@
         </v-data-table>
         </app-table-wrapper>
 
-        <OrderReturnForm :openModal="openModal" @close="openModal = false"  status="Approval" />
     </section>
 </template>
 
@@ -51,7 +50,6 @@ import AppChip from "@/components/AppChip.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
-import OrderReturnForm from "../../Modals/OrderReturnForm.vue";
 
 const props = defineProps<{
     items: any[],

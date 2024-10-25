@@ -5,9 +5,9 @@
           <app-table-wrapper 
             tableName="salesInflow"
             searchLabelText="Search for client" 
-            @search="fetchSalesInflow($event)"
             @export="fetchSalesInflow($event)"
             @filter="fetchSalesInflow($event)"
+            @search="fetchSalesInflow({search: $event})"
           >
             <app-table
               :items="salesTableData"
@@ -23,9 +23,9 @@
           <app-table-wrapper 
             tableName="cashFlow"
             searchLabelText="Search for client"  
-            @search="fetchCashInflow($event)"
             @export="fetchCashInflow($event)"
             @filter="fetchCashInflow($event)"
+            @search="fetchCashInflow({search: $event})"
           >
             <app-table
               :items="cashInflowTableData"
@@ -40,10 +40,10 @@
         <template #cash_outflow>
           <app-table-wrapper 
             tableName="cashFlow"
-            searchLabelText="Search for client"  
-            @search="fetchCashOutflow($event)"
+            searchLabelText="Search for client"
             @export="fetchCashOutflow($event)"
             @filter="fetchCashOutflow($event)"
+            @search="fetchCashOutflow({search: $event})"
           >
             <app-table
               :items="cashOutflowTableData"
@@ -59,7 +59,6 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted} from "vue"
 import {storeToRefs } from "pinia";
-
 import { Pagination } from '@/types'
 
 // ============ Componeents ============//
@@ -85,7 +84,6 @@ const salesTableData = computed<any[]>(() => {
     return {
         "Reswller Name": elm.resellerName,
         "Number": elm.phone,
-        // "Ordered Item": elm.,
         "Order Amount": formatAsMoney(elm.orderAmount),
         "Amount Paid": formatAsMoney(elm.amountPaid),
         "Channel": PAYMENT_METHOD[elm.channel],
