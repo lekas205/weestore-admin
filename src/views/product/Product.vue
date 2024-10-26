@@ -48,9 +48,9 @@
 </template>
 
 <script suspense setup lang="ts">
-import { ref, } from 'vue'
+import { ref, computed} from 'vue'
 import { Plus } from 'lucide-vue-next'
-import { useCategoryStore, useWarehouseStore } from '@/stores'
+import { useCategoryStore, useWarehouseStore, useProductStore } from '@/stores'
 
 // ================ COMPONENTS ============== //
 import ProductSummary from './components/cards/ProductSummary.vue'
@@ -60,6 +60,7 @@ import CreateProduct from './components/modals/CreateProduct.vue'
 import EditProduct from './components/modals/EditProduct.vue'
 import AppPageLoader from '@/components/AppPageLoader.vue'
 
+const productStore = useProductStore();
 const categoryStore = useCategoryStore();
 const warehouseStore = useWarehouseStore();
 
@@ -68,12 +69,15 @@ const createProductModal = ref(false);
 const editProductModal = ref(false);
 const tab = ref<any>(0);
 const refreshProductInfo = ref(false);
-const productSummary = ref({
-  totalSales: 3000,
-  valueOfQtyInStock: 3000000,
-  quantityInStock: 7000,
-  quantityOutOfStock: 30000,
-});
+const productSummary = computed(()=>{
+  return {
+  totalSales:  productStore.dashboardStats.totalSales,
+  valueOfQtyInStock: productStore.dashboardStats.valueOfQuantityInStock,
+  quantityInStock: productStore.dashboardStats.quantityInStock,
+  quantityOutOfStock: productStore.dashboardStats.qunatityOutOfStock,
+  valueOfQtyOutStock: productStore.dashboardStats.valueOfQuantityOutOfStock,
+}
+})
 
 // ============= METHODS ============= //
 
@@ -93,7 +97,10 @@ function handleEditCompleted() {
     await Promise.all([
       categoryStore.fetchAllCategories(),
       warehouseStore.fetchStates(),
+      productStore.getDashboardStats()
     ])
+    console.log(productStore.dashboardStats);
+    
   } catch (error) {
    console.log(error);
   }

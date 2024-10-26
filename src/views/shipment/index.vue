@@ -15,7 +15,7 @@
                 />
             </template>
 
-            <template #completed> 
+            <template #delivered> 
                 <ShipmentTable
                     :loading="loading"
                     :items="completedOrdersData"
@@ -27,7 +27,7 @@
                 />
             </template>
 
-            <template #declined> 
+            <!-- <template #declined> 
                 <ShipmentTable
                     :loading="loading"
                     :items="declinedOrdersData"
@@ -37,7 +37,7 @@
                     @fetchMore="fetchDeclinedOrders($event)"
                     :pagination="declined_orders?.pagination"
                 />
-            </template>
+            </template> -->
         </app-tab>
 
         <ConfirmCancelModal
@@ -71,8 +71,8 @@
     const openConfirmModal = ref(false)
     const tabTitles = ref([ 
         "In Transit", 
-        "Completed",
-        "Declined",
+        "Delivered",
+        // "Declined",
     ])
 
     const newOrdersTableData = computed(() => {
@@ -101,28 +101,28 @@
             driver: elm.driver_name,
             channel: PAYMENT_METHOD[elm.payment_method],
             amount: formatAsMoney(elm.amountv || 0) ,
-            status: 'COMPLETED',
+            status: 'DELIVERED',
             payment_proof: elm.payment_proof,
             }
         })
     })
 
 
-    const declinedOrdersData = computed(() => {
-        return declined_orders.value?.data?.map((elm:any)=>{    
-            return {
-            id: elm.order_id,
-            order_number: elm.order_no,
-            date: `${elm.created_at}` ,
-            customer_name: elm.customer_name,
-            driver: elm.driver_name,
-            channel: PAYMENT_METHOD[elm.payment_method],
-            amount: formatAsMoney(elm.amountv || 0) ,
-            status: 'DECLINED',
-            payment_proof: elm.payment_proof,
-            }
-        })
-    })
+    // const declinedOrdersData = computed(() => {
+    //     return declined_orders.value?.data?.map((elm:any)=>{    
+    //         return {
+    //         id: elm.order_id,
+    //         order_number: elm.order_no,
+    //         date: `${elm.created_at}` ,
+    //         customer_name: elm.customer_name,
+    //         driver: elm.driver_name,
+    //         channel: PAYMENT_METHOD[elm.payment_method],
+    //         amount: formatAsMoney(elm.amountv || 0) ,
+    //         status: 'DECLINED',
+    //         payment_proof: elm.payment_proof,
+    //         }
+    //     })
+    // })
 
     const fetchInTransitOrders = async (query?:any) => {
         loading.value = true
@@ -189,7 +189,7 @@
             await Promise.all([
                 fetchInTransitOrders(),
                 fetchCompletedOrders(),
-                fetchDeclinedOrders(),
+                // fetchDeclinedOrders(),
             ])     
             authStore.toggleLoader();        
         }catch(err:any){

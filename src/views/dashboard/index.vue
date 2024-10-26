@@ -1,12 +1,29 @@
 <template>
   <div class="dashboard-container">
-    <div class="tw-flex mb-2 pl-2">
-      <div class="filter-container">
-        <img class="mr-2" src="@/assets/images/svg/filter-icon.svg" alt="">
-        <p>Filter by</p>
-      </div>
-    </div>
-    <div class="dashboard-banner tw-text-lg mb-3">
+    <v-menu>
+      <template v-slot:activator="{ props }">
+        <v-btn
+          size="large"
+          color="black"
+          v-bind="props"
+          variant="outlined"
+        >
+        <Filter />
+          Filter by
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item
+          v-for="(item, index) in items"
+          :key="index"
+          :value="index"
+          @click="filterTable(item.value)"
+        >
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <div class="dashboard-banner tw-text-lg mb-3 mt-3">
       At MoreBuy, we Pride ourselves to excellent customer satisfaction.
     </div>
     <summary-cards :stats="dashboardStats" />
@@ -16,6 +33,7 @@
       <performance-card :performanceStats="performanceData.slice(2, 4)" class="tw-w-[50%]"/>
     </div>
     <transaction-tables />
+    <AppCustomDateRange v-model:openModal="openModal" @proceed="filterByCustom($event)" />
   </div>
 </template>
 
@@ -24,8 +42,12 @@ import { computed, onMounted, ref } from 'vue';
 import {storeToRefs } from "pinia";
 import SummaryCards from './components/SummaryCard.vue'
 import StatCards from './components/StatCard.vue'
+import AppCustomDateRange from "@/components/AppCustomDateRange.vue";
 import PerformanceCard from "./components/PerformanceCard.vue";
 import TransactionTables from "./components/TransactionTables.vue";
+import { getDateRange } from "@/utils";
+
+import { Filter} from 'lucide-vue-next'
 
 import { useAuthStore, useDashboardStore } from "@/stores";
 
@@ -40,6 +62,17 @@ const payload = ref({
     search: ""
 });
 
+const openModal = ref(false)
+const  items =  ref([
+  { title: 'Today', value: "today" },
+  { title: 'Past 3 days', value: "last3" },
+  { title: 'Past 7 days', value: "last7" },
+  { title: 'Past 2 weeks', value: "last14" },
+  { title: 'Last 30 days', value: "last30" },
+  { title: 'Custom' , value: 'custom'},
+])
+
+
 const performanceData = computed<any[]>(()=>{
   return [
     {label: 'Top Performing Product', data: dashboardStats.value.topPerformingProduct },
@@ -49,11 +82,25 @@ const performanceData = computed<any[]>(()=>{
   ]
 })
 
+const filterTable = (range:string) => {
+  if(range === 'custom') return openModal.value = true;
+  getDashboardSats({ start_date: getDateRange(range), end_date: getDateRange('today')});
+}
+
+const filterByCustom = (payload:any) => {
+  getDashboardSats(payload);
+  openModal.value = false;
+}
+
+const getDashboardSats= async (query?: any) => {
+  authStore.toggleLoader();
+  await dashboadStore.getDashboardStats(query);
+  authStore.toggleLoader();
+}
+
 onMounted(async () => {
   if(dashboardStats.value.noOfWarehouse) return
-  authStore.toggleLoader();
-  await  dashboadStore.getDashboardStats();
-  authStore.toggleLoader();
+  getDashboardSats()
 })
 
 </script>

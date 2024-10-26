@@ -202,7 +202,7 @@ const returnedOrderTableData = computed(() => {
   return returned_orders.value?.data?.map((elm:any)=> {
     return  {
       id: elm.order_id,
-      "order_number": elm.customer_name,
+      "order_number": elm.order_no,
       "date": `${formatDate(elm.created_data)}` ,
       "reseller_name": capitalizeFirstLeters(elm.customer_name),
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),

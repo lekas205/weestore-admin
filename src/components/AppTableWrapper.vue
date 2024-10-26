@@ -24,7 +24,7 @@
           Clear <X/>
         </v-btn>
       </div>
-      <div class="action-container tw-gap-4">
+      <div class="action-container tw-gap-4 tw-items-center">
         <v-menu>
           <template v-slot:activator="{ props }">
             <v-btn
@@ -48,6 +48,17 @@
             </v-list-item>
           </v-list>
         </v-menu>
+
+        <v-btn
+          size="small"
+          variant="text"
+          color="red"
+          @click="clearFilter"
+          v-if="filter.length"
+        >
+          Clear filter
+        </v-btn>
+
         <button
           v-if="createBtnText"
           class="table-btn green-btn"
@@ -122,6 +133,7 @@ defineProps({
   }
 });
 
+const filter = ref("");
 const search = ref("");
 const searched = ref(false);
 const openModal = ref(false);
@@ -138,6 +150,11 @@ const clear = () => {
   emit('search', search.value)
 }
 
+const clearFilter = () => {
+  filter.value = ""
+  emit('filter', {})
+}
+
 const  items =  ref([
   { title: 'Today', value: "today" },
   { title: 'Past 3 days', value: "last3" },
@@ -148,6 +165,7 @@ const  items =  ref([
 ])
 
 const filterTable = (range:string) =>{
+  filter.value = range
   if(range === 'custom') return openModal.value = true;
   emit('filter',{ start_date: getDateRange(range), end_date: getDateRange('today')});
 }

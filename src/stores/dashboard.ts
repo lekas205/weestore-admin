@@ -80,9 +80,11 @@ export const useDashboardStore = defineStore("dashboard", () => {
     }
   };
 
-  const getDashboardStats = async (): Promise<boolean> => {
+  const getDashboardStats = async (params?: any): Promise<boolean> => {
     try {
-      const { data } = await http.get(ENDPOINTS.DASHBOARD + `/summary`);
+      const { data } = await http.get(ENDPOINTS.DASHBOARD + `/summary`, {
+        params,
+      });
 
       dashboardStats.value = data.payload;
       return true;

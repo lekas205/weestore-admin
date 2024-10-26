@@ -3,7 +3,7 @@
     <div class="tw-flex bg-white mb-10 pa-5">
       <v-row>
         <v-col cols="12" md="3">
-          <StatCard title="Product Category" value="70" type="blue"/>
+          <StatCard title="Product Category" :value="pagination.total" type="blue"/>
         </v-col>
       </v-row>
     </div>

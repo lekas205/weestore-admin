@@ -129,6 +129,8 @@ const driversTableData = computed(() => {
 const search = (text: string) => {
     payload.value.search = text;
     payload.value.page = 1;
+
+    fetchDrivers(payload.value)
 }
 
 const deleteDriver = async () => {

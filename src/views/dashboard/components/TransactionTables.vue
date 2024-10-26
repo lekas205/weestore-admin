@@ -5,16 +5,17 @@
           <app-table-wrapper 
             tableName="salesInflow"
             searchLabelText="Search for client" 
-            @search="fetchSalesInflow($event)"
             @export="fetchSalesInflow($event)"
             @filter="fetchSalesInflow($event)"
+            @search="fetchSalesInflow({search: $event})"
           >
             <app-table
-                :items="salesTableData"
-                :loading="loading"
-                class="elevation-1 custom-table"
+              :items="salesTableData"
+              :loading="loading"
+              class="elevation-1 custom-table"
             >
             </app-table>
+              <TableFooter v-bind="sales_inflow.pagination" @next="fetchSalesInflow({page: $event})" />
           </app-table-wrapper>
         </template>
 
@@ -23,16 +24,17 @@
           <app-table-wrapper 
             tableName="cashFlow"
             searchLabelText="Search for client"  
-            @search="fetchCashInflow($event)"
             @export="fetchCashInflow($event)"
             @filter="fetchCashInflow($event)"
+            @search="fetchCashInflow({search: $event})"
           >
             <app-table
-                :items="cashInflowTableData"
-                :loading="loading"
-                class="elevation-1 custom-table"
+              :items="cashInflowTableData"
+              :loading="loading"
+              class="elevation-1 custom-table"
             >
             </app-table>
+            <TableFooter v-bind="cash_inflow.pagination" @next="fetchCashInflow({page: $event})" />
           </app-table-wrapper>
         </template>
 
@@ -40,17 +42,18 @@
         <template #cash_outflow>
           <app-table-wrapper 
             tableName="cashFlow"
-            searchLabelText="Search for client"  
-            @search="fetchCashOutflow($event)"
+            searchLabelText="Search for client"
             @export="fetchCashOutflow($event)"
             @filter="fetchCashOutflow($event)"
+            @search="fetchCashOutflow({search: $event})"
           >
             <app-table
-                :items="cashOutflowTableData"
-                :loading="loading"
-                class="elevation-1 custom-table"
+              :items="cashOutflowTableData"
+              :loading="loading"
+              class="elevation-1 custom-table"
             >
             </app-table>
+            <TableFooter v-bind="cash_outflow.pagination" @next="fetchCashOutflow({page: $event})" />
           </app-table-wrapper>
         </template>
     </app-tab>
@@ -59,7 +62,6 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted} from "vue"
 import {storeToRefs } from "pinia";
-
 import { Pagination } from '@/types'
 
 // ============ Componeents ============//
@@ -85,7 +87,6 @@ const salesTableData = computed<any[]>(() => {
     return {
         "Reswller Name": elm.resellerName,
         "Number": elm.phone,
-        // "Ordered Item": elm.,
         "Order Amount": formatAsMoney(elm.orderAmount),
         "Amount Paid": formatAsMoney(elm.amountPaid),
         "Channel": PAYMENT_METHOD[elm.channel],
@@ -135,21 +136,21 @@ const pagination = computed<Pagination>(() => {
   }
 });
 
-const fetchSalesInflow = (query?:any) => {
+const fetchSalesInflow = async (query?:any) => {
   loading.value = true;
-  dashboadStore.fetchSalesInflow(query);
+  await dashboadStore.fetchSalesInflow(query);
   loading.value = false;
 };
 
-const fetchCashInflow = (query?:any) => {
+const fetchCashInflow = async (query?:any) => {
   loading.value = true;
-  dashboadStore.fetchCashInflow(query);
+  await dashboadStore.fetchCashInflow(query);
   loading.value = false;
 };
 
-const fetchCashOutflow = (query?:any) => {
+const fetchCashOutflow = async (query?:any) => {
   loading.value = true;
-  dashboadStore.fetchCashOutflow(query);
+  await dashboadStore.fetchCashOutflow(query);
   loading.value = false;
 };
 

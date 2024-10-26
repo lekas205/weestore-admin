@@ -70,7 +70,7 @@
 
             <hr/>
 
-            <v-row class="mt-4" v-if="formData.orders.length">
+            <v-row class="mt-4">
                 <v-col cols="12" md="6" v-for="(i, index ) in formData.orders">
                     <v-row>
                         <v-col cols="12" md="3">
@@ -100,7 +100,7 @@
                     </v-row>
                     <v-row>
                       <v-col cols="12" md="3">
-                          <p class="tw-text-lg tw-font-medium">Quantity in Stock</p>
+                          <p class="tw-text-lg tw-font-medium">Quantity Bought</p>
                       </v-col>
                       <v-col cols="12" md="9">
                           <AppInput
@@ -115,7 +115,7 @@
                     </v-row>
                     <v-row class="mb-3">
                         <v-col cols="12" md="3">
-                            <p class="tw-text-lg tw-font-medium">Value of Quantity In Stock</p>
+                            <p class="tw-text-lg tw-font-medium">Value of Quantity Bought</p>
                         </v-col>
                         <v-col cols="12" md="9">
                             <AppInput
@@ -313,7 +313,7 @@
       formData.value.reason = props.order.reason;
       formData.value.wharehouse = props.order.warehouse_name || props.order.warehouse;
       formData.value.order_id = props.order.order_no;
-      formData.value.reseller_name = props.order.first_name + " " +  props.order.last_name;
+      formData.value.reseller_name = props.order.customer_name || props.order.first_name + " " + props.order.last_name
       formData.value.orders = formatOrder.value
       formData.value.amount_paid = props.order.amount ||  props.order.total_amount;      
 
@@ -338,6 +338,7 @@
   )
 
   const disabledBtn = computed(()=>{
+    if(!formData.value.reason?.length) return true
     return formData.value.orders.some((elm:any)=> elm.quantity > elm.initial_quantity)
   })
 
