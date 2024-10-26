@@ -15,6 +15,7 @@
               class="elevation-1 custom-table"
             >
             </app-table>
+              <TableFooter v-bind="sales_inflow.pagination" @next="fetchSalesInflow({page: $event})" />
           </app-table-wrapper>
         </template>
 
@@ -33,6 +34,7 @@
               class="elevation-1 custom-table"
             >
             </app-table>
+            <TableFooter v-bind="cash_inflow.pagination" @next="fetchCashInflow({page: $event})" />
           </app-table-wrapper>
         </template>
 
@@ -51,6 +53,7 @@
               class="elevation-1 custom-table"
             >
             </app-table>
+            <TableFooter v-bind="cash_outflow.pagination" @next="fetchCashOutflow({page: $event})" />
           </app-table-wrapper>
         </template>
     </app-tab>

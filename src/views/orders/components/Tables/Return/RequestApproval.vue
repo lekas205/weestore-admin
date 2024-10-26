@@ -116,6 +116,6 @@ const downloadOrder = (item: any) => {
 
     setTimeout(() => {
     html2Pdf.value.generatePdf();
-  }, 1500);
+  }, 1000);
 }
 </script>

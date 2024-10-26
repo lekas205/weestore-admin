@@ -3,6 +3,7 @@
         hide-default-footer 
         :items="items" 
         :loading="loading" 
+        items-per-page="20"
         loading-text="Loading... Please wait" 
     >
         <!-- <template  v-slot:table-slot>

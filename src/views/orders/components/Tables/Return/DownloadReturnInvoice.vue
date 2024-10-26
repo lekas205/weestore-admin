@@ -76,7 +76,7 @@
                         <p class="tw-text-lg tw-font-medium">Sales Price</p>
                     </v-col>
                     <v-col cols="12" md="9">
-                        <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formData.orders[index].price }} </p>
+                        <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formatAsMoney(formData.orders[index].price) }} </p>
 
                     </v-col>
                 </v-row>
@@ -95,7 +95,7 @@
                         <p class="tw-text-lg tw-font-medium">Value of Quantity Bought</p>
                     </v-col>
                     <v-col cols="12" md="9">
-                        <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formData.orders[index].amount }} </p>
+                        <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formatAsMoney(formData.orders[index].amount) }} </p>
                     </v-col>
                 </v-row>
                 <hr/>
@@ -112,7 +112,7 @@
                     <p class="tw-text-lg tw-font-medium">Total Amount Paid</p>
                 </v-col>
                 <v-col cols="12" md="7">
-                    <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formData.amount_paid }} </p>
+                    <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formatAsMoney(formData.amount_paid) }} </p>
                 </v-col>
             </v-row>
         </v-col>
@@ -122,7 +122,7 @@
                     <p class="tw-text-lg tw-font-medium">Amount to Return</p>
                 </v-col>
                 <v-col cols="12" md="8">
-                    <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formData.amount_retain }} </p>
+                    <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formatAsMoney(formData.amount_retain) }} </p>
                     <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                 </v-col>
             </v-row>
@@ -150,7 +150,7 @@
                     <p class="tw-text-lg tw-font-medium">Amount to Retain</p>
                 </v-col>
                 <v-col cols="12" md="8">
-                    <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formData.amount_return }}</p>
+                    <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formatAsMoney(formData.amount_return) }}</p>
                 </v-col>
             </v-row>
         </v-col>
