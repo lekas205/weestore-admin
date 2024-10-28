@@ -52,12 +52,12 @@
         </v-row>
 
         <v-row :gutter="4" class="mt-5">
-            <v-col col="6" :md="3">
+            <!-- <v-col col="6" :md="3">
                 <p>CREDIT WALLET</p>
                 <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
                     {{ formatAsMoney(customer.credit_wallet) }}
                 </div>
-            </v-col>
+            </v-col> -->
             <v-col col="6" :md="3">
                 <p>WAREHOUSE</p>
                 <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
@@ -70,25 +70,37 @@
                     {{ formatAsMoney(customer.account) }}
                 </div>
             </v-col>
-            <!-- <v-col col="6" :md="3">
-                <p>TOTAL PURCHASE</p>
+            <v-col col="6" :md="3">
+                <p>TOTAL REFUNDS</p>
                 <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                    {{ formatAsMoney(customer.total_refunds) }}
                 </div>
             </v-col>
             <v-col col="6" :md="3">
-                <p>TOTAL RETURNS</p>
+                <p>TOTAL INVOICES</p>
                 <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
+                    {{ formatAsMoney(customer.total_invoice, false ) }}
                 </div>
-            </v-col> -->
+            </v-col>
         </v-row>
 
         <!-- Customer Transaction History -->
         <app-tab :tabTitles="tabTitles" class="tw-mt-[50px]">
             <template #order_history>
-                <OrderHistoryTable :loading="loading" :items="orderhistoryData" />
+                <OrderHistoryTable 
+                    :loading="loading"
+                    :items="orderhistoryData"
+                    :pagination="customerOrders?.pagination"
+                    @next="getCustomerOrders($event)"
+                />
             </template>
             <template #transaction_history>
-                <TransactionHistory :loading="loading" :items="transactionistoryData" />
+                <TransactionHistory 
+                    :loading="loading"
+                    :items="transactionistoryData"
+                    :pagination="customerTransactions?.pagination"
+                    @next="getCustomerTransactions($event)"
+                />
             </template>
         </app-tab>
 
@@ -151,10 +163,23 @@ const transactionistoryData = computed<any>(()=> {
     })
 });
 
+const getCustomerOrders = async (query?: any) => {
+    loading.value = true;
+    await customerStore.getCustomerOrders({customerId: customerId.value, query}),
+    loading.value = false;
+}
+
+const getCustomerTransactions = async (query?: any) => {
+    loading.value = true;
+    await customerStore.getCustomerTransactions({customerId: customerId.value, query })
+    loading.value = false;
+}
+
+
 const getCustomer = async () => {
     authStore.toggleLoader();
     await Promise.all([
-        customerStore.getSingleCustomer(route.params.id as string),
+        customerStore.getSingleCustomer(customerId.value),
         customerStore.getCustomerOrders({customerId: customerId.value}),
         customerStore.getCustomerTransactions({customerId: customerId.value})
     ])

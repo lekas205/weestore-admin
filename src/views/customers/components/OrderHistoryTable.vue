@@ -20,7 +20,7 @@
             </template>
 
             <template  v-slot:bottom>
-                <!-- <TableFooter v-bind="pagination" v-model:page="page" /> -->
+                <TableFooter v-bind="pagination" @next="emits('next', {page: $event})" />
             </template>
         </v-data-table>
     </section>
@@ -34,21 +34,16 @@ import { ZoomIn } from 'lucide-vue-next'
 import AppChip from "@/components/AppChip.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 
-import { useCustomersStore } from "@/stores";
-
-const customerStore = useCustomersStore()
-
-const { customerOrders }:any = storeToRefs(customerStore)
-
 
 const props = defineProps<{
     items: any[],
-    loading: boolean ,
+    loading: boolean,
+    pagination:any, 
 }>()
 
-const pagination = computed<any>(()=>{
-    return customerOrders.value.data?.pagination
-})
+const emits = defineEmits<{
+    (e: 'next', val: any): void
+}>();
 
 const headers = ref<any[]>([
     {
