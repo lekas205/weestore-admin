@@ -31,7 +31,7 @@
 
 
             <template v-slot:item.view_movement="{ item }">
-                <ZoomIn class="tw-cursor-pointer"  />
+                <ZoomIn class="tw-cursor-pointer"  @click="emits('showAddress', item.address)" />
             </template>
 
             <template v-slot:item.date="{ item }">
@@ -73,6 +73,7 @@ const emits = defineEmits<{
     (e: "updateStatus", select: any): void;
     (e: "viewOrder", item: any):void;
     (e: "export", item: any):void
+    (e: "showAddress", item: string):void
 }>();
 
 const select = ref('');
@@ -94,7 +95,7 @@ const headers = ref<any[]>(
         },
         { key: 'date', title: 'Date' },
         { key: 'customer_name', title: 'Customer Name' },
-        { key: 'method', title: 'Method' },
+        { key: 'channel', title: 'Method' },
         { key: 'amount', title: 'Amount' },
         { key: 'driver', title: 'Driver' },
         { key: 'status', title: 'Status' },

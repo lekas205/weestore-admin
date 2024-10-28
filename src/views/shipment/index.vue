@@ -11,6 +11,7 @@
                     @export="fetchInTransitOrders($event)"
                     @fetchMore="fetchInTransitOrders($event)"
                     @updateStatus="updateOrderStatus($event)"
+                    @showAddress="showAddress($event)"
                     :pagination="in_transit_orders?.pagination"
                 />
             </template>
@@ -23,6 +24,7 @@
                     @filter="fetchCompletedOrders($event)"
                     @export="fetchCompletedOrders($event)"
                     @fetchMore="fetchCompletedOrders($event)"
+                    @showAddress="showAddress($event)"
                     :pagination="completed_orders?.pagination"
                 />
             </template>
@@ -46,6 +48,12 @@
             @proceed="proceedToDecline" 
             title="Are you sure you want to return this order?"
         />
+
+        <DeliveryAddessModal 
+            :openModal="openAddressModal" 
+            :address="deliveryAddress" 
+            @close="openAddressModal = false" 
+        />
     </section>
 </template>
 
@@ -57,6 +65,8 @@
     import ConfirmCancelModal from '@/components/AppConfirmModal.vue';
 
     import ShipmentTable from "./components/ShipmentTable.vue";
+    import DeliveryAddessModal from "./components/DeliveryAddessModal.vue";
+
     import { formatText, formatAsMoney, openToastNotification } from "@/utils";
     import { PAYMENT_METHOD } from "@/constants";
 
@@ -69,6 +79,9 @@
     const loading = ref(false);
     const ouderToUpdate = ref<any>({})
     const openConfirmModal = ref(false)
+    const openAddressModal = ref(false)
+    const deliveryAddress = ref("")
+
     const tabTitles = ref([ 
         "In Transit", 
         "Delivered",
@@ -78,15 +91,16 @@
     const newOrdersTableData = computed(() => {
         return in_transit_orders.value?.data?.map((elm:any)=>{    
             return {
-            id: elm.order_id,
-            order_number: elm.order_no,
-            date: `${elm.created_at}` ,
-            customer_name: elm.customer_name,
-            driver: elm.driver_name,
-            channel: PAYMENT_METHOD[elm.payment_method],
-            amount: formatAsMoney(elm.amountv || 0) ,
-            status: 'IN_TRANSIT',
-            payment_proof: elm.payment_proof,
+                id: elm.order_id,
+                order_number: elm.order_no,
+                date: `${elm.created_at}` ,
+                customer_name: elm.customer_name,
+                driver: elm.driver_name,
+                channel: PAYMENT_METHOD[elm.payment_method],
+                amount: formatAsMoney(elm.amount || 0) ,
+                status: 'IN_TRANSIT',
+                payment_proof: elm.payment_proof,
+                address: elm.address
             }
         })
     })
@@ -94,15 +108,16 @@
     const completedOrdersData = computed(() => {
         return completed_orders.value?.data?.map((elm:any)=>{    
             return {
-            id: elm.order_id,
-            order_number: elm.order_no,
-            date: `${elm.created_at}` ,
-            customer_name: elm.customer_name,
-            driver: elm.driver_name,
-            channel: PAYMENT_METHOD[elm.payment_method],
-            amount: formatAsMoney(elm.amountv || 0) ,
-            status: 'DELIVERED',
-            payment_proof: elm.payment_proof,
+                id: elm.order_id,
+                order_number: elm.order_no,
+                date: `${elm.created_at}` ,
+                customer_name: elm.customer_name,
+                driver: elm.driver_name,
+                channel: PAYMENT_METHOD[elm.payment_method],
+                amount: formatAsMoney(elm.amount || 0) ,
+                status: 'DELIVERED',
+                payment_proof: elm.payment_proof,
+                address: elm.address
             }
         })
     })
@@ -123,6 +138,11 @@
     //         }
     //     })
     // })
+
+    const showAddress = (address: string) => {
+        deliveryAddress.value = address;
+        openAddressModal.value = true;
+    }
 
     const fetchInTransitOrders = async (query?:any) => {
         loading.value = true
