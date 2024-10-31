@@ -70,6 +70,7 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from "vue-router";
 import { ref, computed, watch } from 'vue'
 import { ZoomIn, SquarePen } from 'lucide-vue-next'
 import { Pagination, Product, QueryFilter } from '@/types'
@@ -81,6 +82,7 @@ import TableFooter from '@/components/AppTableFooter.vue'
 import TableImage from '@/components/AppTableImage.vue'
 import { openToastNotification } from '@/utils'
 
+const route = useRoute()
 const emit = defineEmits(['refreshDone', 'editProduct']);
 
 const props = defineProps({
@@ -95,7 +97,12 @@ const productStore = useProductStore();
 const isLoading = ref(false);
 const items = computed<Product[]>(() => productStore.productList);
 const pagination = computed<Pagination>(() => productStore.productPagination);
-const queryFilter = ref<QueryFilter>({ page: 1 });
+const queryFilter = computed<QueryFilter>(()=>{
+  return{
+    page: 1,
+   warehouseId: route.query.warehouse_id as string
+  }
+});
 const headers = ref<any[]>([
   {
     title: 'PRODUCT NAME',
@@ -176,6 +183,8 @@ async function loadProducts(query?:any) {
 
 // ============ ON DEFORE MOUNTED ================ //
 (async function() {
+  console.log({...queryFilter.value});
+  
   loadProducts(queryFilter.value);
 })()
 </script>

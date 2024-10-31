@@ -29,10 +29,13 @@
                 ></app-select>
             </template>
 
-
-            <template v-slot:item.view_movement="{ item }">
+            <template v-slot:item.view_address="{ item }">
                 <ZoomIn class="tw-cursor-pointer"  @click="emits('showAddress', item.address)" />
             </template>
+            <template v-slot:item.view_movement="{ item }">
+                <ZoomIn class="tw-cursor-pointer" />
+            </template>
+            
 
             <template v-slot:item.date="{ item }">
                 <p> {{ formatDate(item.date) }} </p>
@@ -99,7 +102,8 @@ const headers = ref<any[]>(
         { key: 'amount', title: 'Amount' },
         { key: 'driver', title: 'Driver' },
         { key: 'status', title: 'Status' },
-        props.action ?{ key: 'action', title: 'Action' ,  width: "15%"}:'',
+        props.action ?{ key: 'action', title: 'Action' ,  width: "30%"}:'',
+        { key: 'view_address', title: 'View Address' },
         { key: 'view_movement', title: 'View Movement' },
     ]
 )

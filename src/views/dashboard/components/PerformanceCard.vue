@@ -5,9 +5,9 @@
             <div class="tw-px-[25px]"> 
                 <app-progress-bar 
                     class="mb-3"
-                    :color="randomColor()"
+                    :color="pColors[idx]"
                     :label="data.name" 
-                    v-for="data in item.data"
+                    v-for="(data, idx) in item.data"
                     v-model:value="data.percentage" 
                 />
             </div>
@@ -19,12 +19,19 @@
 <script lang="ts" setup>
 import useString from "@/composables/string";
 import AppProgressBar from "@/components/AppProgressBar.vue";
+import { ref } from "vue";
 
 const {randomColor } = useString()
 
 const props = defineProps<{
     performanceStats: any[]
 }>()
+
+const pColors = ref([
+    "#0CAE13",
+    "#FE0000",
+    "#CFBB03",
+])
 </script>
 
 <style lang="scss" scoped>

@@ -55,6 +55,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRoute } from "vue-router";
+
 import { Pagination, ProductMetrics, QueryFilter } from '@/types'
 import { useProductStore } from '@/stores'
 
@@ -63,12 +65,18 @@ import TableWrapper from '@/components/AppTableWrapper.vue'
 import TableFooter from '@/components/AppTableFooter.vue'
 import TableImage from '@/components/AppTableImage.vue'
 
+const route = useRoute()
 const productStore = useProductStore();
 
 const isLoading = ref(false);
 const items = computed<ProductMetrics[]>(() => productStore.productMetricsList);
 const pagination = computed<Pagination>(() => productStore.productMetricsPagination);
-const queryFilter = ref<QueryFilter>({ page: 1 });
+  const queryFilter = computed<QueryFilter>(()=>{
+  return{
+    page: 1,
+   warehouseId: route.query.warehouse_id as string
+  }
+});
 const headers = ref<any[]>([
   {
     title: "PRODUCT NAME",

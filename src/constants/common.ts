@@ -25,16 +25,21 @@ export const DRIVER_STATUS_OPTIONS = [
 ];
 
 export const ORDER_STATUS = {
+  NEW: "In Transit",
   PENDING: "Pending",
-  PROCESSING: "Processing",
-  IN_TRANSIT: "In Transit",
   DECLINED: "Declined",
+  APPROVED: "Approved",
+  REJECTED: "Rejected",
   COMPLETED: "Completed",
   DELIVERED: "Delivered",
-  RETURN_ORDER: "Return Order",
-  NEW: "In Transit",
-  PACKAGE_DELIVERED: "Completed",
+  PROCESSING: "Processing",
+  IN_TRANSIT: "In Transit",
   PACKAGE_REJECTED: "Declined",
+  RETURN_ORDER: "Return Order",
+  PACKAGE_DELIVERED: "Completed",
+  RETURN_APPROVED: "Approved",
+  AWAITING_APPROVAL: "Awaiting Approval",
+  AWAITING_PROCESSING: "Awaiting processing",
 };
 
 export const PAYMENT_METHOD = {

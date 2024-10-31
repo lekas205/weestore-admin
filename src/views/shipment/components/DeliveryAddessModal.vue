@@ -6,7 +6,7 @@
           <div class="wrapper ">
             <MapPin  :size="40"/>
             <h2 class="tw-text-2xl text-center mb-3 mt-2"> Delivery Address </h2>
-            <p>{{ address }}</p>
+            <p class="text-center">{{ address }}</p>
             <div class="btn-container">
             </div>
           </div>
