@@ -141,10 +141,13 @@ export const useProductStore = defineStore("product", {
 
       return false;
     },
-    async getDashboardStats(): Promise<boolean> {
+    async getDashboardStats(query?: any): Promise<boolean> {
       try {
         let { data } = await http.get<ApiResponseDto>(
-          ENDPOINTS.PRODUCTS + "/summary"
+          ENDPOINTS.PRODUCTS + "/summary",
+          {
+            params: { ...query },
+          }
         );
         this.dashboardStats = data.payload;
         console.log(data);

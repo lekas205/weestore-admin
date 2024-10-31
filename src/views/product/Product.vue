@@ -1,5 +1,21 @@
 <template>
   <div class="product-page-container">
+    <v-row>
+      <v-col :md="3">
+        <v-select
+          v-model="warehouse_id"
+          :items="options"
+          item-title="warehouse_name"
+          item-value="warehouse_id"
+          label="Select warehouse"
+      ></v-select>
+      </v-col>
+      <v-col :md="3" v-if="warehouse_id.length">
+      <v-btn color="red" @click="warehouse_id=''">reset</v-btn>
+      </v-col>
+    </v-row>
+  
+
     <ProductSummary v-bind="productSummary" />
     <div class="pa-7 mt-6">
       <div class="product-tabs">
@@ -22,6 +38,7 @@
       <v-tabs-window v-model="tab">
         <v-tabs-window-item>
           <ProductInfoTable
+            :key="reRender"
             :referesh-data="refreshProductInfo"
             @refresh-done="refreshProductInfo = false"
             @edit-product="editProductModal = true"
@@ -29,7 +46,7 @@
         </v-tabs-window-item>
 
         <v-tabs-window-item>
-          <ProductMetricsTable></ProductMetricsTable>
+          <ProductMetricsTable  :key="reRender"></ProductMetricsTable>
         </v-tabs-window-item>
       </v-tabs-window>
     </div>
@@ -48,7 +65,8 @@
 </template>
 
 <script suspense setup lang="ts">
-import { ref, computed} from 'vue'
+import { useRouter, useRoute } from "vue-router";
+import { ref, watch, computed, nextTick } from 'vue'
 import { Plus } from 'lucide-vue-next'
 import { useCategoryStore, useWarehouseStore, useProductStore } from '@/stores'
 
@@ -60,15 +78,21 @@ import CreateProduct from './components/modals/CreateProduct.vue'
 import EditProduct from './components/modals/EditProduct.vue'
 import AppPageLoader from '@/components/AppPageLoader.vue'
 
+const route = useRoute()
+const router = useRouter()
 const productStore = useProductStore();
 const categoryStore = useCategoryStore();
 const warehouseStore = useWarehouseStore();
 
+const reRender = ref<any>(1)
+const warehouse_id = ref("")
 const isLoading = ref(false);
 const createProductModal = ref(false);
 const editProductModal = ref(false);
 const tab = ref<any>(0);
 const refreshProductInfo = ref(false);
+
+const options = computed(()=> warehouseStore.warehouseData.rows);
 const productSummary = computed(()=>{
   return {
   totalSales:  productStore.dashboardStats.totalSales,
@@ -80,6 +104,27 @@ const productSummary = computed(()=>{
 })
 
 // ============= METHODS ============= //
+watch(()=> warehouse_id.value, (newval: string)=>{
+  if(newval){
+    router.push("/product?warehouse_id=" + newval)
+    fetchDashboardSats()
+  }else{
+    router.push("/product")
+    fetchDashboardSats()
+  }
+
+  setTimeout(()=>{
+      reRender.value = !reRender.value
+    }, 500)
+})
+
+const fetchDashboardSats = async () =>{
+  isLoading.value = true;
+  await productStore.getDashboardStats({
+    warehouseId:warehouse_id.value
+  })
+  isLoading.value = false;
+}
 
 function handleCreateCompleted() {
   createProductModal.value = false;
@@ -93,14 +138,14 @@ function handleEditCompleted() {
 
 (async function() {
   isLoading.value = true;
+  if(route.query.warehouse_id) warehouse_id.value = route.query.warehouse_id as string
   try {
     await Promise.all([
       categoryStore.fetchAllCategories(),
       warehouseStore.fetchStates(),
-      productStore.getDashboardStats()
-    ])
-    console.log(productStore.dashboardStats);
-    
+      productStore.getDashboardStats(),
+      warehouseStore.fetchAllWarehouses()
+    ])    
   } catch (error) {
    console.log(error);
   }

@@ -25,7 +25,12 @@
         </v-data-table>
         </app-table-wrapper>
         
-        <OrderReturnForm :openModal="openModal" @close="openModal = false" :order="itemToProcess" />
+        <OrderReturnForm 
+            :openModal="openModal"
+            :order="itemToProcess"
+            @close="openModal = false"
+            @refreshData="next(1)"
+        />
     </section>
 </template>
 

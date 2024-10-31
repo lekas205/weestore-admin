@@ -1,27 +1,30 @@
 <template>
      <v-chip :color="chipColors[statusConverter[status]?.toLowerCase()]">
-         <span class="text-capitalize item">{{ statusConverter[status] }} </span>
+         <span class="text-capitalize item">{{ statusConverter[status] }}  </span>
     </v-chip>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue"
+import { ref, markRaw } from "vue"
 import { ORDER_STATUS } from "@/constants/common.ts";
-
 
 defineProps<{
     status: string
 }>()
 
 const statusConverter = ref(ORDER_STATUS)
-const chipColors = ref({
+const chipColors = markRaw({
     "pending": "yellow",
     "in transit": "orange",
     "processing": "purple",
     "return order": 'red',
     "delivered": "success",
     "completed": 'success',
-    "declined": "primary"
+    "declined": "primary",
+    "approved": "success",
+    "rejected": "red",
+    "awaiting approval": "yellow",
+    "awaiting proccessing": "grey"
 })
 </script>
 
