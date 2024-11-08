@@ -7,7 +7,7 @@ export const feilds = {
     "Last Name": "last_name",
     Email: "email",
     "Phone Number": "phone",
-    Lincense: "lincense",
+    Lincense: "license",
     State: "state",
     Warehouse: "warehouse",
   },
@@ -172,5 +172,6 @@ export const feilds = {
       },
     },
     Date: "date",
+    status: "status",
   },
 };

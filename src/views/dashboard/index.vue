@@ -1,28 +1,35 @@
 <template>
   <div class="dashboard-container">
-    <v-menu>
-      <template v-slot:activator="{ props }">
-        <v-btn
-          size="large"
-          color="black"
-          v-bind="props"
-          variant="outlined"
-        >
-        <Filter />
-          Filter by
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item
-          v-for="(item, index) in items"
-          :key="index"
-          :value="index"
-          @click="filterTable(item.value)"
-        >
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+    <div class="tw-flex tw-gap-2">
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn
+            size="large"
+            color="black"
+            v-bind="props"
+            variant="outlined"
+          >
+          <Filter />
+            Filter by
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in items"
+            :key="index"
+            :value="index"
+            @click="filterTable(item.value)"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-btn color="red" v-if="filterDash" @click="()=> {
+        getDashboardSats();
+        filterDash = false
+      }">Reset</v-btn>
+    </div>
+   
     <div class="dashboard-banner tw-text-lg mb-3 mt-3">
       At MoreBuy, we Pride ourselves to excellent customer satisfaction.
     </div>
@@ -57,6 +64,7 @@ const dashboadStore = useDashboardStore();
 const { dashboardStats } = storeToRefs(dashboadStore);
 
 const proValue = ref(21);
+const filterDash = ref(false)
 const payload = ref({
     page: 1,
     search: ""
@@ -83,6 +91,7 @@ const performanceData = computed<any[]>(()=>{
 })
 
 const filterTable = (range:string) => {
+    filterDash.value = true
   if(range === 'custom') return openModal.value = true;
   getDashboardSats({ start_date: getDateRange(range), end_date: getDateRange('today')});
 }

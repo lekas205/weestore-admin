@@ -13,6 +13,7 @@
       createBtnText="Create Warehouse"
       @export="fetchWarehouse($event)"
       @search="fetchWarehouse($event)"
+      @filter="fetchWarehouse($event)"
       @create="createWarehouseModal = true"
     >
       <v-data-table

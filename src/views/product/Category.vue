@@ -13,6 +13,7 @@
       @create="createCategoryModal = true"
       @search="searchCategories"
       @filter="filterCategories"
+      @export="filterCategories($event)"
     >
       <v-data-table
         :headers="headers"

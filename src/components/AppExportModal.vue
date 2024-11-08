@@ -14,7 +14,7 @@
            </div>
 
            <div class="tw-flex tw-gap-2 tw-justify-end tw-mt-[40px]">
-               <v-btn variant="text" color="red" size="large" @click="setShow = false"> Cancel</v-btn>
+               <v-btn variant="text" color="red" size="large" @click="closeModal"> Cancel</v-btn>
                <v-btn  color="red" size="large" @click="proceed" :loading="exporting" :disabled="disableBtn"> Export</v-btn>
            </div>
 
@@ -36,7 +36,7 @@
 <script setup lang="ts">
  import { computed, markRaw, nextTick, ref, watch } from 'vue'
  import AppInput from "@/components/AppInput.vue";
- import { formatDate2 } from "@/utils";
+ import { formatDate2 , openToastNotification} from "@/utils";
 
  import { useExportStore } from "@/stores";
 import { storeToRefs } from 'pinia';
@@ -85,6 +85,13 @@ const setShow = computed({
 
 const disableBtn = computed(()=> !(form.value.start_date.length  && form.value.end_date.length))
 
+const closeModal = () => {
+    setShow.value = false;
+    exporting.value = false;
+
+    start_date.value = ""
+    end_date.value = ""
+}
 const proceed = () => {
     exporting.value = true
    emits("proceed", form.value )
@@ -118,6 +125,14 @@ watch(()=> end_date.value, (newDate) =>{
 watch(()=> dataToExport.value, (newValue) =>{ 
    if(newValue.length){
     downloadSheet()
+   }else{
+    exporting.value = false
+    emits('update:openModal', false)
+    
+    openToastNotification({
+        message: `Sorry there is no data to export`,
+        variant: 'warning'
+    });
    }
 })
 </script>

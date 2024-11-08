@@ -26,21 +26,34 @@ const customerStore = useCustomersStore();
 
 const route = useRoute();
 const disable = ref(false);
+const manaulSwitch = ref(true)
 
 const updateState = async () => {
   const status = disable.value ? "deactivate": "activate"
-  await customerStore.disableAllCustomers(status)
+  let res = await customerStore.disableAllCustomers(status)
 
-  openToastNotification({
-    message: `All customers has ${disable.value ? "deactivated": "activated"} successfully`,
-    variant: "success",
-  });
+  if(res){
+    openToastNotification({
+      message: `All customers has ${disable.value ? "deactivated": "activated"} successfully`,
+      variant: "success",
+    });
 
-  localStorage.setItem('deacivateCustomers', JSON.stringify(disable.value))
+    localStorage.setItem('deacivateCustomers', JSON.stringify(disable.value))
+  }else{
+    manaulSwitch.value = false;
+    disable.value = !disable.value;
+    
+    setTimeout(() => {
+      manaulSwitch.value = true
+    }, 1000);
+  }
 };
 
 watch(()=>disable.value, () => {
-  updateState();
+  if(manaulSwitch.value){
+    updateState();
+  }
+ 
 });
 
 onMounted(() => {
