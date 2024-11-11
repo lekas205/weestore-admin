@@ -20,7 +20,7 @@
       <v-col cols="12" md="3">
         <StatCard
           title="Total Products"
-          :value="$formatAsMoney(totalSales, false)"
+          :value="$formatAsMoney(totalProduts, false)"
           type="red"
         />
       </v-col>
@@ -46,7 +46,7 @@
 import StatCard from './ProductStatCard.vue'
 
 const props = defineProps({
-  totalSales: {
+  totalProduts: {
     type: Number,
     required: true,
   },
