@@ -12,7 +12,8 @@
       searchLabelText="Search By Warehouse Name"
       createBtnText="Create Warehouse"
       @export="fetchWarehouse($event)"
-      @search="fetchWarehouse($event)"
+      @search="searchWarehouse($event)"
+      @filter="fetchWarehouse($event)"
       @create="createWarehouseModal = true"
     >
       <v-data-table
@@ -34,7 +35,7 @@
           </div>
         </template>
         <template v-slot:bottom>
-          <TableFooter v-bind="pagination" />
+          <TableFooter v-bind="pagination"  @next="next($event)"  />
         </template>
       </v-data-table>
     </TableWrapper>
@@ -56,6 +57,8 @@ import { ref, computed } from 'vue'
 import { SquarePen, ZoomIn } from 'lucide-vue-next'
 import { useAuthStore, useWarehouseStore } from '@/stores';
 import { Warehouse } from '@/types';
+import {  QueryFilter } from '@/types';
+
 
 // ========= COMPONENTS =========== //
 import StatCard from './components/cards/ProductStatCard.vue'
@@ -85,6 +88,9 @@ const headers = ref<any[]>([
 const items = computed<Warehouse[]>(() => {
   return warehouseStore.warehouses;
 });
+const queryFilter = ref<QueryFilter>({
+  page: 1,
+});
 
 const pagination = computed(() => {
   return warehouseStore.warehousesPagination || {
@@ -110,6 +116,18 @@ function handleCreateCompleted() {
 function handleEditCompleted() {
   editWarehouseModal.value = false;
   fetchWarehouse();
+}
+
+const next = (page: number) => {
+  queryFilter.value.page = page
+
+  fetchWarehouse(queryFilter.value)
+}
+
+const searchWarehouse = (query: string) => {
+  queryFilter.value.search = query
+
+  fetchWarehouse(queryFilter.value)
 }
 
 async function fetchWarehouse(query?:any) {

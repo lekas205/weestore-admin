@@ -2,7 +2,7 @@
     <section>
         <app-table-wrapper 
             searchLabelText="Search by Order Number" t
-            ableName="orders" 
+            tableName="orders" 
             @search="search" 
             @export="emits('export', $event)" 
             @filter="emits('filter', $event)"

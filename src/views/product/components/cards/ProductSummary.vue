@@ -19,7 +19,7 @@
     <v-row class="tw-justify-between mt-n8">
       <v-col cols="12" md="3">
         <StatCard
-          title="Total Sales"
+          title="Total Products"
           :value="$formatAsMoney(totalSales, false)"
           type="red"
         />

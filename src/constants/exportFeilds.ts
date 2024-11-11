@@ -5,9 +5,9 @@ export const feilds = {
   drivers: {
     "First Name": "first_name",
     "Last Name": "last_name",
-    Email: "email",
+    // Email: "email",
     "Phone Number": "phone",
-    Lincense: "lincense",
+    Lincense: "license",
     State: "state",
     Warehouse: "warehouse",
   },
@@ -172,5 +172,6 @@ export const feilds = {
       },
     },
     Date: "date",
+    status: "status",
   },
 };

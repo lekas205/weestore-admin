@@ -11,7 +11,7 @@
       ></v-select>
       </v-col>
       <v-col :md="3" v-if="warehouse_id.length">
-      <v-btn color="red" @click="warehouse_id=''">reset</v-btn>
+      <v-btn color="red" @click="warehouse_id=''">Reset</v-btn>
       </v-col>
     </v-row>
   
