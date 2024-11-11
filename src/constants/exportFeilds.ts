@@ -5,7 +5,7 @@ export const feilds = {
   drivers: {
     "First Name": "first_name",
     "Last Name": "last_name",
-    Email: "email",
+    // Email: "email",
     "Phone Number": "phone",
     Lincense: "license",
     State: "state",

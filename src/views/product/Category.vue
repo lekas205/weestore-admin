@@ -38,7 +38,7 @@
           </div>
         </template>
         <template v-slot:bottom>
-          <TableFooter v-bind="pagination" />
+          <TableFooter v-bind="pagination" @next="next($event)"  />
         </template>
       </v-data-table>
     </TableWrapper>
@@ -146,6 +146,12 @@ async function searchCategories(value: string) {
   }
   await fetchCategories();
 }
+const next = (page: number) => {
+  queryFilter.value.page = page
+
+  fetchCategories()
+}
+
 
 async function filterCategories(filter: any) {
   queryFilter.value = {
