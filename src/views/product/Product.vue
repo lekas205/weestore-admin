@@ -95,7 +95,7 @@ const refreshProductInfo = ref(false);
 const options = computed(()=> warehouseStore.warehouseData.rows);
 const productSummary = computed(()=>{
   return {
-  totalSales:  productStore.dashboardStats.totalSales,
+  totalProduts:  productStore.dashboardStats.totalProduts,
   valueOfQtyInStock: productStore.dashboardStats.valueOfQuantityInStock,
   quantityInStock: productStore.dashboardStats.quantityInStock,
   quantityOutOfStock: productStore.dashboardStats.qunatityOutOfStock,
