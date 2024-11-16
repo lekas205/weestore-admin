@@ -8,6 +8,7 @@ import customerRoutes from "./customer.routes";
 import creditRoutes from "./credit.routes";
 import walletRoutes from "./wallet.route";
 import shipmentRoutes from "./shipment.route";
+import usersRoutes from "./user..route";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +20,7 @@ const router = createRouter({
     ...productRoutes,
     ...customerRoutes,
     ...walletRoutes,
+    ...usersRoutes,
     ...shipmentRoutes,
   ],
 });
