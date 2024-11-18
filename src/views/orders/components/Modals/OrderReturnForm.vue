@@ -104,9 +104,10 @@
                       </v-col>
                       <v-col cols="12" md="9">
                           <AppInput
-                          v-model:value="formData.orders[index].quantity"
-                          label=""
-                          type="number"
+                            v-model:value="formData.orders[index].quantity"
+                            label=""
+                            type="number"
+                            :readonly="status === 'request' ?  false : true"
                           />
                           <p class="error-text" v-if="formData.orders[index].quantity  > formData.orders[index].initial_quantity">{{ `Sorry quatity can't be increased above ${formData.orders[index].initial_quantity}` }}</p>
 
@@ -182,6 +183,7 @@
                         <v-textarea
                             v-model="formData.reason"
                             variant="outlined"
+                            :readonly="status === 'request' ?  false : true"
                         ></v-textarea>
                         <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
                     </v-col>

@@ -122,9 +122,21 @@ export const feilds = {
     Category: "category",
     Manufacturer: "manufacturer",
     Warehouse: "warehouse",
-    "Quantity in Stock": "stock_quantity",
+    "Quantity Available": "stock_quantity",
     "Quantity Sold": "quantity_bought",
-    Price: {
+    "Value of qty in Stock": {
+      field: "in_stock_value",
+      callback: (value) => {
+        return formatAsMoney(value);
+      },
+    },
+    "Value of qty out of Stock": {
+      field: "out_stock_value",
+      callback: (value) => {
+        return formatAsMoney(value);
+      },
+    },
+    "Sales Price": {
       field: "price",
       callback: (value) => {
         return formatAsMoney(value);

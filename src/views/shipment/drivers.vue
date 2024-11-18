@@ -104,7 +104,7 @@ const headers = ref<any[]>([
     { key: 'state', title: 'State' },
     { key: 'warehouse', title: 'Warehouse' },
     { key: 'license', title: "Driver's License" },
-    { key: 'trips', title: "No of Completed trips" },
+    // { key: 'trips', title: "No of Completed trips" },
     { key: 'action', title: "Action" },
 ])
 

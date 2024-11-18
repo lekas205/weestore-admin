@@ -208,6 +208,7 @@ const returnedOrderTableData = computed(() => {
       "warehouse": capitalizeFirstLeters(elm.warehouse_name),
       "channel": PAYMENT_METHOD[elm.payment_method],
       "amount": formatAsMoney(elm.amount) ,
+      amount_paid:  formatAsMoney(elm.amount_paid) ,
       "status": elm.status,
       payment_proof: elm.payment_proof,
       is_return_processed: elm.is_return_processed,

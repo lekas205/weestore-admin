@@ -73,10 +73,10 @@ const payload = ref({
 const openModal = ref(false)
 const  items =  ref([
   { title: 'Today', value: "today" },
-  { title: 'Past 3 days', value: "last3" },
-  { title: 'Past 7 days', value: "last7" },
-  { title: 'Past 2 weeks', value: "last14" },
-  { title: 'Last 30 days', value: "last30" },
+  // { title: 'Past 3 days', value: "last3" },
+  // { title: 'Past 7 days', value: "last7" },
+  // { title: 'Past 2 weeks', value: "last14" },
+  // { title: 'Last 30 days', value: "last30" },
   { title: 'Custom' , value: 'custom'},
 ])
 
