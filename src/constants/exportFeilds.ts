@@ -71,6 +71,42 @@ export const feilds = {
     },
   },
 
+  orders_returned: {
+    "Order No": "order_no",
+    Warehouse: "warehouse_name",
+    "Reseller Name": "customer_name",
+    "Order Amount": {
+      field: "amount",
+      callback: (value) => {
+        return formatAsMoney(value);
+      },
+    },
+    "Amount Paid": {
+      field: "amount_paid",
+      callback: (value) => {
+        return formatAsMoney(value);
+      },
+    },
+    Date: {
+      field: "created_data",
+      callback: (value) => {
+        return formatDate(value);
+      },
+    },
+    "Payment Method": {
+      field: "payment_method",
+      callback: (value) => {
+        return PAYMENT_METHOD[value];
+      },
+    },
+    Status: {
+      field: "status",
+      callback: (value) => {
+        return ORDER_STATUS[value];
+      },
+    },
+  },
+
   wallet: {
     "First Name": "first_name",
     "Last Name": "last_name",
@@ -107,7 +143,7 @@ export const feilds = {
     "Product Name": "product_name",
     Category: "category",
     Manufacturer: "manufacturer",
-    Warehouse: "warehouse",
+    Warehouse: "warehouse_name",
     Quantity: "stock_quantity",
     Price: {
       field: "price",
@@ -115,6 +151,7 @@ export const feilds = {
         return formatAsMoney(value);
       },
     },
+    Status: "status",
   },
 
   productMetrics: {
