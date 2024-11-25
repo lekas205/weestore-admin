@@ -158,7 +158,7 @@ export const feilds = {
     "Product Name": "product_name",
     Category: "category",
     Manufacturer: "manufacturer",
-    Warehouse: "warehouse",
+    Warehouse: "warehouse_name",
     "Quantity Available": "stock_quantity",
     "Quantity Sold": "quantity_bought",
     "Value of qty in Stock": {
