@@ -72,7 +72,7 @@ import ConfirmCancelModal from "@/components/AppConfirmModal.vue";
 import CreateDriverModal from "./components/CreateDriverModal.vue";
 
 import { PAYMENT_METHOD } from "@/constants";
-import { openToastNotification } from "@/utils";
+import { openToastNotification, formatAsMoney } from "@/utils";
 import { useDriverStore, useAuthStore, useWalletStore } from "@/stores";
 
 const authStore = useAuthStore();
@@ -122,7 +122,7 @@ const driversTableData = computed(() => {
       state: elm.state,
       warehouse: elm.warehouse,
       license: elm.license,
-      sales_performance: elm.sales_performance,
+      sales_performance: formatAsMoney(elm.sales_performance),
     };
   });
 });

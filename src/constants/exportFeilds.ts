@@ -10,6 +10,12 @@ export const feilds = {
     Lincense: "license",
     State: "state",
     Warehouse: "warehouse",
+    "Sales Performance": {
+      field: "sales_performance",
+      callback: (value) => {
+        return formatAsMoney(value);
+      },
+    },
   },
   fleet: {
     "Order No": "order_no",
