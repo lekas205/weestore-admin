@@ -1,72 +1,193 @@
 export const ROUTES = {
   index: {
-    path: '/',
-    name: 'Index',
+    path: "/",
+    name: "Index",
     requiresAuth: false,
   },
   login: {
-    path: '/login',
-    name: 'Login',
+    path: "/login",
+    name: "Login",
     requiresAuth: false,
   },
-  dashboard: {
-    path: '/dashboard',
-    name: 'Dashboard',
+  users: {
+    path: "/users",
+    name: "Users",
     requiresAuth: true,
-    title: 'Dashboard Overview'
+    title: "Users",
+    canAcceess: ["super_admin"],
+  },
+  dashboard: {
+    path: "/dashboard",
+    name: "Dashboard",
+    requiresAuth: true,
+    title: "Dashboard Overview",
+    canAcceess: [
+      "super_admin",
+      "accountant",
+      "customer_service",
+      "internal_control_manager",
+      "business_deveelopment_manager",
+    ],
   },
   category: {
-    path: '/category',
-    name: 'Category',
+    path: "/category",
+    name: "Category",
     requiresAuth: true,
-    title: 'Category'
+    title: "Category",
+    canAcceess: [
+      "super_admin",
+      "accountant",
+      "internal_control_manager",
+      "business_deveelopment_manager",
+    ],
   },
   warehouse: {
-    path: '/warehouse',
-    name: 'Warehouse',
+    path: "/warehouse",
+    name: "Warehouse",
     requiresAuth: true,
-    title: 'Warehouse'
+    title: "Warehouse",
+    canAcceess: [
+      "super_admin",
+      "accountant",
+      "internal_control_manager",
+      "business_deveelopment_manager",
+    ],
   },
   product: {
-    path: '/product',
-    name: 'Product',
+    path: "/product",
+    name: "Product",
     requiresAuth: true,
-    title: 'Product'
+    title: "Product",
+    canAcceess: [
+      "super_admin",
+      "accountant",
+      "internal_control_manager",
+      "business_deveelopment_manager",
+    ],
   },
   orders: {
-    path: '/orders',
-    name: 'Orders',
+    path: "/orders",
+    name: "Orders",
     requiresAuth: true,
-    title: 'Orders'
+    title: "Orders Management",
+    canAcceess: [
+      "super_admin",
+      "accountant",
+      "customer_service",
+      "internal_control_manager",
+      "business_deveelopment_manager",
+    ],
+  },
+
+  view_orders: {
+    path: "/order/:id",
+    name: "ViewOrders",
+    requiresAuth: true,
+    title: "View Order",
+    canAcceess: [
+      "super_admin",
+      "accountant",
+      "customer_service",
+      "internal_control_manager",
+      "business_deveelopment_manager",
+    ],
+  },
+  order_return: {
+    path: "/orders/returned-order",
+    name: "ReeturnedOrders",
+    requiresAuth: true,
+    title: "Return Processing",
+    canAcceess: [
+      "super_admin",
+      "accountant",
+      "customer_service",
+      "internal_control_manager",
+      "business_deveelopment_manager",
+    ],
   },
   customer: {
-    path: '/customers',
-    name: 'Customers',
+    path: "/customers",
+    name: "Customers",
     requiresAuth: true,
-    title: 'Customers'
+    title: "Customer Management",
+    canAcceess: [
+      "super_admin",
+      "accountant",
+      "customer_service",
+      "internal_control_manager",
+      "business_deveelopment_manager",
+    ],
   },
-  shipment: {
-    path: '/shipment',
-    name: 'Shipment',
+  unverified_customer: {
+    path: "/customers/unverified",
+    name: "UnverifiedCustomers",
     requiresAuth: true,
-    title: 'Shipment'
+    title: "Customer Verification",
+    canAcceess: [
+      "super_admin",
+      "accountant",
+      "customer_service",
+      "internal_control_manager",
+      "business_deveelopment_manager",
+    ],
+  },
+  customer_details: {
+    path: "/customers/:id",
+    name: "CustomerDetails",
+    requiresAuth: true,
+    title: "Customer Details",
+    canAcceess: [
+      "super_admin",
+      "accountant",
+      "customer_service",
+      "internal_control_manager",
+      "business_deveelopment_manager",
+    ],
+  },
+  fleet: {
+    path: "/fleet-management",
+    name: "FleetManagement",
+    requiresAuth: true,
+    title: "Fleet Management",
+    canAcceess: ["super_admin", "business_deveelopment_manager"],
+  },
+  driver: {
+    path: "/driver-management",
+    name: "Driver Management",
+    requiresAuth: true,
+    title: "Driver Management",
+    canAcceess: ["super_admin", "business_deveelopment_manager"],
   },
   wallet: {
-    path: '/wallets',
-    name: 'Wallets',
+    path: "/wallets",
+    name: "Wallets",
     requiresAuth: true,
-    title: 'Wallets'
+    title: "Wallets",
+    canAcceess: ["super_admin", "accountant", "customer_service"],
+  },
+  topup_approval: {
+    path: "/wallets/topup-approval",
+    name: "WalletsTopupApproval",
+    requiresAuth: true,
+    title: "Pending TopUp Approval",
+    canAcceess: ["super_admin", "accountant", "customer_service"],
   },
   credit: {
-    path: '/credits',
-    name: 'Credits',
+    path: "/credits",
+    name: "Credits",
     requiresAuth: true,
-    title: 'Credits'
+    title: "Credits Management",
+  },
+  credit_repayment: {
+    path: "/credits/pending-repayment",
+    name: "Credits Repayment",
+    requiresAuth: true,
+    title: "Credits Repayment Requests",
   },
   payment: {
-    path: '/payments',
-    name: 'Payments',
+    path: "/payments",
+    name: "Payments",
     requiresAuth: true,
-    title: 'Payments'
+    title: "Payments",
   },
-}
+};

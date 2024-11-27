@@ -1,6 +1,8 @@
-import { defineStore } from 'pinia'
-import http from '@/lib/http'
-import { ENDPOINTS } from '@/constants'
+import { defineStore } from "pinia";
+import http from "@/lib/http";
+import { ENDPOINTS } from "@/constants";
+import { useExportStore } from "./export";
+
 import {
   ApiResponseDto,
   Category,
@@ -10,13 +12,14 @@ import {
   FetchCategoryByIdRes,
   QueryFilter,
   UpdateCategoryDto,
-} from '@/types'
-import { handleStoreRequestError, openToastNotification } from '@/utils'
+} from "@/types";
+import { handleStoreRequestError, openToastNotification } from "@/utils";
 
-export const useCategoryStore = defineStore('category', {
+export const useCategoryStore = defineStore("category", {
   state: () => ({
     categoriesData: {} as FetchAllCategoryRes,
     selectedCategory: {} as Category,
+    exportStore: useExportStore(),
   }),
 
   getters: {
@@ -27,10 +30,7 @@ export const useCategoryStore = defineStore('category', {
   actions: {
     async createCategory(payload: CreateCategoryDto): Promise<boolean> {
       try {
-        await http.post<CreateCategoryRes>(
-          ENDPOINTS.CATEGORY,
-          payload
-        );
+        await http.post<CreateCategoryRes>(ENDPOINTS.CATEGORY, payload);
         return true;
       } catch (error) {
         handleStoreRequestError(error);
@@ -44,6 +44,11 @@ export const useCategoryStore = defineStore('category', {
           ENDPOINTS.CATEGORY,
           { params }
         );
+
+        if (params?.limit) {
+          this.exportStore.storeData(data.payload.rows);
+          return data.payload.rows;
+        }
         this.categoriesData = data.payload;
         return data.payload.rows;
       } catch (error) {
@@ -59,8 +64,8 @@ export const useCategoryStore = defineStore('category', {
         );
         if (!data.payload.category_id) {
           openToastNotification({
-            message: 'Category Not Found',
-            variant: 'error',
+            message: "Category Not Found",
+            variant: "error",
           });
 
           return;
@@ -71,12 +76,12 @@ export const useCategoryStore = defineStore('category', {
         handleStoreRequestError(error);
       }
     },
-    async updateCategory(payload: Omit<UpdateCategoryDto, 'id'>, id: string): Promise<boolean> {
+    async updateCategory(
+      payload: Omit<UpdateCategoryDto, "id">,
+      id: string
+    ): Promise<boolean> {
       try {
-        await http.patch<ApiResponseDto>(
-          ENDPOINTS.CATEGORY_BY_ID(id),
-          payload
-        );
+        await http.patch<ApiResponseDto>(ENDPOINTS.CATEGORY_BY_ID(id), payload);
         return true;
       } catch (error) {
         handleStoreRequestError(error);
@@ -86,15 +91,13 @@ export const useCategoryStore = defineStore('category', {
     },
     async deleteCategory(id: string): Promise<boolean> {
       try {
-        await http.delete<ApiResponseDto>(
-          ENDPOINTS.CATEGORY_BY_ID(id)
-        );
+        await http.delete<ApiResponseDto>(ENDPOINTS.CATEGORY_BY_ID(id));
         return true;
       } catch (error) {
         handleStoreRequestError(error);
       }
 
       return false;
-    }
-  }
-})
+    },
+  },
+});

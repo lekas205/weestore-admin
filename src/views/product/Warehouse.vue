@@ -3,13 +3,17 @@
     <div class="tw-flex bg-white mb-10 pa-5">
       <v-row>
         <v-col cols="12" md="3">
-          <StatCard title="Number of Warehouse" value="70" type="blue"/>
+          <StatCard title="Number of Warehouse" :value="pagination.total" type="blue"/>
         </v-col>
       </v-row>
     </div>
     <TableWrapper
+      tableName="warehouse"
       searchLabelText="Search By Warehouse Name"
       createBtnText="Create Warehouse"
+      @export="fetchWarehouse($event)"
+      @search="searchWarehouse($event)"
+      @filter="fetchWarehouse($event)"
       @create="createWarehouseModal = true"
     >
       <v-data-table
@@ -31,7 +35,7 @@
           </div>
         </template>
         <template v-slot:bottom>
-          <TableFooter v-bind="pagination" />
+          <TableFooter v-bind="pagination"  @next="next($event)"  />
         </template>
       </v-data-table>
     </TableWrapper>
@@ -53,6 +57,8 @@ import { ref, computed } from 'vue'
 import { SquarePen, ZoomIn } from 'lucide-vue-next'
 import { useAuthStore, useWarehouseStore } from '@/stores';
 import { Warehouse } from '@/types';
+import {  QueryFilter } from '@/types';
+
 
 // ========= COMPONENTS =========== //
 import StatCard from './components/cards/ProductStatCard.vue'
@@ -75,12 +81,15 @@ const headers = ref<any[]>([
   { title: "STATE", key: "state.name" },
   { title: "MANAGER NAME", key: "manager_name" },
   { title: "PHONE NUMBER", key: "phone" },
-  { title: "VIEW", key: "view", align: 'center' },
+  // { title: "VIEW", key: "view", align: 'center' },
   { title: "ACTION", key: "action", align: 'center' },
 ])
 
 const items = computed<Warehouse[]>(() => {
   return warehouseStore.warehouses;
+});
+const queryFilter = ref<QueryFilter>({
+  page: 1,
 });
 
 const pagination = computed(() => {
@@ -109,10 +118,22 @@ function handleEditCompleted() {
   fetchWarehouse();
 }
 
-async function fetchWarehouse() {
+const next = (page: number) => {
+  queryFilter.value.page = page
+
+  fetchWarehouse(queryFilter.value)
+}
+
+const searchWarehouse = (query: string) => {
+  queryFilter.value.search = query
+
+  fetchWarehouse(queryFilter.value)
+}
+
+async function fetchWarehouse(query?:any) {
   isLoading.value = true;
   try {
-    await warehouseStore.fetchAllWarehouses();
+    await warehouseStore.fetchAllWarehouses(query);
   } catch (error) {
     console.log(error);
   }

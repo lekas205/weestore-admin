@@ -24,28 +24,35 @@ import summaryCardIcon1 from '@/assets/images/svg/summary-card-1-icon.svg'
 import summaryCardIcon2 from '@/assets/images/svg/summary-card-2-icon.svg'
 import summaryCardIcon3 from '@/assets/images/svg/summary-card-3-icon.svg'
 
-import { ref } from 'vue'
+import { computed, ref } from 'vue';
+import { formatAsMoney } from "@/utils";
 
-const summaryData = ref([
+const props = defineProps<{
+  stats: any
+}>();
+
+const summaryData = computed<any[]>(()=>{
+  return [
   {
     title: 'Total Completed Sales',
-    amount: '₦0',
+    amount:  formatAsMoney(props.stats.totalCompletedSales),
     icon: summaryCardIcon1,
     class: 'summary-card-1'
   },
   {
     title: 'Items In Stock',
-    amount: '0',
+    amount: formatAsMoney(props.stats.itemsInStock, false),
     icon: summaryCardIcon2,
     class: 'summary-card-2'
   },
   {
     title: 'Item Out Of Stock',
-    amount: '0',
+    amount: formatAsMoney(props.stats.itemsOutOfStock, false),
     icon: summaryCardIcon3,
     class: 'summary-card-3'
   }
-]);
+]
+})
 
 </script>
 

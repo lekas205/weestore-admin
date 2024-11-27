@@ -1,6 +1,8 @@
-import { defineStore } from 'pinia'
-import http from '@/lib/http'
-import { ENDPOINTS } from '@/constants'
+import { defineStore } from "pinia";
+import http from "@/lib/http";
+import { ENDPOINTS } from "@/constants";
+import { useExportStore } from "./export";
+
 import {
   ApiResponseDto,
   CreateWarehouseDto,
@@ -11,15 +13,15 @@ import {
   Warehouse,
   IState,
   FetchSatesRes,
-  WarehouseByState
-} from '@/types'
-import { handleStoreRequestError } from '@/utils'
+  WarehouseByState,
+} from "@/types";
+import { handleStoreRequestError } from "@/utils";
 
-export const useWarehouseStore = defineStore('warehouse', {
+export const useWarehouseStore = defineStore("warehouse", {
   state: () => ({
     warehouseData: {} as FetchAllWarehouseRes,
     selectedWarehouse: {} as Warehouse,
-    states: [] as IState[]
+    states: [] as IState[],
   }),
 
   getters: {
@@ -30,10 +32,7 @@ export const useWarehouseStore = defineStore('warehouse', {
   actions: {
     async createWarehouse(payload: CreateWarehouseDto): Promise<boolean> {
       try {
-        await http.post<CreateWarehouseRes>(
-          ENDPOINTS.WAREHOUSE,
-          payload
-        );
+        await http.post<CreateWarehouseRes>(ENDPOINTS.WAREHOUSE, payload);
         return true;
       } catch (error) {
         handleStoreRequestError(error);
@@ -41,25 +40,31 @@ export const useWarehouseStore = defineStore('warehouse', {
 
       return false;
     },
-    async fetchAllWarehouses(params?: QueryFilter): Promise<FetchAllWarehouseRes | null> {
+    async fetchAllWarehouses(
+      params?: QueryFilter
+    ): Promise<FetchAllWarehouseRes | null> {
       try {
+        const exportStore = useExportStore();
         const { data } = await http.get<ApiResponseDto<FetchAllWarehouseRes>>(
           ENDPOINTS.WAREHOUSE,
           { params }
         );
+
+        if (params?.limit) {
+          exportStore.storeData(data.payload.rows);
+          return data.payload;
+        }
         this.warehouseData = data.payload;
         return data.payload;
       } catch (error) {
         handleStoreRequestError(error);
       }
 
-      return  null;
+      return null;
     },
     async fetchStates(): Promise<IState[]> {
       try {
-        const { data } = await http.get<FetchSatesRes>(
-          ENDPOINTS.GET_STATES
-        );
+        const { data } = await http.get<FetchSatesRes>(ENDPOINTS.GET_STATES);
         this.states = data.payload;
         return data.payload;
       } catch (error) {
@@ -81,7 +86,7 @@ export const useWarehouseStore = defineStore('warehouse', {
       return [];
     },
     async updateWarehouse(
-      payload: Omit<UpdateWarehouseDto, 'id'>,
+      payload: Omit<UpdateWarehouseDto, "id">,
       id: string
     ): Promise<boolean> {
       try {
@@ -96,5 +101,5 @@ export const useWarehouseStore = defineStore('warehouse', {
 
       return false;
     },
-  }
-})
+  },
+});

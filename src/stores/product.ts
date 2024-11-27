@@ -1,6 +1,8 @@
-import { defineStore } from 'pinia'
-import http from '@/lib/http'
-import { DEFAULT_PAGINATION, ENDPOINTS } from '@/constants'
+import { defineStore } from "pinia";
+import http from "@/lib/http";
+import { useExportStore } from "./export";
+
+import { DEFAULT_PAGINATION, ENDPOINTS } from "@/constants";
 import {
   ApiPagination,
   ApiResponseDto,
@@ -12,39 +14,43 @@ import {
   Product,
   ProductMetrics,
   QueryFilter,
-  UpdateProductDto
-} from '@/types'
-import { handleStoreRequestError } from '@/utils'
+  UpdateProductDto,
+} from "@/types";
+import { handleStoreRequestError } from "@/utils";
 
 interface State {
   productData: ApiPagination<Product[]> | null;
   productMetricsData: ApiPagination<ProductMetrics[]> | null;
   product: Product | null;
   selectedProduct: Product | null;
+  exportStore: any;
+  dashboardStats: any;
 }
 
-export const useProductStore = defineStore('product', {
+export const useProductStore = defineStore("product", {
   state: (): State => ({
     productData: null,
     productMetricsData: null,
     product: null,
     selectedProduct: null,
+    dashboardStats: {},
+    exportStore: useExportStore(),
   }),
 
   getters: {
     productList: (state): Product[] => state.productData?.rows || [],
-    productMetricsList: (state): ProductMetrics[] => state.productMetricsData?.rows || [],
-    productPagination: (state): Pagination => state.productData?.paging || DEFAULT_PAGINATION,
-    productMetricsPagination: (state): Pagination => state.productMetricsData?.paging || DEFAULT_PAGINATION,
+    productMetricsList: (state): ProductMetrics[] =>
+      state.productMetricsData?.rows || [],
+    productPagination: (state): Pagination =>
+      state.productData?.paging || DEFAULT_PAGINATION,
+    productMetricsPagination: (state): Pagination =>
+      state.productMetricsData?.paging || DEFAULT_PAGINATION,
   },
 
   actions: {
     async createProduct(payload: CreateProductDto): Promise<boolean> {
       try {
-        await http.post<CreateProductRes>(
-          ENDPOINTS.PRODUCT,
-          payload
-        );
+        await http.post<CreateProductRes>(ENDPOINTS.PRODUCT, payload);
         return true;
       } catch (error) {
         handleStoreRequestError(error);
@@ -54,12 +60,19 @@ export const useProductStore = defineStore('product', {
     },
     async fetchProducts(params?: QueryFilter): Promise<Product[]> {
       try {
-        const { data } = await http.get<FetchProductsRes>(
+        const { data }: any = await http.get<FetchProductsRes>(
           ENDPOINTS.PRODUCT,
-          { params }
+          {
+            params,
+          }
         );
+
+        if (params?.limit) {
+          this.exportStore.storeData(data.payload.rows);
+          return data.payload?.row;
+        }
         this.productData = data.payload;
-        return data.payload.rows;
+        return data.payload?.rows;
       } catch (error) {
         handleStoreRequestError(error);
       }
@@ -68,12 +81,17 @@ export const useProductStore = defineStore('product', {
     },
     async fetchProductMetrics(params?: QueryFilter): Promise<ProductMetrics[]> {
       try {
-        const { data } = await http.get<FetchProductMetricsRes>(
+        const { data }: any = await http.get<FetchProductMetricsRes>(
           ENDPOINTS.PRODUCT_METRICS,
           { params }
         );
+
+        if (params?.limit) {
+          this.exportStore.storeData(data.payload.rows);
+          return data.payload?.row;
+        }
         this.productMetricsData = data.payload;
-        return data.payload.rows;
+        return data.payload?.rows;
       } catch (error) {
         handleStoreRequestError(error);
       }
@@ -105,9 +123,7 @@ export const useProductStore = defineStore('product', {
     },
     async publishProduct(id: string): Promise<boolean> {
       try {
-        await http.get<ApiResponseDto>(
-          ENDPOINTS.PUBLISH_PRODUCT(id)
-        );
+        await http.get<ApiResponseDto>(ENDPOINTS.PUBLISH_PRODUCT(id));
         return true;
       } catch (error) {
         handleStoreRequestError(error);
@@ -117,9 +133,7 @@ export const useProductStore = defineStore('product', {
     },
     async unpublishProduct(id: string): Promise<boolean> {
       try {
-        await http.get<ApiResponseDto>(
-          ENDPOINTS.UNPUBLISH_PRODUCT(id)
-        );
+        await http.get<ApiResponseDto>(ENDPOINTS.UNPUBLISH_PRODUCT(id));
         return true;
       } catch (error) {
         handleStoreRequestError(error);
@@ -127,5 +141,23 @@ export const useProductStore = defineStore('product', {
 
       return false;
     },
-  }
-})
+    async getDashboardStats(query?: any): Promise<boolean> {
+      try {
+        let { data } = await http.get<ApiResponseDto>(
+          ENDPOINTS.PRODUCTS + "/summary",
+          {
+            params: { ...query },
+          }
+        );
+        this.dashboardStats = data.payload;
+        console.log(data);
+
+        return true;
+      } catch (error) {
+        handleStoreRequestError(error);
+      }
+
+      return false;
+    },
+  },
+});

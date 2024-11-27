@@ -130,7 +130,7 @@ const sidebarLinks = ref<SidebarLink[]>([
   {
     id: 2,
     title: 'Orders',
-    link: null,
+    link: ROUTES.orders.name,
     isActive: false,
     icon: OrdersIcon,
     activeIcon: OrdersIconActive,
@@ -139,7 +139,7 @@ const sidebarLinks = ref<SidebarLink[]>([
   {
     id: 3,
     title: 'Customers',
-    link: null,
+    link: ROUTES.customer.name,
     isActive: false,
     icon: CustomersIcon,
     activeIcon: CustomersIconActive,
@@ -153,34 +153,48 @@ const sidebarLinks = ref<SidebarLink[]>([
     icon: ShipmentIcon,
     activeIcon: ShipmentIconActive,
     customClass: '',
+    subLinks: [
+      {
+        id: 0,
+        title: 'Fleet',
+        link: ROUTES.fleet.name,
+        isActive: false,
+      },
+      {
+        id: 1,
+        title: 'Drivers',
+        link: ROUTES.driver.name,
+        isActive: false,
+      },
+    ]
   },
   {
     id: 5,
     title: 'Wallets',
-    link: null,
+    link: ROUTES.wallet.name,
     isActive: false,
     icon: WalletsIcon,
     activeIcon: WalletsIconActive,
     customClass: '',
   },
-  {
-    id: 6,
-    title: 'Credits',
-    link: null,
-    isActive: false,
-    icon: CreditsIcon,
-    activeIcon: CreditsIconActive,
-    customClass: '',
-  },
-  {
-    id: 7,
-    title: 'Payments',
-    link: null,
-    isActive: false,
-    icon: PaymentsIcon,
-    activeIcon: PaymentsIconActive,
-    customClass: ''
-  },
+  // {
+  //   id: 6,
+  //   title: 'Credits',
+  //   link: ROUTES.credit.name,
+  //   isActive: false,
+  //   icon: CreditsIcon,
+  //   activeIcon: CreditsIconActive,
+  //   customClass: '',
+  // },
+  // {
+  //   id: 7,
+  //   title: 'Payments',
+  //   link: null,
+  //   isActive: false,
+  //   icon: PaymentsIcon,
+  //   activeIcon: PaymentsIconActive,
+  //   customClass: ''
+  // },
 ]);
 
 onBeforeMount(() => {

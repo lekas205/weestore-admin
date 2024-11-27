@@ -15,7 +15,7 @@
                 Name of Category
               </label>
               <AppInput
-                v-model="formData.name.value"
+                v-model:value="formData.name.value"
                 id="category-name"
                 label="Name of Category"
                 :disabled="isLoading"
@@ -29,7 +29,7 @@
                 Description
               </label>
               <AppInput
-                v-model="formData.description.value"
+                v-model:value="formData.description.value"
                 id="description"
                 label="Description"
                 :disabled="isLoading"

@@ -19,7 +19,7 @@
             </v-col>
             <v-col cols="12" md="9">
               <AppInput
-                v-model="formData.name.value"
+                v-model:value="formData.name.value"
                 label="Product Name"
                 type="text"
                 :disabled="isLoading"
@@ -87,7 +87,7 @@
             </v-col>
             <v-col cols="12" md="9">
               <AppInput
-                v-model="formData.price.value"
+                v-model:value="formData.price.value"
                 label="Sales Price"
                 type="number"
                 :disabled="isLoading"
@@ -103,7 +103,7 @@
             </v-col>
             <v-col cols="12" md="9">
               <AppInput
-                v-model="formData.quantity.value"
+                v-model:value="formData.quantity.value"
                 label="Quantity"
                 type="number"
                 :disabled="isLoading"
@@ -122,7 +122,8 @@
               <AppInput
                 label="Value Of Quantity In Stock"
                 type="number"
-                :disabled="isLoading"
+                :value="valOfQtyInStock"
+                disabled
               />
             </v-col>
           </v-row>
@@ -196,7 +197,7 @@
             </v-col>
             <v-col cols="12" md="9">
               <AppInput
-                v-model="formData.manufacturer.value"
+                v-model:value="formData.manufacturer.value"
                 label="Manufacturer"
                 type="text"
                 :disabled="isLoading"
@@ -252,6 +253,10 @@ const warehouses = ref<WarehouseByState>([]);
 const productSizes = ['S', 'M', 'L', 'XL', 'XXL', 'NIL'];
 const states = computed(() => warehouseStore.states);
 const categories = computed(() => categoryStore.categories);
+const valOfQtyInStock = computed(() => {
+  const result = formData.value.price.value * formData.value.quantity.value;
+  return result || null;
+});
 const createProductPayload = ref<CreateProductDto>({} as CreateProductDto);
 
 const formData = ref<CustomFormData>({

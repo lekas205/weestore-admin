@@ -20,34 +20,41 @@ import statCardIcon2 from '@/assets/images/svg/stat-card-2-icon.svg'
 import statCardIcon3 from '@/assets/images/svg/stat-card-3-icon.svg'
 import statCardIcon4 from '@/assets/images/svg/stat-card-4-icon.svg'
 
-import { ref } from 'vue'
+import { computed, ref } from 'vue';
+import { formatAsMoney } from "@/utils";
 
-const statCardData = ref([
-  {
-    title: 'No of Warehouse',
-    value: '0',
-    icon: statCardIcon1,
-    iconClass: 'stat-icon-1',
-  },
-  {
-    title: 'Active Resellers',
-    value: '0',
-    icon: statCardIcon2,
-    iconClass: 'stat-icon-2',
-  },
-  {
-    title: 'Completed Order',
-    value: '0',
-    icon: statCardIcon3,
-    iconClass: 'stat-icon-3',
-  },
-  {
-    title: 'Returned Order',
-    value: '0',
-    icon: statCardIcon4,
-    iconClass: 'stat-icon-4',
-  }
-]);
+const props = defineProps<{
+  stats: any
+}>();
+
+const statCardData = computed<any[]>(()=>{
+  return [
+    {
+      title: 'No of Warehouse',
+      value: formatAsMoney(props.stats.noOfWarehouse, false),
+      icon: statCardIcon1,
+      iconClass: 'stat-icon-1',
+    },
+    {
+      title: 'Active Resellers',
+      value: formatAsMoney(props.stats.noOfactiveResellers, false),
+      icon: statCardIcon2,
+      iconClass: 'stat-icon-2',
+    },
+    {
+      title: 'Completed Order',
+      value: formatAsMoney(props.stats.noOfCompletedOrders, false),
+      icon: statCardIcon3,
+      iconClass: 'stat-icon-3',
+    },
+    {
+      title: 'Returned Order',
+      value: formatAsMoney(props.stats.noOfReturnOrders, false),
+      icon: statCardIcon4,
+      iconClass: 'stat-icon-4',
+    }
+  ]
+})
 </script>
 
 <style lang="scss" scoped>

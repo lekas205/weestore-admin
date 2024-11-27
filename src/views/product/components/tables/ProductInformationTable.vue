@@ -1,6 +1,10 @@
 <template>
   <TableWrapper
     searchLabelText="Search product by name"
+    tableName="productInfo"
+    @search="search"
+    @export="loadProducts($event)"
+    @filter="loadProducts($event)"
   >
     <v-data-table
       :headers="headers"
@@ -66,6 +70,7 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from "vue-router";
 import { ref, computed, watch } from 'vue'
 import { ZoomIn, SquarePen } from 'lucide-vue-next'
 import { Pagination, Product, QueryFilter } from '@/types'
@@ -77,6 +82,7 @@ import TableFooter from '@/components/AppTableFooter.vue'
 import TableImage from '@/components/AppTableImage.vue'
 import { openToastNotification } from '@/utils'
 
+const route = useRoute()
 const emit = defineEmits(['refreshDone', 'editProduct']);
 
 const props = defineProps({
@@ -91,7 +97,12 @@ const productStore = useProductStore();
 const isLoading = ref(false);
 const items = computed<Product[]>(() => productStore.productList);
 const pagination = computed<Pagination>(() => productStore.productPagination);
-const queryFilter = ref<QueryFilter>({ page: 1 });
+const queryFilter = computed<QueryFilter>(()=>{
+  return{
+    page: 1,
+   warehouseId: route.query.warehouse_id as string
+  }
+});
 const headers = ref<any[]>([
   {
     title: 'PRODUCT NAME',
@@ -104,7 +115,7 @@ const headers = ref<any[]>([
   { title: 'SALES PRICE', key: 'price' },
   { title: 'QTY-A', key: 'stock_quantity' },
   { title: 'STATUS', key: 'status' },
-  { title: 'VIEW', key: 'view' },
+  // { title: 'VIEW', key: 'view' },
   { title: 'PUBLISHED', key: 'published' },
   { title: 'ACTION', key: 'action', align: 'center' },
 ]);
@@ -133,7 +144,7 @@ function handleEditAction(item: Product) {
 async function handlePublishToggle(value: any, item: Product) {
   isLoading.value = true;
   let success = false;
-  if (value == true) {
+  if (value === true) {
     success = await productStore.publishProduct(item.product_id);
   }
   else {
@@ -151,13 +162,19 @@ async function handlePublishToggle(value: any, item: Product) {
 
 function handleNextPage(page: number) {
   queryFilter.value.page = page;
-  loadProducts();
+  loadProducts(queryFilter.value);
 }
 
-async function loadProducts() {
+const search = (text: string) => {
+  queryFilter.value.search = text;
+  queryFilter.value.page = 1;
+  loadProducts(queryFilter.value)
+}
+
+async function loadProducts(query?:any) {
   isLoading.value = true;
   try {
-    await productStore.fetchProducts({ ...queryFilter.value });
+    await productStore.fetchProducts({ ...query });
   } catch (error) {
    console.log(error);
   }
@@ -166,7 +183,9 @@ async function loadProducts() {
 
 // ============ ON DEFORE MOUNTED ================ //
 (async function() {
-  loadProducts();
+  console.log({...queryFilter.value});
+  
+  loadProducts(queryFilter.value);
 })()
 </script>
 

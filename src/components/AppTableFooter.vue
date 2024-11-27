@@ -1,5 +1,5 @@
 <template>
-  <div class="table-footer-wrapper">
+  <div class="table-footer-wrapper" v-if="totalNoPages">
     <div class="tw-flex tw-items-center">
       <p>
         Showing {{ currentPage }} of {{ totalNoPages }}
@@ -19,7 +19,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-defineEmits(['next']);
+defineEmits<{
+  (e: "next", val: number)
+}>()
 
 const props = defineProps({
   total: {
@@ -38,6 +40,10 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  page:{
+    type: Number,
+    required: false,
+  }
 })
 
 const currentPage = ref(props.currentPageNo);

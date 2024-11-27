@@ -8,10 +8,10 @@
         <h1 class="tw-text-4xl mb-10 mt-10">Login</h1>
         <form @submit.prevent="login">
           <div class="mb-6">
-            <p class="tw-font-medium">Email</p>
+            <p class="tw-font-medium">Username</p>
             <app-input
-              v-model="formData.username"
-              label="Email"
+              v-model:value="formData.username"
+              label="Username"
               type="text"
               @blur="validateUsername"
               @input="validateUsername"
@@ -23,7 +23,7 @@
           <div class="mb-6">
             <p>Password</p>
             <app-input
-              v-model="formData.password"
+              v-model:value="formData.password"
               label="Password"
               type="password"
               @blur="validatePassword"

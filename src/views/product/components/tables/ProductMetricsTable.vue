@@ -1,6 +1,10 @@
 <template>
   <TableWrapper
     searchLabelText="Search product by name"
+    tableName="productMetrics"
+    @search="search"
+    @export="loadProductMetrics($event)"
+    @filter="loadProductMetrics($event)"
   >
     <v-data-table
       :headers="headers"
@@ -51,6 +55,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRoute } from "vue-router";
+
 import { Pagination, ProductMetrics, QueryFilter } from '@/types'
 import { useProductStore } from '@/stores'
 
@@ -59,12 +65,18 @@ import TableWrapper from '@/components/AppTableWrapper.vue'
 import TableFooter from '@/components/AppTableFooter.vue'
 import TableImage from '@/components/AppTableImage.vue'
 
+const route = useRoute()
 const productStore = useProductStore();
 
 const isLoading = ref(false);
 const items = computed<ProductMetrics[]>(() => productStore.productMetricsList);
 const pagination = computed<Pagination>(() => productStore.productMetricsPagination);
-const queryFilter = ref<QueryFilter>({ page: 1 });
+  const queryFilter = computed<QueryFilter>(()=>{
+  return{
+    page: 1,
+   warehouseId: route.query.warehouse_id as string
+  }
+});
 const headers = ref<any[]>([
   {
     title: "PRODUCT NAME",
@@ -83,13 +95,19 @@ const headers = ref<any[]>([
 
 function handleNextPage(page: number) {
   queryFilter.value.page = page;
-  loadProductMetrics();
+  loadProductMetrics(queryFilter.value);
 }
 
-async function loadProductMetrics() {
+const search = (text: string) => {
+  queryFilter.value.search = text;
+  queryFilter.value.page = 1;
+  loadProductMetrics(queryFilter.value)
+}
+
+async function loadProductMetrics(query?:any) {
   isLoading.value = true;
   try {
-    await productStore.fetchProductMetrics();
+    await productStore.fetchProductMetrics(query);
   } catch (error) {
    console.log(error);
   }
@@ -98,7 +116,7 @@ async function loadProductMetrics() {
 
 // ============ ON DEFORE MOUNTED ================ //
 (async function() {
-  loadProductMetrics();
+  loadProductMetrics(queryFilter.value);
 })()
 
 </script>

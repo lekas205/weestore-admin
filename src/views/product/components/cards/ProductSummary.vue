@@ -19,8 +19,8 @@
     <v-row class="tw-justify-between mt-n8">
       <v-col cols="12" md="3">
         <StatCard
-          title="Total Sales"
-          :value="$formatAsMoney(totalSales, false)"
+          title="Total Products"
+          :value="$formatAsMoney(totalProduts, false)"
           type="red"
         />
       </v-col>
@@ -33,8 +33,8 @@
       </v-col>
       <v-col cols="12" md="3">
         <StatCard
-          title="Quantity Out Of Stock"
-          :value="$formatAsMoney(quantityOutOfStock)"
+          title="Value of Qty out stock"
+          :value="$formatAsMoney(valueOfQtyOutStock)"
           type="red"
         />
       </v-col>
@@ -46,7 +46,7 @@
 import StatCard from './ProductStatCard.vue'
 
 const props = defineProps({
-  totalSales: {
+  totalProduts: {
     type: Number,
     required: true,
   },
@@ -59,6 +59,10 @@ const props = defineProps({
     required: true,
   },
   quantityOutOfStock: {
+    type: Number,
+    required: true,
+  },
+  valueOfQtyOutStock: {
     type: Number,
     required: true,
   },

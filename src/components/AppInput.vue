@@ -2,7 +2,8 @@
   <div class="input-group d-flex align-center rounded-lg">
     <slot name="prepend-icon"></slot>
     <input
-      v-model="model"
+      :value="value"
+      @input="$emit('update:value',($event.target as HTMLInputElement).value)"
       :placeholder="label"
       :type="internalType"
       v-bind="$attrs"
@@ -16,18 +17,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 
-const model = defineModel();
+const model = ref("");
 
 interface Props {
   label?: string;
   type?: string;
+  value?: string | number | null;
 }
+const emits = defineEmits<{
+  (e: "update:value", data: any): void;
+}>();
 
 const props = withDefaults(defineProps<Props>(), {
   label: '',
   type: 'text',
+  value: "" 
 })
 
 defineOptions({
@@ -43,6 +49,7 @@ const internalType = computed(() => {
     return props.type;
   }
 });
+
 </script>
 
 <style lang="scss" scoped>

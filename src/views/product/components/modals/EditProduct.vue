@@ -19,7 +19,7 @@
             </v-col>
             <v-col cols="12" md="9">
               <AppInput
-                v-model="formData.name.value"
+                v-model:value="formData.name.value"
                 label="Product Name"
                 type="text"
                 :disabled="isLoading"
@@ -89,7 +89,7 @@
             </v-col>
             <v-col cols="12" md="9">
               <AppInput
-                v-model="formData.price.value"
+                v-model:value="formData.price.value"
                 label="Sales Price"
                 type="number"
                 :disabled="isLoading"
@@ -105,7 +105,7 @@
             </v-col>
             <v-col cols="12" md="9">
               <AppInput
-                v-model="formData.quantity.value"
+                v-model:value="formData.quantity.value"
                 label="Quantity"
                 type="number"
                 :disabled="isLoading"
@@ -124,7 +124,8 @@
               <AppInput
                 label="Value Of Quantity In Stock"
                 type="number"
-                :disabled="isLoading"
+                :value="valOfQtyInStock"
+                disabled
               />
             </v-col>
           </v-row>
@@ -201,7 +202,7 @@
             </v-col>
             <v-col cols="12" md="9">
               <AppInput
-                v-model="formData.manufacturer.value"
+                v-model:value="formData.manufacturer.value"
                 label="Manufacturer"
                 type="text"
                 :disabled="isLoading"
@@ -261,6 +262,10 @@ const productSizes = ['S', 'M', 'L', 'XL', 'XXL', 'NIL'];
 const states = computed(() => warehouseStore.states);
 const categories = computed(() => categoryStore.categories);
 const selectedProduct = computed<Product>(() => productStore.selectedProduct as Product);
+const valOfQtyInStock = computed(() => {
+  const result = formData.value.price.value! * formData.value.quantity.value!;
+  return result || null;
+});
 
 const defaultFormValue: CustomFormData<UpdateProductDto> = {
   productId: {
@@ -322,7 +327,7 @@ watch(selectedProduct, async (newValue) => {
   formData.value.price.value = data.price;
   formData.value.quantity.value = data.stock_quantity;
   formData.value.state.value = data.state_id;
-  formData.value.category.value = newValue.category;
+  formData.value.category.value = newValue.category_id;
   formData.value.manufacturer.value = newValue.manufacturer;
 
   loadingWarehouse.value = true;

@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from "zod";
 
 export const QueryFilterSchema = z.object({
   limit: z.number().optional(),
@@ -7,4 +7,5 @@ export const QueryFilterSchema = z.object({
   search: z.string().optional(),
   start_date: z.string().optional(),
   end_date: z.string().optional(),
-})
+  warehouseId: z.string().optional(),
+});

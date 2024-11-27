@@ -15,7 +15,7 @@
                 Name of Warehouse
               </label>
               <AppInput
-                 v-model="formData.name.value"
+                 v-model:value="formData.name.value"
                 id="warehouse-name"
                 label="Name of Warehouse"
                 type="text"
@@ -30,7 +30,7 @@
                 Warehouse Manager
               </label>
               <AppInput
-                v-model="formData.managerName.value"
+                v-model:value="formData.managerName.value"
                 id="manager-name"
                 label="Manager Name"
                 type="text"
@@ -45,7 +45,7 @@
                 Warehouse Manager Phone Number
               </label>
               <AppInput
-                v-model="formData.managerPhoneNo.value"
+                v-model:value="formData.managerPhoneNo.value"
                 id="phone-number"
                 label="Phone Number"
                 type="text"
@@ -60,7 +60,7 @@
                 Warehouse Address
               </label>
               <AppInput
-                v-model="formData.address.value"
+                v-model:value="formData.address.value"
                 id="address"
                 label="Address"
                 type="text"

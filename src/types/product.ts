@@ -109,6 +109,7 @@ export type Product = {
   status: string;
   warehouse_name: string;
   category: string;
+  category_id: string;
   images: {
     imageUrl: string;
     isPrimary: boolean
