@@ -243,9 +243,8 @@ export async function handleFileUpload(
     const uploadPayloads: PutObjectCommandInput[] = [];
     files.forEach((file) => {
       const timestampprefix = new Date().getTime();
-      const Key = `morebuy/${timestampprefix}_${file.name
-        .split(" ")
-        .join("_")}`;
+      const folder = import.meta.env.DEV ? 'staging/' : '';
+      const Key = `${folder}${timestampprefix}_${file.name.trim().split(" ").join("_")}`;
       uploadPayloads.push({
         Bucket: import.meta.env.VITE_AWS_S3_BUCKET,
         Key,
@@ -266,7 +265,7 @@ export async function handleFileUpload(
       const command = new PutObjectCommand(payload);
       try {
         await bucket.send(command);
-        urls.push(`https://fajo-bc.s3.amazonaws.com/${payload.Key}`);
+        urls.push(`https://morebuy-bc.s3.amazonaws.com/${payload.Key}`);
       } catch (error) {
         console.log(error);
       }
