@@ -85,7 +85,7 @@ const headers = ref<any[]>([
   { key: "name", title: "Name" },
   { key: "email", title: "Email" },
   { key: "phone_no", title: "Phone Number" },
-  { key: "platform", title: "How do you hear about us" },
+  { key: "referral", title: "How do you hear about us" },
   { key: "action", title: "Action" },
 ]);
 
@@ -98,7 +98,7 @@ const items = computed<any[]>(() => {
       name: `${formatText(elm.first_name)} ${formatText(elm.last_name)}`,
       email: elm.email,
       phone_no: elm.phone,
-      platform: elm.platform ?? "--",
+      referral: elm.referral ?? "--",
     };
   });
 });
