@@ -47,40 +47,42 @@
 
       <!-- Table Footer -->
       <template v-slot:bottom>
-        <TableFooter v-bind="pagination" />
+        <TableFooter v-bind="pagination" @next="handleNextPage" />
       </template>
     </v-data-table>
   </TableWrapper>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
 
-import { Pagination, ProductMetrics, QueryFilter } from '@/types'
-import { useProductStore } from '@/stores'
+import { Pagination, ProductMetrics, QueryFilter } from "@/types";
+import { useProductStore } from "@/stores";
 
 // ================ COMPONENTS ================ //
-import TableWrapper from '@/components/AppTableWrapper.vue'
-import TableFooter from '@/components/AppTableFooter.vue'
-import TableImage from '@/components/AppTableImage.vue'
+import TableWrapper from "@/components/AppTableWrapper.vue";
+import TableFooter from "@/components/AppTableFooter.vue";
+import TableImage from "@/components/AppTableImage.vue";
 
-const route = useRoute()
+const route = useRoute();
 const productStore = useProductStore();
 
 const isLoading = ref(false);
 const items = computed<ProductMetrics[]>(() => productStore.productMetricsList);
-const pagination = computed<Pagination>(() => productStore.productMetricsPagination);
-  const queryFilter = computed<QueryFilter>(()=>{
-  return{
+const pagination = computed<Pagination>(
+  () => productStore.productMetricsPagination
+);
+const queryFilter = computed<QueryFilter>(() => {
+  return {
     page: 1,
-   warehouseId: route.query.warehouse_id as string
-  }
+    warehouseId: route.query.warehouse_id as string,
+  };
 });
 const headers = ref<any[]>([
   {
     title: "PRODUCT NAME",
-    align: 'start',
+    align: "start",
     key: "product_name",
   },
   { title: "CATEGORY", key: "category" },
@@ -101,26 +103,23 @@ function handleNextPage(page: number) {
 const search = (text: string) => {
   queryFilter.value.search = text;
   queryFilter.value.page = 1;
-  loadProductMetrics(queryFilter.value)
-}
+  loadProductMetrics(queryFilter.value);
+};
 
-async function loadProductMetrics(query?:any) {
+async function loadProductMetrics(query?: any) {
   isLoading.value = true;
   try {
     await productStore.fetchProductMetrics(query);
   } catch (error) {
-   console.log(error);
+    console.log(error);
   }
   isLoading.value = false;
 }
 
 // ============ ON DEFORE MOUNTED ================ //
-(async function() {
+(async function () {
   loadProductMetrics(queryFilter.value);
-})()
-
+})();
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
