@@ -1,400 +1,432 @@
 <template>
-    <section class="px-4">
-        <div class="title-container">
-        <div class="title tw-flex tw-gap-[50px] tw-justify-center mt-5">
-            <p 
-            class="tw-font-[700] tw-text-[20px] tw-text-[#000000] tw-cursor-pointer text-capitalize" 
-            > {{ returnType }} return </p>
-        </div>
+  <section class="px-4">
+    <div class="title-container">
+      <div class="title tw-flex tw-gap-[50px] tw-justify-center mt-5">
+        <p
+          class="tw-font-[700] tw-text-[20px] tw-text-[#000000] tw-cursor-pointer text-capitalize"
+        >
+          {{ returnType }} return
+        </p>
+      </div>
 
-        <div class="title-tab">
-            <p class="text-red tw-text-lg">Order Information</p>
-        </div>
-        <hr>
-        </div>
-        <div>
-        <v-row>
-            <v-col cols="12" md="3">
-            <p class="tw-text-lg tw-font-medium">Wharehouse</p>
-            </v-col>
-            <v-col cols="12" md="9">
-            <AppInput
-                v-model:value="formData.wharehouse"
-                label="Wharehouse"
-                type="text"
-                readonly
-            />
-            <!-- {{ formData.wharehouse }} -->
-            <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
-            </v-col>
-        </v-row>
-
-        <v-row>
-            <v-col cols="12" md="3">
-            <p class="tw-text-lg tw-font-medium">Reseller’s Name</p>
-            </v-col>
-            <v-col cols="12" md="9">
-            <AppInput
-                label="Reseller’s Name"
-                type="text"
-                readonly
-                v-model:value="formData.reseller_name"
-            />
-            <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
-            </v-col>
-        </v-row>
-
-        <v-row class="mb-4">
-            <v-col cols="12" md="3">
-            <p class="tw-text-lg tw-font-medium">Order ID</p>
-            </v-col>
-            <v-col cols="12" md="9">
-            <AppInput
-                label="Order ID"
-                type="text"
-                readonly
-                v-model:value="formData.order_id"
-            />
-            <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
-            </v-col>
-        </v-row>
-
-        <hr/>
-
-        <v-row class="mt-4">
-            <v-col cols="12" md="6" v-for="(i, index ) in formData.orders">
-                <v-row>
-                    <v-col cols="12" md="3">
-                        <p class="tw-text-lg tw-font-medium">Product Name</p>
-                    </v-col>
-                    <v-col cols="12" md="9">
-                        <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formData.orders[index].product_name }} </p>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col cols="12" md="3">
-                        <p class="tw-text-lg tw-font-medium">Sales Price</p>
-                    </v-col>
-                    <v-col cols="12" md="9">
-                        <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formatAsMoney(formData.orders[index].price) }} </p>
-
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col cols="12" md="3">
-                        <p class="tw-text-lg tw-font-medium">Quantity Bought</p>
-                    </v-col>
-                    <v-col cols="12" md="9">
-                        <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formData.orders[index].quantity }} </p>
-
-                    </v-col>
-
-                </v-row>
-                <v-row class="mb-3">
-                    <v-col cols="12" md="3">
-                        <p class="tw-text-lg tw-font-medium">Value of Quantity Bought</p>
-                    </v-col>
-                    <v-col cols="12" md="9">
-                        <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formatAsMoney(formData.orders[index].amount) }} </p>
-                    </v-col>
-                </v-row>
-                <hr/>
-            </v-col>
-        </v-row>
-        </div>
-
-        <hr>
-
-        <v-row class=" mt-4">
-        <v-col cols="12" md="6">
-            <v-row class="">
-                <v-col cols="12" md="5">
-                    <p class="tw-text-lg tw-font-medium">Total Amount Paid</p>
-                </v-col>
-                <v-col cols="12" md="7">
-                    <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formatAsMoney(formData.amount_paid) }} </p>
-                </v-col>
-            </v-row>
+      <div class="title-tab">
+        <p class="text-red tw-text-lg">Order Information</p>
+      </div>
+      <hr />
+    </div>
+    <div>
+      <v-row>
+        <v-col cols="12" md="3">
+          <p class="tw-text-lg tw-font-medium">Wharehouse</p>
         </v-col>
-        <v-col cols="12" md="6">
-            <v-row class="">
-                <v-col cols="12" md="4">
-                    <p class="tw-text-lg tw-font-medium">Amount to Return</p>
-                </v-col>
-                <v-col cols="12" md="8">
-                    <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formatAsMoney(formData.amount_retain) }} </p>
-                    <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
-                </v-col>
-            </v-row>
+        <v-col cols="12" md="9">
+          <AppInput
+            v-model:value="formData.wharehouse"
+            label="Wharehouse"
+            type="text"
+            readonly
+          />
+          <!-- {{ formData.wharehouse }} -->
+          <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
         </v-col>
-        </v-row>
+      </v-row>
 
+      <v-row>
+        <v-col cols="12" md="3">
+          <p class="tw-text-lg tw-font-medium">Reseller’s Name</p>
+        </v-col>
+        <v-col cols="12" md="9">
+          <AppInput
+            label="Reseller’s Name"
+            type="text"
+            readonly
+            v-model:value="formData.reseller_name"
+          />
+          <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
+        </v-col>
+      </v-row>
+
+      <v-row class="mb-4">
+        <v-col cols="12" md="3">
+          <p class="tw-text-lg tw-font-medium">Order ID</p>
+        </v-col>
+        <v-col cols="12" md="9">
+          <AppInput
+            label="Order ID"
+            type="text"
+            readonly
+            v-model:value="formData.order_id"
+          />
+          <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
+        </v-col>
+      </v-row>
+
+      <hr />
+
+      <v-row class="mt-4">
+        <v-col cols="12" md="6" v-for="(i, index) in formData.orders">
+          <v-row>
+            <v-col cols="12" md="3">
+              <p class="tw-text-lg tw-font-medium">Product Name</p>
+            </v-col>
+            <v-col cols="12" md="9">
+              <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">
+                {{ formData.orders[index].product_name }}
+              </p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="3">
+              <p class="tw-text-lg tw-font-medium">Sales Price</p>
+            </v-col>
+            <v-col cols="12" md="9">
+              <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">
+                {{ formatAsMoney(formData.orders[index].price) }}
+              </p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="3">
+              <p class="tw-text-lg tw-font-medium">Quantity Returned</p>
+            </v-col>
+            <v-col cols="12" md="9">
+              <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">
+                {{ formData.orders[index].quantity }}
+              </p>
+            </v-col>
+          </v-row>
+          <v-row class="mb-3">
+            <v-col cols="12" md="3">
+              <p class="tw-text-lg tw-font-medium">
+                Value of Quantity Returned
+              </p>
+            </v-col>
+            <v-col cols="12" md="9">
+              <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">
+                {{ formatAsMoney(formData.orders[index].amount) }}
+              </p>
+            </v-col>
+          </v-row>
+          <hr />
+        </v-col>
+      </v-row>
+    </div>
+
+    <hr />
+
+    <v-row class="mt-4">
+      <v-col cols="12" md="6">
         <v-row class="">
-        <v-col cols="12" md="6">
-            <v-row class="">
-                <v-col cols="12" md="5">
-                    <p class="tw-text-lg tw-font-medium"> Reason to Return</p>
-                </v-col>
-                <v-col cols="12" md="7">
-                    <v-textarea
-                        v-model="formData.reason"
-                        variant="outlined"
-                    ></v-textarea>
-                    <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
-                </v-col>
-            </v-row>
-        </v-col>
-        <v-col cols="12" md="6">
-            <v-row class="">
-                <v-col cols="12" md="4">
-                    <p class="tw-text-lg tw-font-medium">Amount to Retain</p>
-                </v-col>
-                <v-col cols="12" md="8">
-                    <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">{{ formatAsMoney(formData.amount_return) }}</p>
-                </v-col>
-            </v-row>
-        </v-col>
+          <v-col cols="12" md="5">
+            <p class="tw-text-lg tw-font-medium">Total Amount Paid</p>
+          </v-col>
+          <v-col cols="12" md="7">
+            <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">
+              {{ formatAsMoney(formData.amount_paid) }}
+            </p>
+          </v-col>
         </v-row>
-    </section>
-  </template>
-  
-  <script setup lang="ts">
-  import { computed, onMounted, ref, watch } from 'vue'
-  import AppInput from '@/components/AppInput.vue'
-  import AppButton from '@/components/AppButton.vue'
-  import AppFileUpload from '@/components/AppFileUpload.vue'
-  import { CustomFormData, CreateProductDto, Category, IState } from '@/types'
-  import { formValidator, handleFileUpload, openToastNotification, formatAsMoney } from '@/utils'
-  import { CreateProductSchema } from '@/schemas'
-  import { useOrderStore } from '@/stores'
-  
-  const orderStore = useOrderStore();
-  const emit = defineEmits(['close', 'refreshData']);
-  const props = defineProps({
-    openModal: {
-      type: Boolean,
-      default: false,
-    },
-    order: {
-      type: Object,
-      default(){
-        return {}
-      }
-    },
-    status: {
-        type: String,
-        default: "request",
-        description: "options are request and approval "
-    },
-    categories: {
-      type: Array,
-      default() {
-        const data: Array<Category> = [];
-        return data;
-      },
-    },
-    states: {
-      type: Array,
-      default() {
-        const data: Array<IState> = [];
-        return data;
-      },
-    },
-  });
-  
-  const returnType = ref('half');
-  const isLoading = ref<boolean>(false);
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-row class="">
+          <v-col cols="12" md="4">
+            <p class="tw-text-lg tw-font-medium">Amount to Return</p>
+          </v-col>
+          <v-col cols="12" md="8">
+            <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">
+              {{ formatAsMoney(formData.amount_retain) }}
+            </p>
+            <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
 
-  const formData = ref<any>({
-    order_id: "",
-    wharehouse: "",
-    reseller_name: "",
-    orders: [{
+    <v-row class="">
+      <v-col cols="12" md="6">
+        <v-row class="">
+          <v-col cols="12" md="5">
+            <p class="tw-text-lg tw-font-medium">Reason to Return</p>
+          </v-col>
+          <v-col cols="12" md="7">
+            <v-textarea
+              v-model="formData.reason"
+              variant="outlined"
+            ></v-textarea>
+            <!-- <p class="error-text">{{ formData.name.errorMessage }}</p> -->
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-row class="">
+          <v-col cols="12" md="4">
+            <p class="tw-text-lg tw-font-medium">Amount to Retain</p>
+          </v-col>
+          <v-col cols="12" md="8">
+            <p class="px-4 py-2 tw-border tw-border-black tw-rounded-md">
+              {{ formatAsMoney(formData.amount_return) }}
+            </p>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+  </section>
+</template>
+
+<script setup lang="ts">
+import { computed, onMounted, ref, watch } from "vue";
+import AppInput from "@/components/AppInput.vue";
+import AppButton from "@/components/AppButton.vue";
+import AppFileUpload from "@/components/AppFileUpload.vue";
+import { CustomFormData, CreateProductDto, Category, IState } from "@/types";
+import {
+  formValidator,
+  handleFileUpload,
+  openToastNotification,
+  formatAsMoney,
+} from "@/utils";
+import { CreateProductSchema } from "@/schemas";
+import { useOrderStore } from "@/stores";
+
+const orderStore = useOrderStore();
+const emit = defineEmits(["close", "refreshData"]);
+const props = defineProps({
+  openModal: {
+    type: Boolean,
+    default: false,
+  },
+  order: {
+    type: Object,
+    default() {
+      return {};
+    },
+  },
+  status: {
+    type: String,
+    default: "request",
+    description: "options are request and approval ",
+  },
+  categories: {
+    type: Array,
+    default() {
+      const data: Array<Category> = [];
+      return data;
+    },
+  },
+  states: {
+    type: Array,
+    default() {
+      const data: Array<IState> = [];
+      return data;
+    },
+  },
+});
+
+const returnType = ref("half");
+const isLoading = ref<boolean>(false);
+
+const formData = ref<any>({
+  order_id: "",
+  wharehouse: "",
+  reseller_name: "",
+  orders: [
+    {
       porduct_name: "",
       price: "",
       quantity: "",
       amount: "",
+    },
+  ],
+  amount_paid: "",
+  amount_retain: "",
+  reason: "",
+  amount_return: "",
+});
 
-    }],
-    amount_paid: "",
-    amount_retain: "",
-    reason: "",
-    amount_return: ""
-
-  })
-  
-  function closeModal() {
-    if (isLoading.value === true) return;
-    for (const key in formData.value) {
-      if (Object.prototype.hasOwnProperty.call(formData.value, key)) {
-        if (formData.value[key] === 'string') {
-          formData.value[key] = "";
-        }
+function closeModal() {
+  if (isLoading.value === true) return;
+  for (const key in formData.value) {
+    if (Object.prototype.hasOwnProperty.call(formData.value, key)) {
+      if (formData.value[key] === "string") {
+        formData.value[key] = "";
       }
     }
-    emit('close');
   }
+  emit("close");
+}
 
-  const formatOrder = computed(()=> {
-    return props.order?.orderItems?.map((elm:any)=>{
-        return {
-          id: elm.product_id,
-          product_name: elm.product_name,
-          price: elm.price,
-          quantity: elm.quantity,
-          amount: elm.amount,
-          initial_quantity:  Number(elm.quantity),
-        }
-      })
-  })
+const formatOrder = computed(() => {
+  return props.order?.orderItems?.map((elm: any) => {
+    return {
+      id: elm.product_id,
+      product_name: elm.product_name,
+      price: elm.price,
+      quantity: elm.quantity,
+      amount: elm.amount,
+      initial_quantity: Number(elm.quantity),
+    };
+  });
+});
 
-  watch(()=> props.order, (newval: any)=>{
-    if(newval){
+watch(
+  () => props.order,
+  (newval: any) => {
+    if (newval) {
       formData.value.reason = props.order.reason;
-      formData.value.wharehouse = props.order.warehouse_name || props.order.warehouse;
+      formData.value.wharehouse =
+        props.order.warehouse_name || props.order.warehouse;
       formData.value.order_id = props.order.order_no;
-      formData.value.reseller_name = props.order.customer_name || props.order.first_name + " " + props.order.last_name
-      formData.value.orders = formatOrder.value
-      formData.value.amount_paid = props.order.amount ||  props.order.total_amount;      
+      formData.value.reseller_name =
+        props.order.customer_name ||
+        props.order.first_name + " " + props.order.last_name;
+      formData.value.orders = formatOrder.value;
+      formData.value.amount_paid =
+        props.order.amount || props.order.total_amount;
 
       // check return type
-      if(!props.order.return_type) return
-      if(props.order.return_type === "FULL_RETURN"){
-        returnType.value = "full"
-      }else{
-        returnType.value = "half"
+      if (!props.order.return_type) return;
+      if (props.order.return_type === "FULL_RETURN") {
+        returnType.value = "full";
+      } else {
+        returnType.value = "half";
       }
     }
-  } )
+  }
+);
 
-  watch(
-    () => formData.value.orders,
-    (newValue:any) => {
-      if(newValue){
-        recalculateORders()
-      }
+watch(
+  () => formData.value.orders,
+  (newValue: any) => {
+    if (newValue) {
+      recalculateORders();
+    }
+  },
+  { deep: true }
+);
+
+const disabledBtn = computed(() => {
+  if (!formData.value.reason?.length) return true;
+  return formData.value.orders.some(
+    (elm: any) => elm.quantity > elm.initial_quantity
+  );
+});
+
+const recalculateORders = () => {
+  formData.value.orders.forEach((elm: any, index: number) => {
+    elm.amount = elm.price * elm.quantity;
+    index === 0
+      ? (formData.value.amount_retain = elm.amount)
+      : (formData.value.amount_retain += elm.amount);
+  });
+  formData.value.amount_return =
+    formData.value.amount_paid - formData.value.amount_retain;
+};
+
+const createReturnRequestDTO = computed(() => {
+  return {
+    ordeerId: props.order.order_id,
+    payload: {
+      reason: formData.value.reason,
+      returnType: returnType.value === "half" ? "HALF_RETURN" : "FULL_RETURN",
+      products: formData.value.orders.map((elm: any) => {
+        return {
+          productId: elm.id,
+          quantity: Number(elm.quantity),
+          amount: elm.amount,
+        };
+      }),
     },
-    { deep: true }
-  )
+  };
+});
 
-  const disabledBtn = computed(()=>{
-    if(!formData.value.reason?.length) return true
-    return formData.value.orders.some((elm:any)=> elm.quantity > elm.initial_quantity)
-  })
+const submit = async () => {
+  isLoading.value = true;
+  props.status === "request"
+    ? await orderStore.initiateOrderReturn(createReturnRequestDTO.value)
+    : await orderStore.ApproveDeclineReturn({
+        requestId: props.order.request_id,
+        action: "approve",
+      });
+  isLoading.value = false;
 
-  const recalculateORders = () => {
-    formData.value.orders.forEach((elm: any, index:number)=>{
-      elm.amount = elm.price * elm.quantity
-       index === 0 ? 
-       formData.value.amount_retain = elm.amount 
-       : formData.value.amount_retain+= elm.amount
+  if (props.status === "request") {
+    openToastNotification({
+      message: "Return order request submitted",
+      variant: "success",
     });
-    formData.value.amount_return =  formData.value.amount_paid -  formData.value.amount_retain
-  } 
+  } else {
+    openToastNotification({
+      message: "Return order has been approved",
+      variant: "success",
+    });
+  }
 
-  const createReturnRequestDTO = computed(()=>{
-    return {
-      ordeerId: props.order.order_id,
-      payload: {
-        reason: formData.value.reason,
-        returnType : returnType.value === 'half' ? "HALF_RETURN": "FULL_RETURN",
-        products: formData.value.orders.map((elm:any)=>{
-          return {
-            productId: elm.id,
-            quantity: Number(elm.quantity) ,
-            amount: elm.amount,
-          }
-        })
-      }
-    }
-  })
+  closeModal();
+  emit("refreshData", "approve");
+};
+</script>
 
-  const submit = async () => {
-    isLoading.value = true;
-    props.status === 'request' ?
-      await  orderStore.initiateOrderReturn(createReturnRequestDTO.value)
-      : await orderStore.ApproveDeclineReturn({requestId : props.order.request_id, action: "approve"});
-    isLoading.value = false;
+<style lang="scss" scoped>
+.title-container {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #f8f9fa;
+}
 
-    if(props.status === 'request'){
-      openToastNotification({
-          message: "Return order request submitted",
-          variant: 'success'
-        });
-    }else{
-      openToastNotification({
-          message: "Return order has been approved",
-          variant: 'success'
-        });
-    }
+.title {
+  margin-bottom: 2rem;
+}
 
-    closeModal()
-    emit("refreshData", "approve")
+.divider {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  gap: 1rem;
+
+  p {
+    text-align: center;
   }
-  </script>
-  
-  <style lang="scss" scoped>
-  .title-container {
-    margin-bottom: 1rem;
-    border-bottom: 1px solid #F8F9FA;
-  }
-  
-  .title {
-    margin-bottom: 2rem;
-  }
-  
-  .divider {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-  }
-  
-  .checkbox-wrapper {
-    display: flex;
-    gap: 1rem;
-  
-    p {
-      text-align: center;
-    }
-  }
-  
-  .product-checkbox {
-    -webkit-appearance: none;
-    appearance: none;
-    background-color: #fff;
-    margin: 0;
-    font: inherit;
-    color: currentColor;
-    width: 2em;
-    height: 2em;
-    border: 0.15em solid currentColor;
-    border-radius: 0.5em;
-    transform: translateY(-0.075em);
-    display: grid;
-    place-content: center;
-  }
-  
-  .product-checkbox::before {
-    content: "";
-    width: 1em;
-    height: 1em;
-    transform: scale(0);
-    transition: 120ms transform ease-in-out;
-    box-shadow: inset 1em 1em var(--form-control-color);
-    background-color: CanvasText;
-  }
-  
-  .product-checkbox:checked::before {
-    transform: scale(1);
-  }
-  
-  .product-select {
-    max-height: 60px;
-  }
-  
-  .btn-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 5rem;
-  }
-  </style>
-  
+}
+
+.product-checkbox {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 2em;
+  height: 2em;
+  border: 0.15em solid currentColor;
+  border-radius: 0.5em;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+}
+
+.product-checkbox::before {
+  content: "";
+  width: 1em;
+  height: 1em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--form-control-color);
+  background-color: CanvasText;
+}
+
+.product-checkbox:checked::before {
+  transform: scale(1);
+}
+
+.product-select {
+  max-height: 60px;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 5rem;
+}
+</style>
