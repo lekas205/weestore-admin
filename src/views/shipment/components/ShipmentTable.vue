@@ -33,7 +33,7 @@
                 <ZoomIn class="tw-cursor-pointer"  @click="emits('showAddress', item.address)" />
             </template>
             <template v-slot:item.view_movement="{ item }">
-                <ZoomIn class="tw-cursor-pointer" />
+                <ZoomIn class="tw-cursor-pointer" @click="emits('trackDelivery', item)" />
             </template>
             
 
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { ZoomIn } from 'lucide-vue-next'
 
@@ -59,8 +59,7 @@ import AppSelect from "@/components/AppSelect.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
-import { formatDate } from "@/utils";
-import { openToastNotification } from '@/utils'
+import { openToastNotification, formatDate } from '@/utils'
 import { DRIVER_STATUS_OPTIONS } from "@/constants/common.ts";
 
 const props = defineProps<{
@@ -75,8 +74,9 @@ const emits = defineEmits<{
     (e: "fetchMore", page: any): void;
     (e: "updateStatus", select: any): void;
     (e: "viewOrder", item: any):void;
-    (e: "export", item: any):void
-    (e: "showAddress", item: string):void
+    (e: "export", item: any):void;
+    (e: "showAddress", item: string):void;
+    (e: "trackDelivery", item: any):void
 }>();
 
 const select = ref('');

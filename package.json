@@ -13,6 +13,7 @@
     "@vueuse/core": "^11.0.3",
     "axios": "^1.7.3",
     "dayjs": "^1.11.6",
+    "firebase": "^11.1.0",
     "html2pdf.js": "^0.10.1",
     "lucide-vue-next": "^0.435.0",
     "pinia": "^2.1.7",
@@ -22,6 +23,7 @@
     "vue-router": "^4.3.3",
     "vue-toast-notification": "^3.1.2",
     "vue3-dropzone": "^2.2.1",
+    "vue3-google-map": "^0.21.0",
     "vue3-html2pdf": "^1.1.2",
     "vuetify": "^3.7.0",
     "zod": "^3.23.8"

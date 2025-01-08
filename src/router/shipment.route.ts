@@ -1,6 +1,7 @@
 import { PRIVATE, ROUTES } from "@/constants";
 import shipment from "../views/shipment/index.vue";
 import driver from "../views/shipment/drivers.vue";
+import trackDelivery from "../views/shipment/track-delivery.vue";
 
 export const shipmentRoutes = [
   {
@@ -21,6 +22,16 @@ export const shipmentRoutes = [
       layout: PRIVATE,
       title: ROUTES.driver.title,
       requiresAuth: ROUTES.driver.requiresAuth,
+    },
+  },
+  {
+    path: ROUTES.track_delivery.path,
+    name: ROUTES.track_delivery.name,
+    component: trackDelivery,
+    meta: {
+      layout: PRIVATE,
+      title: ROUTES.track_delivery.title,
+      requiresAuth: ROUTES.track_delivery.requiresAuth,
     },
   },
 ];

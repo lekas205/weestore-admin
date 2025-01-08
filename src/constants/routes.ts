@@ -158,6 +158,13 @@ export const ROUTES = {
     title: "Driver Management",
     canAcceess: ["super_admin", "business_deveelopment_manager"],
   },
+  track_delivery: {
+    path: "/fleet-management/track-delivery/:id",
+    name: "Track Delivery",
+    requiresAuth: true,
+    title: "Fleet Management",
+    canAcceess: ["super_admin", "business_development_manager"],
+  },
   wallet: {
     path: "/wallets",
     name: "Wallets",
