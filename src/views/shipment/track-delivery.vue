@@ -1,5 +1,8 @@
 <template>
   <div class="mt-5">
+    <div class="pl-5">
+      <v-btn color="primary" @click="$router.back()" class="mb-5"> <ChevronLeft/> Back </v-btn>
+    </div>
     <GoogleMap
       style="width: 100%; height: 90vh"
       :api-key="apiKey"
@@ -19,14 +22,16 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { GoogleMap, Marker, AdvancedMarker } from 'vue3-google-map'
-import { doc, onSnapshot } from "firebase/firestore";
+import { GoogleMap, AdvancedMarker } from 'vue3-google-map'
+import { doc, onSnapshot, getDoc } from "firebase/firestore";
+import { ChevronLeft } from 'lucide-vue-next';
 
 import { useAuthStore, useDriverStore } from '@/stores';
 import { openToastNotification } from '@/utils';
 import { db } from '@/lib/firebase';
 
 import carImg from '@/assets/images/png/car-rotated.png';
+import dayjs from 'dayjs';
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -140,31 +145,49 @@ onMounted(async () => {
     }
 
     const collection = import.meta.env.DEV ? 'driver_location_staging' : 'driver_location';
-
-    unsubscribe = onSnapshot(
-      doc(db, collection, order.value.driver_phone),
-      (doc) => {
-        const data: any = doc.data();
-        if (!data || data.coords?.latitude || data.coords?.longitude) {
-          openToastNotification({
-            message: `Realtime tracking not available`,
-            variant: 'error',
-          });
-          return;
-        }
-        position.value = {
-          lat: data?.coords?.latitude,
-          lng: data?.coords?.longitude
-        }
-      },
-      (error) => {
-        console.log(error);
+    const docRef = doc(db, collection, order.value.driver_phone);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      if (data.updated_at) {
+        const val = dayjs(data.updated_at.toDate()).format('ddd MMM DD YYYY HH:mm:ss A');
+        console.log(data.updated_at.toDate())
         openToastNotification({
-          message: `Firebase subscription error`,
-          variant: 'error',
-        })
+          message: `Last realtime update at: ${val}`,
+          variant: 'success',
+          duration: 0,
+        });
       }
-    );
+
+      unsubscribe = onSnapshot(
+        doc(db, collection, order.value.driver_phone),
+        (doc) => {
+          const data: any = doc.data();
+
+          if (data.coords) {
+            position.value = {
+              lat: data?.coords?.latitude,
+              lng: data?.coords?.longitude
+            }
+          }          
+        },
+        (error) => {
+          console.log(error);
+          openToastNotification({
+            message: `Firebase subscription error`,
+            variant: 'error',
+          })
+        }
+      );
+      
+    }
+    else {
+      openToastNotification({
+        message: `Realtime tracking not available`,
+        variant: 'error',
+        duration: 0,
+      });
+    }
 
     // let count = 0
     // const intervalId = setInterval(function() {
