@@ -139,12 +139,13 @@ onMounted(async () => {
       return;
     }
 
+    const collection = import.meta.env.DEV ? 'driver_location_staging' : 'driver_location';
+
     unsubscribe = onSnapshot(
-      doc(db, 'driver_location', order.value.driver_phone),
+      doc(db, collection, order.value.driver_phone),
       (doc) => {
-        console.log("Current data: ", doc.data());
         const data: any = doc.data();
-        if (!data) {
+        if (!data || data.coords?.latitude || data.coords?.longitude) {
           openToastNotification({
             message: `Realtime tracking not available`,
             variant: 'error',
@@ -155,7 +156,6 @@ onMounted(async () => {
           lat: data?.coords?.latitude,
           lng: data?.coords?.longitude
         }
-        console.log(position.value);
       },
       (error) => {
         console.log(error);
