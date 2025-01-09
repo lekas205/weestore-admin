@@ -12,6 +12,7 @@ export const useDriverStore = defineStore("drivers", () => {
   const declined_orders = ref({ ...STATE_PAYLOAD });
   const completed_orders = ref({ ...STATE_PAYLOAD });
   const in_transit_orders = ref({ ...STATE_PAYLOAD });
+  const singleOrder = ref({});
 
   const fetchAllDrivers = async (query?: any): Promise<boolean> => {
     try {
@@ -70,6 +71,18 @@ export const useDriverStore = defineStore("drivers", () => {
     } catch (error) {
       handleStoreRequestError(error);
       return false;
+    }
+  };
+
+  const fetchOrderById = async (id: any): Promise<any> => {
+    try {
+      const { data } = await http.get(ENDPOINTS.GET_DRIVERS + `/order/${id}`);
+
+      singleOrder.value = data.payload;
+      return data.payload;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return null;
     }
   };
 
@@ -177,5 +190,6 @@ export const useDriverStore = defineStore("drivers", () => {
     fetchCompletedOrders,
     fetchInTransitOrders,
     fetchDeclinedOrders,
+    fetchOrderById,
   };
 });
