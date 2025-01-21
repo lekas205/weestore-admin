@@ -1,6 +1,8 @@
 const ADMIN_BASE = "/admin";
 
 export const ENDPOINTS = {
+  ADMIN: `${ADMIN_BASE}`,
+  ADMIN_ROLES: `role`,
   LOGIN: `${ADMIN_BASE}/login`,
   LOGOUT: `${ADMIN_BASE}/logout`,
   CATEGORY: `${ADMIN_BASE}/category`,

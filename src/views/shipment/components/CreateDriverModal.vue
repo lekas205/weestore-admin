@@ -126,7 +126,6 @@
   import { CreateWarehouseSchema } from '@/schemas'
   import { useWarehouseStore, useDriverStore } from '@/stores'
 
-
   // ============ COMPONENTS =================== //
   import DriverLoginDetails from "./DriverLoginDetails.vue";
   import AppSelect from "@/components/AppSelect.vue";

@@ -71,3 +71,10 @@ export const LOAN_STATUSES = {
   AWAITING_APPROVAL: "Pending",
   disbursed: "Disbursed",
 };
+
+export const ADMIN_ROLES = {
+  accountant: "Accountant",
+  customer_service: "Customer Service",
+  business_development_manager: "Business Development Manager",
+  internal_control_manager: "Internal Control Manager",
+}
