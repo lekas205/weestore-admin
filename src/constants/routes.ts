@@ -26,7 +26,7 @@ export const ROUTES = {
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   category: {
@@ -38,7 +38,7 @@ export const ROUTES = {
       "super_admin",
       "accountant",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   warehouse: {
@@ -50,7 +50,7 @@ export const ROUTES = {
       "super_admin",
       "accountant",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   product: {
@@ -62,7 +62,7 @@ export const ROUTES = {
       "super_admin",
       "accountant",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   orders: {
@@ -75,7 +75,7 @@ export const ROUTES = {
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
 
@@ -89,7 +89,7 @@ export const ROUTES = {
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   order_return: {
@@ -102,7 +102,7 @@ export const ROUTES = {
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   customer: {
@@ -115,7 +115,7 @@ export const ROUTES = {
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   unverified_customer: {
@@ -128,7 +128,7 @@ export const ROUTES = {
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   customer_details: {
@@ -141,7 +141,7 @@ export const ROUTES = {
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   fleet: {
@@ -149,14 +149,14 @@ export const ROUTES = {
     name: "FleetManagement",
     requiresAuth: true,
     title: "Fleet Management",
-    canAcceess: ["super_admin", "business_deveelopment_manager"],
+    canAcceess: ["super_admin", "business_development_manager"],
   },
   driver: {
     path: "/driver-management",
     name: "Driver Management",
     requiresAuth: true,
     title: "Driver Management",
-    canAcceess: ["super_admin", "business_deveelopment_manager"],
+    canAcceess: ["super_admin", "business_development_manager"],
   },
   wallet: {
     path: "/wallets",

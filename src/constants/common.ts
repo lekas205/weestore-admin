@@ -2,7 +2,7 @@ import { Pagination } from "@/types";
 
 // KEYS
 export const SAVED_AUTH_TOKEN_KEY = "AUTH_TOKEN";
-
+export const SAVED_ADMIN_ROLE = "ADMIN_ROLE";
 // LAYOUTS
 export const PUBLIC = "public";
 export const PRIVATE = "private";

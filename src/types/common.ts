@@ -41,6 +41,7 @@ export type SidebarLink = {
   icon: string;
   activeIcon: string;
   customClass: string;
+  access:string[],
   subLinks?: {
     id: number;
     title: string;

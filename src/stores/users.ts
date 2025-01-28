@@ -36,11 +36,9 @@ export const useUserStore = defineStore("users", () => {
     }
   };
 
-  const changeAdminsRole = async (payload?: any): Promise<boolean> => {
+  const changeAdminsRole = async (params?: any): Promise<boolean> => {
     try {
-      const { data } = await http.put(ENDPOINTS.ADMIN + '/register', {
-        ...payload
-      });
+      const { data } = await http.put(ENDPOINTS.ADMIN_ROLES + `/${params.roleId}/admin/${params.adminId}`);
       return true;
     } catch (error) {
       handleStoreRequestError(error);

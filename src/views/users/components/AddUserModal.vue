@@ -25,6 +25,7 @@
                 id="firstname"
                 label="Enter first name"
                 type="text"
+                :readonly="action == 'edit'"
               />
             </div>
 
@@ -37,10 +38,11 @@
                 id="lastname"
                 label="Enter Last name"
                 type="text"
+                :readonly="action == 'edit'"
               />
             </div>
-
-            <div class="mb-3">
+            <section v-if="action === 'create' ">
+              <div class="mb-3">
               <label for="warehouse-name" class="tw-text-lg tw-font-medium">
                 Email
               </label>
@@ -51,7 +53,6 @@
                 type="email"
               />
             </div>
-
             <div class="mb-3">
               <label for="warehouse-name" class="tw-text-lg tw-font-medium">
                 Phone Number
@@ -62,36 +63,6 @@
                 label="Phone Number"
                 type="number"
               />
-            </div>
-
-            <div class="mb-3">
-              <label for="warehouse-name" class="tw-text-lg tw-font-medium">
-                Address
-              </label>
-              <AppInput
-                v-model:value="formData.address"
-                id="address"
-                label="Enter address"
-                type="text"
-              />
-            </div>
-
-            <div class="mb-3">
-              <label for="warehouse-name" class="tw-text-lg tw-font-medium">
-                Roles
-              </label>
-              <v-select
-                v-model="formData.role"
-                :items="admin_roles"
-                variant="outlined"
-                density="compact"
-                item-title="roleName"
-                item-value="roleId"
-                label="Select role"
-                persistent-hint
-                single-line
-                hide-details
-              ></v-select>
             </div>
             <div class="mb-3">
                 <label for="warehouse-name" class="tw-text-lg tw-font-medium">
@@ -126,7 +97,25 @@
                     single-line
                     hide-details
                 ></v-select>
-              </div>
+              </div> 
+            </section>
+            <div class="mb-3">
+              <label for="warehouse-name" class="tw-text-lg tw-font-medium">
+                Roles
+              </label>
+              <v-select
+                v-model="formData.role"
+                :items="admin_roles"
+                variant="outlined"
+                density="compact"
+                item-title="roleName"
+                item-value="roleId"
+                label="Select role"
+                persistent-hint
+                single-line
+                hide-details
+              ></v-select>
+            </div>
             <div class="btn-container">
               <AppButton
                 class="mr-3"
@@ -234,16 +223,24 @@ const updateWarehouse = (value?: any) => {
 
 const submit = async () => {
   loading.value = true;
-  
+
   var res;
   if(props.action === "create"){
     res = await await userStore.createAdmins(formData.value);
   }else{
-    res = await await userStore.changeAdminsRole(formData.value);
+    res = await await userStore.changeAdminsRole({
+      roleId: formData.value.role,
+      adminId: props.admin.adminId,
+    });
   }
 
    if(res){
-     openToastNotification( "Admin created successfully");
+     openToastNotification(
+      props.action === 'create' 
+      ? "Admin created successfully"
+      : 'Admin role change successfully'
+    );
+
      emit("success");
    }
    loading.value = false;

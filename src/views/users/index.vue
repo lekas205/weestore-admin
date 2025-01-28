@@ -1,10 +1,10 @@
 <template>
    <div class="users tw-mt-[60px] tw-mx-auto tw-w-[50%]">
     <div class="tw-flex  tw-items-center tw-justify-between py-3 tw-mb-[30px]">
-        <h1 class="tw-text-2xl tw-font-bold"> 1 user(s)</h1>
-        <v-btn color="green" @click="openAddUserModal = true"> Add User</v-btn>
+        <h1 class="tw-text-2xl tw-font-bold"> {{ admins?.data?.length }} user(s)</h1>
+        <v-btn color="green" @click="addAdmin"> Add User</v-btn>
     </div>
-    <div class="user tw-flex tw-justify-between" v-for="admin in  admins.data" :key="admin.adminId">
+    <div class="user tw-flex tw-justify-between mb-6 last:mb-6" v-for="admin in  admins.data" :key="admin.adminId">
         <div class="">
             <h3 class="tw-font-bold"> {{ `${admin.first_name} ${admin.last_name}`  }} </h3>
             <small>{{  admin.role_name }}</small>
@@ -58,8 +58,14 @@ const fetchAdmins = async ()=>{
 
 const refreshData = () => {
     fetchAdmins();
-    action.value = "create" 
+  
     openAddUserModal.value = false
+}
+
+const addAdmin = () =>{
+    action.value = "create" 
+    adminToUpdate.value = {}
+    openAddUserModal.value = true
 }
 
 const initiateProcess = (admin:any) =>{  
