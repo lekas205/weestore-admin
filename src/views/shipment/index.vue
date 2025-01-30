@@ -12,6 +12,7 @@
                     @fetchMore="fetchInTransitOrders($event)"
                     @updateStatus="updateOrderStatus($event)"
                     @showAddress="showAddress($event)"
+                    @trackDelivery="openTrackDelivery($event)"
                     :pagination="in_transit_orders?.pagination"
                 />
             </template>
@@ -59,6 +60,7 @@
 
 <script lang="ts" setup>
     import { onMounted, ref, computed } from "vue";
+    import { useRouter } from "vue-router";
     import { storeToRefs } from "pinia";
 
     import AppTab from "@/components/AppTab.vue";
@@ -67,11 +69,12 @@
     import ShipmentTable from "./components/ShipmentTable.vue";
     import DeliveryAddessModal from "./components/DeliveryAddessModal.vue";
 
-    import { formatText, formatAsMoney, openToastNotification } from "@/utils";
-    import { PAYMENT_METHOD } from "@/constants";
+    import { formatAsMoney, openToastNotification } from "@/utils";
+    import { PAYMENT_METHOD, ROUTES } from "@/constants";
 
     import { useDriverStore , useAuthStore} from "@/stores";
 
+    const router = useRouter();
     const driverStore = useDriverStore();
     const authStore = useAuthStore();
     const { declined_orders, in_transit_orders, completed_orders } = storeToRefs(driverStore);
@@ -142,6 +145,15 @@
     const showAddress = (address: string) => {
         deliveryAddress.value = address;
         openAddressModal.value = true;
+    }
+
+    const openTrackDelivery = (item: any) => {
+        router.push({
+            name: ROUTES.track_delivery.name,
+            params: {
+                id: item.id
+            }
+        });
     }
 
     const fetchInTransitOrders = async (query?:any) => {
