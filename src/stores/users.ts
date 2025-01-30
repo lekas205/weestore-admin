@@ -46,6 +46,16 @@ export const useUserStore = defineStore("users", () => {
     }
   };
 
+  const deleteAdmin = async (adminId: string): Promise<boolean> => {
+    try {
+      const { data } = await http.delete(ENDPOINTS.ADMIN + `/${adminId}`);
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
   const fetchAdminRoles = async (query?: any): Promise<boolean> => {
     try {
       const { data } = await http.get(ENDPOINTS.ADMIN_ROLES, {
@@ -67,6 +77,7 @@ export const useUserStore = defineStore("users", () => {
     admin_roles,
     fetchAdmins,
     createAdmins,
+    deleteAdmin,
     fetchAdminRoles,
     changeAdminsRole,
   };

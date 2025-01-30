@@ -105,7 +105,7 @@
               </label>
               <v-select
                 v-model="formData.role"
-                :items="admin_roles"
+                :items="formattedRoles"
                 variant="outlined"
                 density="compact"
                 item-title="roleName"
@@ -114,7 +114,8 @@
                 persistent-hint
                 single-line
                 hide-details
-              ></v-select>
+              >
+            </v-select>
             </div>
             <div class="btn-container">
               <AppButton
@@ -195,7 +196,14 @@ const formData = ref<any>({
 
 const stateList = computed(() => warehouseStore.states ?? []);
 const warehouseList = computed(() => warehouseStore.warehouseData.rows ?? []);
-
+const formattedRoles = computed(()=>{
+  return admin_roles.value.map((role: any) => {
+    return {
+      roleName: ADMIN_ROLES[role.roleName],
+      roleId: role.roleId,
+    };
+  });
+})
 function closeModal() {
   if (loading.value === true) return;
   emit("close");

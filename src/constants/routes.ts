@@ -14,15 +14,15 @@ export const ROUTES = {
     name: "Users",
     requiresAuth: true,
     title: "Users",
-    canAcceess: ["super_admin"],
+    canAccess: ["superadmin"],
   },
   dashboard: {
     path: "/dashboard",
     name: "Dashboard",
     requiresAuth: true,
     title: "Dashboard Overview",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
@@ -34,8 +34,8 @@ export const ROUTES = {
     name: "Category",
     requiresAuth: true,
     title: "Category",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "internal_control_manager",
       "business_development_manager",
@@ -46,8 +46,8 @@ export const ROUTES = {
     name: "Warehouse",
     requiresAuth: true,
     title: "Warehouse",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "internal_control_manager",
       "business_development_manager",
@@ -58,8 +58,8 @@ export const ROUTES = {
     name: "Product",
     requiresAuth: true,
     title: "Product",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "internal_control_manager",
       "business_development_manager",
@@ -70,8 +70,8 @@ export const ROUTES = {
     name: "Orders",
     requiresAuth: true,
     title: "Orders Management",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
@@ -84,8 +84,8 @@ export const ROUTES = {
     name: "ViewOrders",
     requiresAuth: true,
     title: "View Order",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
@@ -97,8 +97,8 @@ export const ROUTES = {
     name: "ReeturnedOrders",
     requiresAuth: true,
     title: "Return Processing",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
@@ -110,8 +110,8 @@ export const ROUTES = {
     name: "Customers",
     requiresAuth: true,
     title: "Customer Management",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
@@ -123,8 +123,8 @@ export const ROUTES = {
     name: "UnverifiedCustomers",
     requiresAuth: true,
     title: "Customer Verification",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
@@ -136,8 +136,8 @@ export const ROUTES = {
     name: "CustomerDetails",
     requiresAuth: true,
     title: "Customer Details",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
@@ -149,28 +149,28 @@ export const ROUTES = {
     name: "FleetManagement",
     requiresAuth: true,
     title: "Fleet Management",
-    canAcceess: ["super_admin", "business_development_manager"],
+    canAccess: ["superadmin", "business_development_manager"],
   },
   driver: {
     path: "/driver-management",
     name: "Driver Management",
     requiresAuth: true,
     title: "Driver Management",
-    canAcceess: ["super_admin", "business_development_manager"],
+    canAccess: ["superadmin", "business_development_manager"],
   },
   wallet: {
     path: "/wallets",
     name: "Wallets",
     requiresAuth: true,
     title: "Wallets",
-    canAcceess: ["super_admin", "accountant", "customer_service"],
+    canAccess: ["superadmin", "accountant", "customer_service"],
   },
   topup_approval: {
     path: "/wallets/topup-approval",
     name: "WalletsTopupApproval",
     requiresAuth: true,
     title: "Pending TopUp Approval",
-    canAcceess: ["super_admin", "accountant", "customer_service"],
+    canAccess: ["superadmin", "accountant", "customer_service"],
   },
   credit: {
     path: "/credits",

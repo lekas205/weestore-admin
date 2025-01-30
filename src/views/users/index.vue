@@ -7,12 +7,12 @@
     <div class="user tw-flex tw-justify-between mb-6 last:mb-6" v-for="admin in  admins.data" :key="admin.adminId">
         <div class="">
             <h3 class="tw-font-bold"> {{ `${admin.first_name} ${admin.last_name}`  }} </h3>
-            <small>{{  admin.role_name }}</small>
+            <small>{{  ADMIN_ROLES[admin.role_name] }}</small>
         </div>
 
         <div class="tw-flex tw-gap-3">
-            <v-btn @click="initiateProcess(admin)">Change Role</v-btn>
-            <v-btn color="primary" @click="openConfirmModal = true">Delete</v-btn>
+            <v-btn @click="initiateProcess(admin, 'edit')">Change Role</v-btn>
+            <v-btn color="primary" @click="initiateProcess(admin, 'delete')">Delete</v-btn>
         </div>
     </div>
    </div>
@@ -27,7 +27,7 @@
     delete
     :openModal="openConfirmModal" 
     @close="openConfirmModal = false" 
-    @proceed="proceedToDelete" 
+    @proceed="proceedToDelete(adminToUpdate.adminId)" 
     title="Are you sure you want to delete this user??"
     />
 </template>
@@ -35,8 +35,11 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
+import { ADMIN_ROLES } from "@/constants";
 import { useUserStore, useAuthStore } from "@/stores";
 import AddUserModal from "./components/AddUserModal.vue";
+import { openToastNotification } from "@/utils";
+
 import ConfirmDeleteModal from "@/components/AppConfirmModal.vue";
 
 const userStore = useUserStore()
@@ -48,8 +51,6 @@ const openAddUserModal = ref(false)
 const openConfirmModal = ref(false)
 const adminToUpdate = ref({})
 
-const proceedToDelete = () => {}
-
 const fetchAdmins = async ()=>{
     authStore.toggleLoader();
     await userStore.fetchAdmins()
@@ -58,7 +59,6 @@ const fetchAdmins = async ()=>{
 
 const refreshData = () => {
     fetchAdmins();
-  
     openAddUserModal.value = false
 }
 
@@ -68,10 +68,29 @@ const addAdmin = () =>{
     openAddUserModal.value = true
 }
 
-const initiateProcess = (admin:any) =>{  
-    action.value = "edit"  
+const initiateProcess = (admin:any, actionType: string) =>{  
+    action.value = actionType
     adminToUpdate.value = admin
-    openAddUserModal.value = true
+    if(actionType === 'edit'){
+        openAddUserModal.value = true
+    }else{
+        openConfirmModal.value = true
+    }
+   
+}
+
+const proceedToDelete = async (adminId:string) =>{
+    authStore.toggleLoader();
+    openConfirmModal.value = false
+   let res = await userStore.deleteAdmin(adminId)
+
+   if(res){
+        await fetchAdmins()
+        openToastNotification( "Admin deleted successfully");
+   }
+
+//    authStore.toggleLoader();
+    
 }
 
 onMounted(()=>{

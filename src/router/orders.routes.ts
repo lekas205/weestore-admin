@@ -11,6 +11,7 @@ export const ordersRoutes = [
       layout: PRIVATE,
       title: ROUTES.orders.title,
       requiresAuth: ROUTES.orders.requiresAuth,
+      canAccess: ROUTES.orders.canAccess,
     },
   },
   {
@@ -21,6 +22,7 @@ export const ordersRoutes = [
       layout: PRIVATE,
       title: ROUTES.view_orders.title,
       requiresAuth: true,
+      canAccess: ROUTES.orders.canAccess,
     },
   },
   {
@@ -31,6 +33,7 @@ export const ordersRoutes = [
       layout: PRIVATE,
       title: ROUTES.order_return.title,
       requiresAuth: true,
+      canAccess: ROUTES.orders.canAccess,
     },
   },
 ];
