@@ -10,6 +10,7 @@ export const dashboardRoutes = [
       layout: PRIVATE,
       title: ROUTES.dashboard.title,
       requiresAuth: ROUTES.dashboard.requiresAuth,
+      canAccess: ROUTES.dashboard.canAccess,
     },
   },
 ]

@@ -12,6 +12,7 @@ export const shipmentRoutes = [
       layout: PRIVATE,
       title: ROUTES.fleet.title,
       requiresAuth: ROUTES.fleet.requiresAuth,
+      canAccess: ROUTES.fleet.canAccess,
     },
   },
   {
@@ -22,6 +23,7 @@ export const shipmentRoutes = [
       layout: PRIVATE,
       title: ROUTES.driver.title,
       requiresAuth: ROUTES.driver.requiresAuth,
+      canAccess: ROUTES.driver.canAccess,
     },
   },
   {
