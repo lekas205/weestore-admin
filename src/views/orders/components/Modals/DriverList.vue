@@ -43,7 +43,7 @@
     }>()
 
     const emits = defineEmits<{
-        (e : "procced", id: string): void
+        (e : "proceed", id: string): void
         (e : "update:openModal", val: boolean): void
     }>()
 
@@ -68,7 +68,7 @@
     })
 
     const proceed = () => {
-        emits("procced", select.value)
+        emits("proceed", select.value)
         setShow.value = false
     }
 

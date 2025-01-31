@@ -79,12 +79,13 @@
       @proceed="proceedToDecline" 
       title="Are you sure you want to decline this order?"
    />
-   <DriverList v-model:openModal="openDriverModal"  @procced="proceedToTransit($event)" />
+
+    <LazyDriverList v-if="openDriverModal" v-model:openModal="openDriverModal"  @proceed="proceedToTransit($event)" />
   </section>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed} from "vue"
+import { ref, computed, defineAsyncComponent} from "vue"
 import { storeToRefs } from "pinia";
 import { Pagination } from '@/types'
 import { useRouter } from "vue-router";
@@ -92,7 +93,7 @@ import { useRouter } from "vue-router";
 import { formatDate, formatTime, formatAsMoney, formatText, capitalizeFirstLeters } from "@/utils";
 // ============ Local Componeents ============//
 import NewOrderTable from "./Tables/Orders/NewOrderTable.vue";
-import DriverList from "./Modals/DriverList.vue";
+// import DriverList from "./Modals/DriverList.vue";
 import ReturnedOrderTable from "./Tables/Orders/ReturnedOrderTable.vue";
 import DeliveredOrderTable from "./Tables/Orders/DeliveredOrderTable.vue";
 import CompletedOrderTable from "./Tables/Orders/CompletedOrderTable.vue";
@@ -103,6 +104,8 @@ import AppTab from "@/components/AppTab.vue";
 import AppTable from "@/components/AppTable.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 import ConfirmCancelModal from '@/components/AppConfirmModal.vue';
+
+const LazyDriverList = defineAsyncComponent(() => import('./Modals/DriverList.vue'));
 
 
 import { ROUTES, PAYMENT_METHOD } from "@/constants";
