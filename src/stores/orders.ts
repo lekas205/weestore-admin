@@ -28,7 +28,7 @@ export const useOrderStore = defineStore("orders", () => {
   const updateOrderDetails = (details: any) => {
     orderDetails.value = details;
   };
-  const fetchNewOrders = async (query?: any): Promise<boolean> => {
+  const fetchNewOrders = async (query?: any): Promise<boolean> => {    
     try {
       const { data } = await http.get(ENDPOINTS.GET_ORDERS + "/new", {
         params: {

@@ -7,10 +7,11 @@
         </v-col>
       </v-row>
     </div>
+    {{canCreateProduct}}
     <TableWrapper
       tableName="warehouse"
       searchLabelText="Search By Warehouse Name"
-      createBtnText="Create Warehouse"
+      :createBtnText="canCreateProduct ? 'Create Warehouse': null"
       @export="fetchWarehouse($event)"
       @search="searchWarehouse($event)"
       @filter="fetchWarehouse($event)"
@@ -58,6 +59,7 @@ import { SquarePen, ZoomIn } from 'lucide-vue-next'
 import { useAuthStore, useWarehouseStore } from '@/stores';
 import { Warehouse } from '@/types';
 import {  QueryFilter } from '@/types';
+import { SAVED_ADMIN_ROLE } from '@/constants';
 
 
 // ========= COMPONENTS =========== //
@@ -110,12 +112,12 @@ function openEditModal(item: Warehouse) {
 
 function handleCreateCompleted() {
   createWarehouseModal.value = false;
-  fetchWarehouse();
+  fetchWarehouse(queryFilter.value);
 }
 
 function handleEditCompleted() {
   editWarehouseModal.value = false;
-  fetchWarehouse();
+  fetchWarehouse(queryFilter.value);
 }
 
 const next = (page: number) => {
@@ -123,6 +125,17 @@ const next = (page: number) => {
 
   fetchWarehouse(queryFilter.value)
 }
+
+const canCreateProduct = computed(()=>{  
+  let roles = [
+      "superadmin",
+      "accountant",
+      "internal_control_manager",
+      "business_development_manager"
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE);
+
+  return roles.includes(adminRole);})
 
 const searchWarehouse = (query: string) => {
   queryFilter.value.search = query

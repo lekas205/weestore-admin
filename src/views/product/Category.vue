@@ -9,7 +9,7 @@
     </div>
     <TableWrapper
       searchLabelText="Search by Category Name"
-      createBtnText="Add Category"
+      :createBtnText="canCreateProduct ?' Add Category': null"
       @create="createCategoryModal = true"
       @search="searchCategories"
       @filter="filterCategories"
@@ -65,6 +65,7 @@ import { ref, computed } from 'vue'
 import { Trash2, SquarePen, ZoomIn } from 'lucide-vue-next'
 import { useAuthStore, useCategoryStore } from '@/stores';
 import { Category, Pagination, QueryFilter } from '@/types';
+import { SAVED_ADMIN_ROLE } from '@/constants';
 
 // ========= COMPONENTS =========== //
 import StatCard from './components/cards/ProductStatCard.vue'
@@ -110,6 +111,17 @@ const pagination = computed<Pagination>(() => {
     totalNoPages: 1
   }
 });
+
+const canCreateProduct=  computed(()=>{  
+  let roles = [
+      "superadmin",
+      "accountant",
+      "internal_control_manager",
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE);
+
+  return roles.includes(adminRole);
+})
 
 // =============== METHODS ================= //
 function openEditModal(item: Category) {

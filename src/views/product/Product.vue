@@ -27,7 +27,7 @@
             Product Metrics
           </div>
         </div>
-        <div class="action-container">
+        <div class="action-container" v-if="canCreateProduct"> 
           <button class="table-btn green-btn" @click="createProductModal = true">
             <Plus class="mr-2" />
             Add Product
@@ -69,6 +69,8 @@ import { useRouter, useRoute } from "vue-router";
 import { ref, watch, computed, nextTick } from 'vue'
 import { Plus } from 'lucide-vue-next'
 import { useCategoryStore, useWarehouseStore, useProductStore } from '@/stores'
+
+import { SAVED_ADMIN_ROLE } from '@/constants';
 
 // ================ COMPONENTS ============== //
 import ProductSummary from './components/cards/ProductSummary.vue'
@@ -125,6 +127,16 @@ const fetchDashboardSats = async () =>{
   })
   isLoading.value = false;
 }
+const canCreateProduct=  computed(()=>{  
+  let roles = [
+      "superadmin",
+      "accountant",
+      "internal_control_manager",
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE);
+
+  return roles.includes(adminRole);
+})
 
 function handleCreateCompleted() {
   createProductModal.value = false;

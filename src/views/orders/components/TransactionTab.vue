@@ -282,7 +282,9 @@ const proceedToTransit = async(driverId: string) => {
 
 const fetchContent = async () => {
   loading.value = true
-  await  orderStore.fetchNewOrders()
+  await  orderStore.fetchNewOrders({
+    page: new_orders.value?.pagination.currentPageNo,
+  });
   loading.value = false
 }
 
@@ -304,10 +306,14 @@ const updateOrderStatus = async(payload: any) => {
     });
 
     if(payload.status.toLowerCase() === "declined"){
-      fetchDeclinedOrders()
+      fetchDeclinedOrders({
+        page: declined_orders.value?.pagination.currentPageNo,
+      })
     }
     if(payload.status.toLowerCase() === "return_order"){
-      fetchDeliveredOrders()
+      fetchDeliveredOrders({
+        page: delivered_orders.value?.pagination.currentPageNo,
+      })
     }
   }
  
