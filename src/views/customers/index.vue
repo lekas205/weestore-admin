@@ -140,7 +140,8 @@ const proceedToDelete = async () => {
   loading.value = true;
   openDeleteModal.value = false;
   const res = await customerStore.deleteCustomer(itemToDelete.value);
-  await fetchCustomer({ page: page.value }), (loading.value = false);
+  await fetchCustomer({ page: page.value })
+  loading.value = false;
   if (res) {
     openToastNotification({
       message: "Customer deleted successfully",

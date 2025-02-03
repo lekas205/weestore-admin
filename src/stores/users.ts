@@ -29,7 +29,7 @@ export const useUserStore = defineStore("users", () => {
       const { data } = await http.post(ENDPOINTS.ADMIN + '/register', {
         ...payload
       });
-      return true;
+      return data;
     } catch (error) {
       handleStoreRequestError(error);
       return false;

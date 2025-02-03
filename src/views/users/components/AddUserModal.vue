@@ -243,13 +243,21 @@ const submit = async () => {
   }
 
    if(res){
-     openToastNotification(
+     openToastNotification({message:
       props.action === 'create' 
       ? "Admin created successfully"
       : 'Admin role change successfully'
-    );
-
-     emit("success");
+   });
+    console.log(res);
+    if( props.action === 'create' ){
+      emit("success", {
+        pin: res.payload.password,
+        phoneNumber: formData.value.phoneNo,
+     });
+    }else{
+      emit('close')
+    }
+    
    }
    loading.value = false;
 };

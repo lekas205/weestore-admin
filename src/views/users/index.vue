@@ -17,10 +17,10 @@
     </div>
    </div>
    <AddUserModal
-   :action="action"
+    :action="action"
     :openModal="openAddUserModal"
     @close="openAddUserModal = false" 
-    @success="refreshData"
+    @success="refreshData($event)"
     :admin="adminToUpdate"
    />
    <ConfirmDeleteModal
@@ -30,6 +30,8 @@
     @proceed="proceedToDelete(adminToUpdate.adminId)" 
     title="Are you sure you want to delete this user??"
     />
+    <DriverLoginDetails :openModal="showModal" :data="loginData"  @close="showModal = false"/>
+
 </template>
  
 <script lang="ts" setup>
@@ -37,6 +39,7 @@ import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { ADMIN_ROLES } from "@/constants";
 import { useUserStore, useAuthStore } from "@/stores";
+import DriverLoginDetails from "../shipment/components/DriverLoginDetails.vue";
 import AddUserModal from "./components/AddUserModal.vue";
 import { openToastNotification } from "@/utils";
 
@@ -47,9 +50,11 @@ const authStore = useAuthStore()
 const { admins } = storeToRefs(userStore)
 
 const action = ref("create")
+const showModal = ref(false)
 const openAddUserModal = ref(false)
 const openConfirmModal = ref(false)
 const adminToUpdate = ref({})
+const loginData = ref({})
 
 const fetchAdmins = async ()=>{
     authStore.toggleLoader();
@@ -57,8 +62,11 @@ const fetchAdmins = async ()=>{
     authStore.toggleLoader();
 }
 
-const refreshData = () => {
+const refreshData = (data: any) => {
     fetchAdmins();
+    loginData.value = data
+
+    showModal.value = true
     openAddUserModal.value = false
 }
 
@@ -85,12 +93,11 @@ const proceedToDelete = async (adminId:string) =>{
    let res = await userStore.deleteAdmin(adminId)
 
    if(res){
-        await fetchAdmins()
-        openToastNotification( "Admin deleted successfully");
+        fetchAdmins()
+        openToastNotification({message:  "Admin deleted successfully"});
    }
 
-//    authStore.toggleLoader();
-    
+    authStore.toggleLoader();
 }
 
 onMounted(()=>{
