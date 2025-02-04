@@ -9,7 +9,7 @@
     </div>
     <TableWrapper
       searchLabelText="Search by Category Name"
-      :createBtnText="canCreateProduct ?' Add Category': null"
+      :createBtnText="canCreateProduct ?' Add Category': ''"
       @create="createCategoryModal = true"
       @search="searchCategories"
       @filter="filterCategories"
@@ -118,7 +118,7 @@ const canCreateProduct=  computed(()=>{
       "accountant",
       "internal_control_manager",
     ]
-  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE);
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
 
   return roles.includes(adminRole);
 })

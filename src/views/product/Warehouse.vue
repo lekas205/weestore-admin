@@ -11,7 +11,7 @@
     <TableWrapper
       tableName="warehouse"
       searchLabelText="Search By Warehouse Name"
-      :createBtnText="canCreateProduct ? 'Create Warehouse': null"
+      :createBtnText="canCreateProduct ? 'Create Warehouse': ''"
       @export="fetchWarehouse($event)"
       @search="searchWarehouse($event)"
       @filter="fetchWarehouse($event)"
@@ -133,9 +133,10 @@ const canCreateProduct = computed(()=>{
       "internal_control_manager",
       "business_development_manager"
     ]
-  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE);
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
 
-  return roles.includes(adminRole);})
+  return roles.includes(adminRole )
+})
 
 const searchWarehouse = (query: string) => {
   queryFilter.value.search = query

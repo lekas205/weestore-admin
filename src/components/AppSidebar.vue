@@ -18,7 +18,7 @@
             class="sidebar-link"
             :class="{'active': item.isActive}"
             @click="handleSidebarNavigation(item.id)"
-            v-if="item.access.includes(adminRole)"
+            v-if="item.access.includes(adminRole ?? '')"
           >
             <img v-if="item.isActive" :src="item.activeIcon" alt="" />
             <img v-else :src="item.icon" alt="">
