@@ -133,7 +133,7 @@ const canCreateProduct=  computed(()=>{
       "accountant",
       "internal_control_manager",
     ]
-  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE);
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
 
   return roles.includes(adminRole);
 })

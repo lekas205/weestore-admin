@@ -64,7 +64,7 @@ export const DEFAULT_PAGINATION: Pagination = {
 
 export const STATE_PAYLOAD = {
   data: [],
-  pagination: {},
+  pagination: {} as any,
 };
 
 export const LOAN_STATUSES = {

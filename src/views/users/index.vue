@@ -27,7 +27,7 @@
     delete
     :openModal="openConfirmModal" 
     @close="openConfirmModal = false" 
-    @proceed="proceedToDelete(adminToUpdate.adminId)" 
+    @proceed="proceedToDelete(adminToUpdate?.adminId)" 
     title="Are you sure you want to delete this user??"
     />
     <DriverLoginDetails :openModal="showModal" :data="loginData"  @close="showModal = false"/>
@@ -53,7 +53,7 @@ const action = ref("create")
 const showModal = ref(false)
 const openAddUserModal = ref(false)
 const openConfirmModal = ref(false)
-const adminToUpdate = ref({})
+const adminToUpdate = ref<any>({})
 const loginData = ref({})
 
 const fetchAdmins = async ()=>{

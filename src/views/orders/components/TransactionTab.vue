@@ -283,7 +283,7 @@ const proceedToTransit = async(driverId: string) => {
 const fetchContent = async () => {
   loading.value = true
   await  orderStore.fetchNewOrders({
-    page: new_orders.value?.pagination.currentPageNo,
+    page: new_orders.value?.pagination?.currentPageNo,
   });
   loading.value = false
 }
@@ -307,12 +307,12 @@ const updateOrderStatus = async(payload: any) => {
 
     if(payload.status.toLowerCase() === "declined"){
       fetchDeclinedOrders({
-        page: declined_orders.value?.pagination.currentPageNo,
+        page: declined_orders.value?.pagination?.currentPageNo,
       })
     }
     if(payload.status.toLowerCase() === "return_order"){
       fetchDeliveredOrders({
-        page: delivered_orders.value?.pagination.currentPageNo,
+        page: delivered_orders.value?.pagination?.currentPageNo,
       })
     }
   }
