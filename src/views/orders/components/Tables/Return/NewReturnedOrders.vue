@@ -44,9 +44,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { storeToRefs } from "pinia";
 import { Ellipsis } from 'lucide-vue-next'
+import { SAVED_ADMIN_ROLE } from '@/constants';
 
 import AppChip from "@/components/AppChip.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
@@ -79,7 +80,18 @@ const payload= ref({
     page: 1,
     search: "",
 })
-const headers = ref<any[]>([
+
+const canHandle = computed(()=>{  
+  let roles = [
+      "superadmin",
+      'accountant',
+      "internal_control_manager",
+      "business_development_manager"
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
+  return roles.includes(adminRole)
+})
+const headers = computed<any[]>(()=>[
     {
     align: 'start',
     key: 'order_number',
@@ -92,8 +104,12 @@ const headers = ref<any[]>([
     { key: 'return_type', title: 'Return Type' },
     { key: 'amount_return', title: 'Amount to Return' },
     { key: 'amount_retain', title: 'Amount to Retain' },
-    { key: 'action', title: 'Action' },
+    canHandle.value ? { key: 'action', title: 'Action' }: {} ,
 ])
+
+const updateStatus = (event:any, id:string) => {
+    emits("updateStatus", {orderId: id, status: event.value})    
+}
 
 const next = (page: number) => {
     payload.value.page = Number(page);

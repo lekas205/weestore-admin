@@ -61,6 +61,7 @@ export const ROUTES = {
     canAccess: [
       "superadmin",
       "accountant",
+      "customer_service",
       "internal_control_manager",
       "business_development_manager",
     ],
@@ -170,7 +171,7 @@ export const ROUTES = {
     name: "Wallets",
     requiresAuth: true,
     title: "Wallets",
-    canAccess: ["superadmin", "accountant", "customer_service"],
+    canAccess: ["superadmin", "accountant", "customer_service", "internal_control_manager"],
   },
   topup_approval: {
     path: "/wallets/topup-approval",

@@ -119,6 +119,7 @@ const sidebarLinks = ref<SidebarLink[]>([
     access: [
       "superadmin",
       "accountant",
+      "customer_service",
       "internal_control_manager",
       "business_development_manager",
     ],
@@ -207,7 +208,7 @@ const sidebarLinks = ref<SidebarLink[]>([
     icon: WalletsIcon,
     activeIcon: WalletsIconActive,
     customClass: '',
-    access: ["superadmin", "accountant", "customer_service"],
+    access: ["superadmin", "accountant", "internal_control_manager", "customer_service"],
   },
   {
     id: 6,
