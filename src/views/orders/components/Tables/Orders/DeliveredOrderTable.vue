@@ -58,9 +58,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed , onMounted} from "vue";
 import { ZoomIn } from 'lucide-vue-next'
 import { useRouter } from "vue-router";
+import { SAVED_ADMIN_ROLE } from '@/constants';
 
 import AppChip from "@/components/AppChip.vue";
 import AppSelect from "@/components/AppSelect.vue";
@@ -95,33 +96,47 @@ const payload= ref({
     search: "",
 });
 
+const canHandle = computed(()=>{  
+  let roles = [
+      "superadmin",
+      'customer_service',
+      "business_development_manager"
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
+  return roles.includes(adminRole)
+})
+
 const updateStatus = (event:any, id:string) => {
     emits("updateStatus", {orderId: id, status: event.value})    
 }
 
 
-const headers = ref<any[]>([
-    {
-    align: 'start',
-    key: 'order_number',
-    sortable: false,
-    title: 'Order Number',
-    },
-    { key: 'date', title: 'Date' },
-    { key: 'reseller_name', title: 'Reseller Name' },
-    { key: 'warehouse', title: 'Warehouse' },
-    { key: 'channel', title: 'Channel' },
-    { key: 'amount', title: 'Amount' },
-    { key: 'status', title: 'Status' },
-    { key: 'pop', title: 'View Pop' },
-    { key: 'view_order', title: 'View' },
-    { key: 'action', title: 'Action',  width: "50%" },
-])
+const headers = computed<any>(()=>{
+    const header = [
+        {
+        align: 'start',
+        key: 'order_number',
+        sortable: false,
+        title: 'Order Number',
+        },
+        { key: 'date', title: 'Date' },
+        { key: 'reseller_name', title: 'Reseller Name' },
+        { key: 'warehouse', title: 'Warehouse' },
+        { key: 'channel', title: 'Channel' },
+        { key: 'amount', title: 'Amount' },
+        { key: 'status', title: 'Status' },
+        { key: 'pop', title: 'View Pop' },
+        { key: 'view_order', title: 'View' },
+        canHandle.value ? { key: 'action', title: 'Action',  width: "50%" }:{},
+    ]
+})
 
 const next = (page: number) => {
     payload.value.page = Number(page);
     emits("fetchMore", payload.value)
 }
+
+
 
 const viewPOP = (image_url: string) => {    
     if(!image_url) {
@@ -138,4 +153,5 @@ const search = (text: string) => {
     payload.value.page = 1;
     emits("fetchMore", payload.value)
 }
+
 </script>

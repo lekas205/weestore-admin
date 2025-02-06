@@ -89,6 +89,7 @@ import { ref, computed, defineAsyncComponent} from "vue"
 import { storeToRefs } from "pinia";
 import { Pagination } from '@/types'
 import { useRouter } from "vue-router";
+import { SAVED_ADMIN_ROLE } from '@/constants';
 
 import { formatDate, formatTime, formatAsMoney, formatText, capitalizeFirstLeters } from "@/utils";
 // ============ Local Componeents ============//
@@ -129,13 +130,32 @@ const openConfirmModal = ref(false);
 const ouderToUpdate = ref<any>({})
 const openDriverModal = ref(false)
 
-const tabTitles = ref([ 
-  "new orders", 
+const canHandle = computed(()=>{  
+  let roles = [
+      "superadmin",
+      "customer_service",
+      "internal_control_manager",
+      "business_development_manager"
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
+
+  return roles.includes(adminRole )
+})
+
+const tabTitles = computed(() =>{
+  return !canHandle.value ? [ 
   "delivered orders",
   "orders returned", 
   "completed orders", 
   "declined orders"
-])
+] : [ 
+ "new orders" , 
+  "delivered orders",
+  "orders returned", 
+  "completed orders", 
+  "declined orders"
+]
+})
 
 const newOrdersTableData = computed(() => {
   return new_orders.value?.data?.map((elm:any)=>{    
