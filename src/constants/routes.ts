@@ -37,6 +37,7 @@ export const ROUTES = {
     canAccess: [
       "superadmin",
       "accountant",
+      "customer_service",
       "internal_control_manager",
       "business_development_manager",
     ],
@@ -49,6 +50,7 @@ export const ROUTES = {
     canAccess: [
       "superadmin",
       "accountant",
+      "customer_service",
       "internal_control_manager",
       "business_development_manager",
     ],
@@ -79,7 +81,6 @@ export const ROUTES = {
       "business_development_manager",
     ],
   },
-
   view_orders: {
     path: "/order/:id",
     name: "ViewOrders",

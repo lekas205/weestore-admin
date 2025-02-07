@@ -75,6 +75,7 @@ import { ref, computed, watch } from 'vue'
 import { ZoomIn, SquarePen } from 'lucide-vue-next'
 import { Pagination, Product, QueryFilter } from '@/types'
 import { useProductStore } from '@/stores'
+import { SAVED_ADMIN_ROLE } from '@/constants';
 
 // ================ COMPONENTS ================ //
 import TableWrapper from '@/components/AppTableWrapper.vue'
@@ -103,7 +104,19 @@ const queryFilter = computed<QueryFilter>(()=>{
    warehouseId: route.query.warehouse_id as string
   }
 });
-const headers = ref<any[]>([
+
+const canHandle=  computed(()=>{  
+  let roles = [
+      "superadmin",
+      "accountant",
+      "internal_control_manager",
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
+
+  return roles.includes(adminRole);
+})
+
+const headers = computed<any>(() =>[
   {
     title: 'PRODUCT NAME',
     align: 'start',
@@ -117,7 +130,7 @@ const headers = ref<any[]>([
   { title: 'STATUS', key: 'status' },
   // { title: 'VIEW', key: 'view' },
   { title: 'PUBLISHED', key: 'published' },
-  { title: 'ACTION', key: 'action', align: 'center' },
+  canHandle.value ? { title: 'ACTION', key: 'action', align: 'center' }: {} ,
 ]);
 
 watch(() => props.refereshData, async (newValue) => {

@@ -91,6 +91,7 @@ const payload= ref({
 const canHandle = computed(()=>{  
   let roles = [
       "superadmin",
+      "customer_service",
       "internal_control_manager",
       "business_development_manager"
     ]

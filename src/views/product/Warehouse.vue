@@ -74,7 +74,20 @@ const warehouseStore = useWarehouseStore();
 const isLoading = ref(false);
 const createWarehouseModal = ref(false);
 const editWarehouseModal = ref(false);
-const headers = ref<any[]>([
+
+const canCreateProduct = computed(()=>{  
+  let roles = [
+      "superadmin",
+      "accountant",
+      "internal_control_manager",
+      "business_development_manager"
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
+
+  return roles.includes(adminRole )
+})
+
+const headers = computed<any>(()=>[
   {
     title: "NAME OF WAREHOUSE",
     align: "start",
@@ -84,7 +97,7 @@ const headers = ref<any[]>([
   { title: "MANAGER NAME", key: "manager_name" },
   { title: "PHONE NUMBER", key: "phone" },
   // { title: "VIEW", key: "view", align: 'center' },
-  { title: "ACTION", key: "action", align: 'center' },
+  canCreateProduct.value ? { title: "ACTION", key: "action", align: 'center' }: {},
 ])
 
 const items = computed<Warehouse[]>(() => {
@@ -126,17 +139,6 @@ const next = (page: number) => {
   fetchWarehouse(queryFilter.value)
 }
 
-const canCreateProduct = computed(()=>{  
-  let roles = [
-      "superadmin",
-      "accountant",
-      "internal_control_manager",
-      "business_development_manager"
-    ]
-  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
-
-  return roles.includes(adminRole )
-})
 
 const searchWarehouse = (query: string) => {
   queryFilter.value.search = query
