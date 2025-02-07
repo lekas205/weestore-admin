@@ -33,7 +33,7 @@ const manaulSwitch = ref(true)
 const canHandle = computed(()=>{ 
   let roles = [
       "superadmin",
-      "business_development_manager"
+      "internal_control_manager"
     ]
   const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
   return roles.includes(adminRole)

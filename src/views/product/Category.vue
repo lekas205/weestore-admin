@@ -9,7 +9,7 @@
     </div>
     <TableWrapper
       searchLabelText="Search by Category Name"
-      :createBtnText="canCreateProduct ?' Add Category': ''"
+      :createBtnText="canHandle ?' Add Category': ''"
       @create="createCategoryModal = true"
       @search="searchCategories"
       @filter="filterCategories"
@@ -82,7 +82,21 @@ const isLoading = ref(false);
 const createCategoryModal = ref(false);
 const editCategoryModal = ref(false);
 const deleteCategoryModal = ref(false);
-const headers = ref<any[]>([
+
+
+
+const canHandle=  computed(()=>{  
+  let roles = [
+      "superadmin",
+      "accountant",
+      "internal_control_manager",
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
+
+  return roles.includes(adminRole);
+})
+
+const headers = computed<any>(()=> [
   {
     title: "ID",
     align: "start",
@@ -93,7 +107,7 @@ const headers = ref<any[]>([
   { title: "DESCRIPTION", key: "description" },
   // { title: "PUBLISHED", key: "isPublished" },
   // { title: "VIEW", key: "view", align: 'center' },
-  { title: "ACTION", key: "action", align: 'center' },
+  canHandle.value ?  { title: "ACTION", key: "action", align: 'center' }: {},
 ]);
 const queryFilter = ref<QueryFilter>({
   page: 1,
@@ -112,16 +126,7 @@ const pagination = computed<Pagination>(() => {
   }
 });
 
-const canCreateProduct=  computed(()=>{  
-  let roles = [
-      "superadmin",
-      "accountant",
-      "internal_control_manager",
-    ]
-  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
 
-  return roles.includes(adminRole);
-})
 
 // =============== METHODS ================= //
 function openEditModal(item: Category) {

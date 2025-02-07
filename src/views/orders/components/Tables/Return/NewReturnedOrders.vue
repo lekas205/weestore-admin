@@ -86,7 +86,6 @@ const canHandle = computed(()=>{
       "superadmin",
       'accountant',
       "internal_control_manager",
-      "business_development_manager"
     ]
   const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
   return roles.includes(adminRole)

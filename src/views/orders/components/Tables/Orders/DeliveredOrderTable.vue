@@ -45,7 +45,7 @@
             <template v-slot:item.view_order="{ item }">
                 <ZoomIn class="tw-cursor-pointer" @click="router.push(`/order/${item.id}`)"/>
             </template>
-            <template v-slot:item.pop="{ item }">
+            <template v-slot:item.payment_proof="{ item }">
                 <ZoomIn class="tw-cursor-pointer" @click="viewPOP(item.payment_proof)" />
             </template>
 
@@ -99,8 +99,7 @@ const payload= ref({
 const canHandle = computed(()=>{  
   let roles = [
       "superadmin",
-      'customer_service',
-      "business_development_manager"
+      "accountant",
     ]
   const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
   return roles.includes(adminRole)
@@ -111,8 +110,7 @@ const updateStatus = (event:any, id:string) => {
 }
 
 
-const headers = computed<any>(()=>{
-    const header = [
+const headers = computed<any>(()=> [
         {
         align: 'start',
         key: 'order_number',
@@ -125,11 +123,10 @@ const headers = computed<any>(()=>{
         { key: 'channel', title: 'Channel' },
         { key: 'amount', title: 'Amount' },
         { key: 'status', title: 'Status' },
-        { key: 'pop', title: 'View Pop' },
+        { key: 'payment_proof', title: 'View Pop' },
         { key: 'view_order', title: 'View' },
         canHandle.value ? { key: 'action', title: 'Action',  width: "50%" }:{},
-    ]
-})
+    ])
 
 const next = (page: number) => {
     payload.value.page = Number(page);
