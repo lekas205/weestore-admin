@@ -36,6 +36,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     removeSavedAuthToken(): void {
+      localStorage.removeItem(SAVED_ADMIN_ROLE);
       localStorage.removeItem(SAVED_AUTH_TOKEN_KEY);
     },
 
