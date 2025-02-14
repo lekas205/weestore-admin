@@ -5,7 +5,7 @@
         <div class="header-title">
           <h1 class="tw-text-2xl tw-ml-5 tw-font-semibold">{{ route.meta.title }}</h1>
         </div>
-        <div class="tw-flex tw-items-center tw-gap-3">
+        <div class="tw-flex tw-items-center tw-gap-3" v-if="canHandle">
           <p class="tw-underline">Disable All Client Login</p>
           <v-switch  hide-details v-model="disable"  color="success"></v-switch>
         </div>
@@ -16,9 +16,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCustomersStore } from "@/stores";
 import { onMounted, ref, watch } from 'vue';
+import { SAVED_ADMIN_ROLE } from '@/constants';
 
 import { openToastNotification } from "@/utils";
 
@@ -27,6 +29,15 @@ const customerStore = useCustomersStore();
 const route = useRoute();
 const disable = ref(false);
 const manaulSwitch = ref(true)
+
+const canHandle = computed(()=>{ 
+  let roles = [
+      "superadmin",
+      "internal_control_manager"
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
+  return roles.includes(adminRole)
+})
 
 const updateState = async () => {
   const status = disable.value ? "deactivate": "activate"

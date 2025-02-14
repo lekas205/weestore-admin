@@ -11,6 +11,7 @@ export const walletRoutes = [
       layout: PRIVATE,
       title: ROUTES.wallet.title,
       requiresAuth: ROUTES.wallet.requiresAuth,
+      canAccess: ROUTES.wallet.canAccess,
     },
   },
   {
@@ -21,6 +22,7 @@ export const walletRoutes = [
       layout: PRIVATE,
       title: ROUTES.topup_approval.title,
       requiresAuth: ROUTES.topup_approval.requiresAuth,
+      canAccess: ROUTES.topup_approval.canAccess,
     },
   },
 ];

@@ -9,7 +9,7 @@
     </div>
     <TableWrapper
       searchLabelText="Search by Category Name"
-      createBtnText="Add Category"
+      :createBtnText="canHandle ?' Add Category': ''"
       @create="createCategoryModal = true"
       @search="searchCategories"
       @filter="filterCategories"
@@ -65,6 +65,7 @@ import { ref, computed } from 'vue'
 import { Trash2, SquarePen, ZoomIn } from 'lucide-vue-next'
 import { useAuthStore, useCategoryStore } from '@/stores';
 import { Category, Pagination, QueryFilter } from '@/types';
+import { SAVED_ADMIN_ROLE } from '@/constants';
 
 // ========= COMPONENTS =========== //
 import StatCard from './components/cards/ProductStatCard.vue'
@@ -81,7 +82,21 @@ const isLoading = ref(false);
 const createCategoryModal = ref(false);
 const editCategoryModal = ref(false);
 const deleteCategoryModal = ref(false);
-const headers = ref<any[]>([
+
+
+
+const canHandle=  computed(()=>{  
+  let roles = [
+      "superadmin",
+      "accountant",
+      "internal_control_manager",
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
+
+  return roles.includes(adminRole);
+})
+
+const headers = computed<any>(()=> [
   {
     title: "ID",
     align: "start",
@@ -92,7 +107,7 @@ const headers = ref<any[]>([
   { title: "DESCRIPTION", key: "description" },
   // { title: "PUBLISHED", key: "isPublished" },
   // { title: "VIEW", key: "view", align: 'center' },
-  { title: "ACTION", key: "action", align: 'center' },
+  canHandle.value ?  { title: "ACTION", key: "action", align: 'center' }: {},
 ]);
 const queryFilter = ref<QueryFilter>({
   page: 1,
@@ -110,6 +125,8 @@ const pagination = computed<Pagination>(() => {
     totalNoPages: 1
   }
 });
+
+
 
 // =============== METHODS ================= //
 function openEditModal(item: Category) {

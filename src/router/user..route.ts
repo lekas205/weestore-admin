@@ -10,6 +10,7 @@ export const useersRoutes = [
       layout: PRIVATE,
       title: ROUTES.users.title,
       requiresAuth: ROUTES.users.requiresAuth,
+      canAccess: ROUTES.users.canAccess,
     },
   },
 ];

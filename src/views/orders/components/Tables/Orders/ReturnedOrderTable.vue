@@ -37,6 +37,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
 import { ref, watch, computed} from "vue";
+import { SAVED_ADMIN_ROLE } from '@/constants';
 
 import AppChip from "@/components/AppChip.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
@@ -75,7 +76,22 @@ const payload= ref({
     search: "",
 })
 
-const headers = ref<any[]>([
+const canHandle = computed(()=>{  
+  let roles = [
+      "superadmin",
+      'accountant',
+      "internal_control_manager",
+      "business_development_manager"
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
+  return roles.includes(adminRole)
+})
+
+const updateStatus = (event:any, id:string) => {
+    emits("updateStatus", {orderId: id, status: event.value})    
+}
+
+const headers = computed<any[]>(()=>[
     {
     align: 'start',
     key: 'order_number',
@@ -89,7 +105,7 @@ const headers = ref<any[]>([
     { key: 'amount', title: 'Order Amount' },
     { key: 'amount_paid', title: 'Amount Paid' },
     { key: 'status', title: 'Status' },
-    { key: 'action', title: 'Action' , width: "20%"},
+    canHandle.value ? { key: 'action', title: 'Action' , width: "20%"}: {},
 ])
 
 const next = (page: number) => {

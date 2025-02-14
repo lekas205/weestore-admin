@@ -12,6 +12,7 @@ export const customerRoutes = [
       layout: PRIVATE,
       title: ROUTES.customer.title,
       requiresAuth: ROUTES.customer.requiresAuth,
+      canAccess: ROUTES.customer.canAccess,
     },
   },
   {
@@ -22,6 +23,7 @@ export const customerRoutes = [
       layout: PRIVATE,
       title: ROUTES.unverified_customer.title,
       requiresAuth: ROUTES.unverified_customer.requiresAuth,
+      canAccess: ROUTES.unverified_customer.canAccess,
     },
   },
   {
@@ -32,6 +34,7 @@ export const customerRoutes = [
       layout: PRIVATE,
       title: ROUTES.customer_details.title,
       requiresAuth: ROUTES.customer_details.requiresAuth,
+      canAccess: ROUTES.customer_details.canAccess,
     },
   },
 ];

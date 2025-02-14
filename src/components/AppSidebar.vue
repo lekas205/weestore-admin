@@ -18,6 +18,7 @@
             class="sidebar-link"
             :class="{'active': item.isActive}"
             @click="handleSidebarNavigation(item.id)"
+            v-if="item.access.includes(adminRole ?? '')"
           >
             <img v-if="item.isActive" :src="item.activeIcon" alt="" />
             <img v-else :src="item.icon" alt="">
@@ -76,13 +77,15 @@ import CreditsIconActive from '@/assets/images/svg/credits-icon-active.svg'
 import PaymentsIcon from '@/assets/images/svg/payments-icon.svg'
 import PaymentsIconActive from '@/assets/images/svg/payments-icon-active.svg'
 
-import { ref, onBeforeMount } from 'vue'
+import { ref, computed, onBeforeMount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ChevronRight, ChevronDown, Minus } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores'
 import { ROUTES } from '@/constants'
 import { SidebarLink } from '@/types'
 import AppButton from '@/components/AppButton.vue'
+import {  SAVED_ADMIN_ROLE } from '@/constants'
+
 
 const router = useRouter();
 const route = useRoute();
@@ -97,6 +100,13 @@ const sidebarLinks = ref<SidebarLink[]>([
     icon: DashboardIcon,
     activeIcon: DashboardIconActive,
     customClass: '',
+    access:[
+      "superadmin",
+      "accountant",
+      "customer_service",
+      "internal_control_manager",
+      "business_development_manager",
+    ]
   },
   {
     id: 1,
@@ -106,6 +116,13 @@ const sidebarLinks = ref<SidebarLink[]>([
     icon: StockIcon,
     activeIcon:StockIconActive,
     customClass: '',
+    access: [
+      "superadmin",
+      "accountant",
+      "customer_service",
+      "internal_control_manager",
+      "business_development_manager",
+    ],
     subLinks: [
       {
         id: 0,
@@ -135,6 +152,13 @@ const sidebarLinks = ref<SidebarLink[]>([
     icon: OrdersIcon,
     activeIcon: OrdersIconActive,
     customClass: '',
+    access:[
+      "superadmin",
+      "accountant",
+      "customer_service",
+      "internal_control_manager",
+      "business_development_manager",
+    ],
   },
   {
     id: 3,
@@ -144,6 +168,13 @@ const sidebarLinks = ref<SidebarLink[]>([
     icon: CustomersIcon,
     activeIcon: CustomersIconActive,
     customClass: '',
+    access: [
+      "superadmin",
+      "accountant",
+      "customer_service",
+      "internal_control_manager",
+      "business_development_manager",
+    ],
   },
   {
     id: 4,
@@ -153,6 +184,7 @@ const sidebarLinks = ref<SidebarLink[]>([
     icon: ShipmentIcon,
     activeIcon: ShipmentIconActive,
     customClass: '',
+    access: ["superadmin", "business_development_manager"],
     subLinks: [
       {
         id: 0,
@@ -176,16 +208,18 @@ const sidebarLinks = ref<SidebarLink[]>([
     icon: WalletsIcon,
     activeIcon: WalletsIconActive,
     customClass: '',
+    access: ["superadmin", "accountant", "internal_control_manager", "customer_service"],
   },
-  // {
-  //   id: 6,
-  //   title: 'Credits',
-  //   link: ROUTES.credit.name,
-  //   isActive: false,
-  //   icon: CreditsIcon,
-  //   activeIcon: CreditsIconActive,
-  //   customClass: '',
-  // },
+  {
+    id: 6,
+    title: 'Users',
+    link: ROUTES.users.name,
+    isActive: false,
+    icon: CustomersIcon,
+    activeIcon: CustomersIconActive,
+    customClass: '',
+    access: ["superadmin"],
+  },
   // {
   //   id: 7,
   //   title: 'Payments',
@@ -196,6 +230,8 @@ const sidebarLinks = ref<SidebarLink[]>([
   //   customClass: ''
   // },
 ]);
+
+const adminRole = computed(()=> localStorage.getItem(SAVED_ADMIN_ROLE))
 
 onBeforeMount(() => {
   // console.log(route.name)

@@ -7,4 +7,5 @@ export type LoginDto = {
 
 export type LoginResDto = ApiResponseDto<{
   access_token: string;
+  role_name: string
 }>;

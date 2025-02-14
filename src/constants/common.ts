@@ -2,7 +2,7 @@ import { Pagination } from "@/types";
 
 // KEYS
 export const SAVED_AUTH_TOKEN_KEY = "AUTH_TOKEN";
-
+export const SAVED_ADMIN_ROLE = "ADMIN_ROLE";
 // LAYOUTS
 export const PUBLIC = "public";
 export const PRIVATE = "private";
@@ -64,10 +64,17 @@ export const DEFAULT_PAGINATION: Pagination = {
 
 export const STATE_PAYLOAD = {
   data: [],
-  pagination: {},
+  pagination: {} as any,
 };
 
 export const LOAN_STATUSES = {
   AWAITING_APPROVAL: "Pending",
   disbursed: "Disbursed",
 };
+
+export const ADMIN_ROLES = {
+  accountant: "Accountant",
+  customer_service: "Customer Service",
+  business_development_manager: "Business Development Manager",
+  internal_control_manager: "Internal Control Manager",
+}

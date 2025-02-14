@@ -51,9 +51,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import { ZoomIn } from 'lucide-vue-next'
+import { SAVED_ADMIN_ROLE } from '@/constants';
 
 import AppChip from "@/components/AppChip.vue";
 import AppSelect from "@/components/AppSelect.vue";
@@ -86,7 +87,20 @@ const payload= ref({
     page: 11,
     search: "",
 })
-const headers = ref<any[]>([
+
+const canHandle = computed(()=>{  
+  let roles = [
+      "superadmin",
+      "customer_service",
+      "internal_control_manager",
+      "business_development_manager"
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
+
+  return roles.includes(adminRole )
+})
+
+const headers = computed<any[]>(()=>[
     {
     align: 'start',
     key: 'order_number',
@@ -99,7 +113,7 @@ const headers = ref<any[]>([
     { key: 'channel', title: 'Channel' },
     { key: 'amount', title: 'Amount' },
     { key: 'status', title: 'Status' },
-    { key: 'action', title: 'Action' ,  width: "50%"},
+    canHandle.value ?  { key: 'action', title: 'Action' ,  width: "50%"}: {},
     { key: 'pop', title: 'View Pop' },
     { key: 'view_order', title: 'View Order' },
 ])

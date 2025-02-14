@@ -7,10 +7,11 @@
         </v-col>
       </v-row>
     </div>
+    {{canCreateProduct}}
     <TableWrapper
       tableName="warehouse"
       searchLabelText="Search By Warehouse Name"
-      createBtnText="Create Warehouse"
+      :createBtnText="canCreateProduct ? 'Create Warehouse': ''"
       @export="fetchWarehouse($event)"
       @search="searchWarehouse($event)"
       @filter="fetchWarehouse($event)"
@@ -58,6 +59,7 @@ import { SquarePen, ZoomIn } from 'lucide-vue-next'
 import { useAuthStore, useWarehouseStore } from '@/stores';
 import { Warehouse } from '@/types';
 import {  QueryFilter } from '@/types';
+import { SAVED_ADMIN_ROLE } from '@/constants';
 
 
 // ========= COMPONENTS =========== //
@@ -72,7 +74,20 @@ const warehouseStore = useWarehouseStore();
 const isLoading = ref(false);
 const createWarehouseModal = ref(false);
 const editWarehouseModal = ref(false);
-const headers = ref<any[]>([
+
+const canCreateProduct = computed(()=>{  
+  let roles = [
+      "superadmin",
+      "accountant",
+      "internal_control_manager",
+      "business_development_manager"
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
+
+  return roles.includes(adminRole )
+})
+
+const headers = computed<any>(()=>[
   {
     title: "NAME OF WAREHOUSE",
     align: "start",
@@ -82,7 +97,7 @@ const headers = ref<any[]>([
   { title: "MANAGER NAME", key: "manager_name" },
   { title: "PHONE NUMBER", key: "phone" },
   // { title: "VIEW", key: "view", align: 'center' },
-  { title: "ACTION", key: "action", align: 'center' },
+  canCreateProduct.value ? { title: "ACTION", key: "action", align: 'center' }: {},
 ])
 
 const items = computed<Warehouse[]>(() => {
@@ -110,12 +125,12 @@ function openEditModal(item: Warehouse) {
 
 function handleCreateCompleted() {
   createWarehouseModal.value = false;
-  fetchWarehouse();
+  fetchWarehouse(queryFilter.value);
 }
 
 function handleEditCompleted() {
   editWarehouseModal.value = false;
-  fetchWarehouse();
+  fetchWarehouse(queryFilter.value);
 }
 
 const next = (page: number) => {
@@ -123,6 +138,7 @@ const next = (page: number) => {
 
   fetchWarehouse(queryFilter.value)
 }
+
 
 const searchWarehouse = (query: string) => {
   queryFilter.value.search = query

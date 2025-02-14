@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import router from '@/router'
 import http from '@/lib/http'
-import { ENDPOINTS, SAVED_AUTH_TOKEN_KEY, ROUTES } from '@/constants'
+import { ENDPOINTS, SAVED_AUTH_TOKEN_KEY, SAVED_ADMIN_ROLE, ROUTES } from '@/constants'
 import { LoginDto, LoginResDto } from '@/types'
 import { handleStoreRequestError } from '@/utils'
 
@@ -22,6 +22,7 @@ export const useAuthStore = defineStore('auth', {
           payload
         );
         this.saveAuthToken(data.payload.access_token);
+        localStorage.setItem(SAVED_ADMIN_ROLE, data.payload.role_name);
         return true;
       } catch (error) {
         handleStoreRequestError(error);
@@ -35,6 +36,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     removeSavedAuthToken(): void {
+      localStorage.removeItem(SAVED_ADMIN_ROLE);
       localStorage.removeItem(SAVED_AUTH_TOKEN_KEY);
     },
 

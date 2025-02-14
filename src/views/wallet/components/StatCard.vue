@@ -22,6 +22,7 @@
   import { computed, ref } from 'vue'
   import { useRouter } from "vue-router";
   import { formatAsMoney } from "@/utils";
+  import { SAVED_ADMIN_ROLE } from '@/constants';
 
     
   const router = useRouter();
@@ -47,9 +48,18 @@
       },
     ]
   });
-  
+  const canHandle = computed(()=>{  
+  let roles = [
+      "superadmin",
+      "accountant"
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
+
+  return roles.includes(adminRole )
+})  
+
   const redirect = (item:any) => {
-      item.link ? router.push(item.link) : ''
+      item.link && canHandle.value ? router.push(item.link) : ''
     }
   
   </script>

@@ -14,19 +14,19 @@ export const ROUTES = {
     name: "Users",
     requiresAuth: true,
     title: "Users",
-    canAcceess: ["super_admin"],
+    canAccess: ["superadmin"],
   },
   dashboard: {
     path: "/dashboard",
     name: "Dashboard",
     requiresAuth: true,
     title: "Dashboard Overview",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   category: {
@@ -34,11 +34,12 @@ export const ROUTES = {
     name: "Category",
     requiresAuth: true,
     title: "Category",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
+      "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   warehouse: {
@@ -46,11 +47,12 @@ export const ROUTES = {
     name: "Warehouse",
     requiresAuth: true,
     title: "Warehouse",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
+      "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   product: {
@@ -58,11 +60,12 @@ export const ROUTES = {
     name: "Product",
     requiresAuth: true,
     title: "Product",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
+      "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   orders: {
@@ -70,26 +73,25 @@ export const ROUTES = {
     name: "Orders",
     requiresAuth: true,
     title: "Orders Management",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
-
   view_orders: {
     path: "/order/:id",
     name: "ViewOrders",
     requiresAuth: true,
     title: "View Order",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   order_return: {
@@ -97,12 +99,12 @@ export const ROUTES = {
     name: "ReeturnedOrders",
     requiresAuth: true,
     title: "Return Processing",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   customer: {
@@ -110,12 +112,12 @@ export const ROUTES = {
     name: "Customers",
     requiresAuth: true,
     title: "Customer Management",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   unverified_customer: {
@@ -123,12 +125,12 @@ export const ROUTES = {
     name: "UnverifiedCustomers",
     requiresAuth: true,
     title: "Customer Verification",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   customer_details: {
@@ -136,12 +138,12 @@ export const ROUTES = {
     name: "CustomerDetails",
     requiresAuth: true,
     title: "Customer Details",
-    canAcceess: [
-      "super_admin",
+    canAccess: [
+      "superadmin",
       "accountant",
       "customer_service",
       "internal_control_manager",
-      "business_deveelopment_manager",
+      "business_development_manager",
     ],
   },
   fleet: {
@@ -149,14 +151,14 @@ export const ROUTES = {
     name: "FleetManagement",
     requiresAuth: true,
     title: "Fleet Management",
-    canAcceess: ["super_admin", "business_deveelopment_manager"],
+    canAccess: ["superadmin", "business_development_manager"],
   },
   driver: {
     path: "/driver-management",
     name: "Driver Management",
     requiresAuth: true,
     title: "Driver Management",
-    canAcceess: ["super_admin", "business_deveelopment_manager"],
+    canAccess: ["superadmin", "business_development_manager"],
   },
   track_delivery: {
     path: "/fleet-management/track-delivery/:id",
@@ -170,14 +172,14 @@ export const ROUTES = {
     name: "Wallets",
     requiresAuth: true,
     title: "Wallets",
-    canAcceess: ["super_admin", "accountant", "customer_service"],
+    canAccess: ["superadmin", "accountant", "customer_service", "internal_control_manager"],
   },
   topup_approval: {
     path: "/wallets/topup-approval",
     name: "WalletsTopupApproval",
     requiresAuth: true,
     title: "Pending TopUp Approval",
-    canAcceess: ["super_admin", "accountant", "customer_service"],
+    canAccess: ["superadmin", "accountant", "customer_service"],
   },
   credit: {
     path: "/credits",

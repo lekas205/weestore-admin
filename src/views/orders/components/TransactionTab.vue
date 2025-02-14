@@ -79,20 +79,22 @@
       @proceed="proceedToDecline" 
       title="Are you sure you want to decline this order?"
    />
-   <DriverList v-model:openModal="openDriverModal"  @procced="proceedToTransit($event)" />
+
+    <LazyDriverList v-if="openDriverModal" v-model:openModal="openDriverModal"  @proceed="proceedToTransit($event)" />
   </section>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed} from "vue"
+import { ref, computed, defineAsyncComponent} from "vue"
 import { storeToRefs } from "pinia";
 import { Pagination } from '@/types'
 import { useRouter } from "vue-router";
+import { SAVED_ADMIN_ROLE } from '@/constants';
 
 import { formatDate, formatTime, formatAsMoney, formatText, capitalizeFirstLeters } from "@/utils";
 // ============ Local Componeents ============//
 import NewOrderTable from "./Tables/Orders/NewOrderTable.vue";
-import DriverList from "./Modals/DriverList.vue";
+// import DriverList from "./Modals/DriverList.vue";
 import ReturnedOrderTable from "./Tables/Orders/ReturnedOrderTable.vue";
 import DeliveredOrderTable from "./Tables/Orders/DeliveredOrderTable.vue";
 import CompletedOrderTable from "./Tables/Orders/CompletedOrderTable.vue";
@@ -103,6 +105,8 @@ import AppTab from "@/components/AppTab.vue";
 import AppTable from "@/components/AppTable.vue";
 import TableFooter from '@/components/AppTableFooter.vue';
 import ConfirmCancelModal from '@/components/AppConfirmModal.vue';
+
+const LazyDriverList = defineAsyncComponent(() => import('./Modals/DriverList.vue'));
 
 
 import { ROUTES, PAYMENT_METHOD } from "@/constants";
@@ -126,13 +130,32 @@ const openConfirmModal = ref(false);
 const ouderToUpdate = ref<any>({})
 const openDriverModal = ref(false)
 
-const tabTitles = ref([ 
-  "new orders", 
+const canHandle = computed(()=>{  
+  let roles = [
+      "superadmin",
+      "customer_service",
+      "internal_control_manager",
+      "business_development_manager"
+    ]
+  const adminRole = localStorage.getItem(SAVED_ADMIN_ROLE) as string;
+
+  return roles.includes(adminRole )
+})
+
+const tabTitles = computed(() =>{
+  return !canHandle.value ? [ 
   "delivered orders",
   "orders returned", 
   "completed orders", 
   "declined orders"
-])
+] : [ 
+ "new orders" , 
+  "delivered orders",
+  "orders returned", 
+  "completed orders", 
+  "declined orders"
+]
+})
 
 const newOrdersTableData = computed(() => {
   return new_orders.value?.data?.map((elm:any)=>{    
@@ -279,7 +302,9 @@ const proceedToTransit = async(driverId: string) => {
 
 const fetchContent = async () => {
   loading.value = true
-  await  orderStore.fetchNewOrders()
+  await  orderStore.fetchNewOrders({
+    page: new_orders.value?.pagination?.currentPageNo,
+  });
   loading.value = false
 }
 
@@ -301,10 +326,14 @@ const updateOrderStatus = async(payload: any) => {
     });
 
     if(payload.status.toLowerCase() === "declined"){
-      fetchDeclinedOrders()
+      fetchDeclinedOrders({
+        page: declined_orders.value?.pagination?.currentPageNo,
+      })
     }
     if(payload.status.toLowerCase() === "return_order"){
-      fetchDeliveredOrders()
+      fetchDeliveredOrders({
+        page: delivered_orders.value?.pagination?.currentPageNo,
+      })
     }
   }
  
