@@ -288,6 +288,22 @@ const defaultFormValue: CustomFormData<UpdateProductDto> = {
     value: [],
     errorMessage: null,
   },
+  whp: {
+    value: null,
+    errorMessage: null,
+  },
+  interest: {
+    value: null,
+    errorMessage: null,
+  },
+  min_quantity: {
+    value: null,
+    errorMessage: null,
+  },
+  max_quantity: {
+    value: null,
+    errorMessage: null,
+  },
   price: {
     value: null,
     errorMessage: null,
@@ -312,7 +328,7 @@ const defaultFormValue: CustomFormData<UpdateProductDto> = {
     value: null,
     errorMessage: null,
   },
-}
+} 
 
 const formData = ref({...defaultFormValue});
 
