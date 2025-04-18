@@ -99,6 +99,70 @@
           </v-row>
           <v-row>
             <v-col cols="12" md="3">
+              <p class="tw-text-lg tw-font-medium">WHP</p>
+            </v-col>
+            <v-col cols="12" md="9">
+              <AppInput
+                v-model:value="formData.whp.value"
+                label="Sales Price"
+                type="number"
+                :disabled="isLoading"
+                @blur="validateFormData('whp')"
+                @input="validateFormData('whp')"
+              />
+              <p class="error-text">{{ formData.whp.errorMessage }}</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="3">
+              <p class="tw-text-lg tw-font-medium">Min Quantity</p>
+            </v-col>
+            <v-col cols="12" md="9">
+              <AppInput
+                v-model:value="formData.min_quantity.value"
+                label="Sales Price"
+                type="number"
+                :disabled="isLoading"
+                @blur="validateFormData('min_quantity')"
+                @input="validateFormData('min_quantity')"
+              />
+              <p class="error-text">{{ formData.min_quantity.errorMessage }}</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="3">
+              <p class="tw-text-lg tw-font-medium">Max Quantity</p>
+            </v-col>
+            <v-col cols="12" md="9">
+              <AppInput
+                v-model:value="formData.max_quantity.value"
+                label="Sales Price"
+                type="number"
+                :disabled="isLoading"
+                @blur="validateFormData('max_quantity')"
+                @input="validateFormData('max_quantity')"
+              />
+              <p class="error-text">{{ formData.max_quantity.errorMessage }}</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="3">
+              <p class="tw-text-lg tw-font-medium">Interest</p>
+            </v-col>
+            <v-col cols="12" md="9">
+              <AppInput
+                v-model:value="formData.interest.value"
+                label="Sales Price"
+                type="number"
+                :disabled="isLoading"
+                @blur="validateFormData('interest')"
+                @input="validateFormData('interest')"
+              />
+              <p class="error-text">{{ formData.interest.errorMessage }}</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="3">
               <p class="tw-text-lg tw-font-medium">Quantity In Stock</p>
             </v-col>
             <v-col cols="12" md="9">
@@ -280,6 +344,22 @@ const formData = ref<CustomFormData>({
     value: null,
     errorMessage: null,
   },
+  whp: {
+    value: null,
+    errorMessage: null,
+  },
+  min_quantity: {
+    value: null,
+    errorMessage: null,
+  },
+  max_quantity: {
+    value: null,
+    errorMessage: null,
+  },
+  interest: {
+    value: null,
+    errorMessage: null,
+  },
   quantity: {
     value: null,
     errorMessage: null,
@@ -325,6 +405,22 @@ function clearFormData() {
       value: null,
       errorMessage: null,
     },
+    whp: {
+    value: null,
+    errorMessage: null,
+  },
+  interest: {
+    value: null,
+    errorMessage: null,
+  },
+  min_quantity: {
+    value: null,
+    errorMessage: null,
+  },
+  max_quantity: {
+    value: null,
+    errorMessage: null,
+  },
     quantity: {
       value: null,
       errorMessage: null,
@@ -369,14 +465,21 @@ function handleFileUploadSuccess(urls: Array<string> | null) {
     return;
   }
 
-  const { price, quantity } = createProductPayload.value;
+  const {whp, interest, max_quantity, min_quantity,  price, quantity } = createProductPayload.value;
 
   createProductPayload.value.images = urls.map(
     url => ({image_url: url, s3_id: ''})
   );
+  
   createProductPayload.value.price = price.toString() as any;
   createProductPayload.value.quantity = quantity.toString() as any;
+  createProductPayload.value.quantity = quantity.toString() as any;
+  createProductPayload.value.whp = whp.toString() as any;
+  createProductPayload.value.interest = interest.toString() as any;
+  createProductPayload.value.max_quantity = max_quantity.toString() as any;
+  createProductPayload.value.min_quantity = min_quantity.toString() as any;
 
+  // console.log(createProductPayload.value)
   createProduct({...createProductPayload.value});
 }
 

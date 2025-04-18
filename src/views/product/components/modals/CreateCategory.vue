@@ -171,6 +171,7 @@ async function validateFormData(field?: keyof CreateCategoryDto, proceedOnSucces
 
 async function createCategory(payload: CreateCategoryDto) {
   try {
+    
     const success = await categoryStore.createCategory(payload);
     if (success) {
       emit('completed');

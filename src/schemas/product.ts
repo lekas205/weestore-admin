@@ -102,6 +102,35 @@ export const CreateProductSchema = z.object({
     .min(1, {
       message: 'Quantity cannot be less than 1'
     }),
+    min_quantity: z
+    .number({
+      message: 'Min quantity is required',
+      coerce: true
+    })
+    .min(1, {
+      message: 'Min quantity cannot be less than 1'
+    }),
+    max_quantity: z
+    .number({
+      message: 'Max quantity is required',
+      coerce: true
+    })
+    .min(1, {
+      message: 'Max quantity cannot be less than 1'
+    }),
+    interest: z
+    .number({
+      message: 'Interest is required',
+      coerce: true
+    })
+    .min(1, {
+      message: 'Interest cannot be less than 1'
+    }),
+    whp: z
+    .number({
+      message: 'WHP is required',
+      coerce: true
+    }),
   category: z.string({
     message: 'Category is required'
   }),

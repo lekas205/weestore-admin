@@ -7,12 +7,12 @@ export const ENDPOINTS = {
   LOGOUT: `${ADMIN_BASE}/logout`,
   CATEGORY: `${ADMIN_BASE}/category`,
   CATEGORY_BY_ID: (id: any) => `${ADMIN_BASE}/category/${id}`,
-  WAREHOUSE: `${ADMIN_BASE}/warehouse`,
-  WAREHOUSE_BY_ID: (id: any) => `${ADMIN_BASE}/warehouse/${id}`,
+  WAREHOUSE: `${ADMIN_BASE}/store`,
+  WAREHOUSE_BY_ID: (id: any) => `${ADMIN_BASE}/store/${id}`,
   PRODUCT: `${ADMIN_BASE}/product`,
   GET_STATES: "/utility/states",
   GET_WAREHOUSE_BY_STATE: (stateID: string) =>
-    `/utility/state/warehouse/${stateID}`,
+    `/utility/state/store/${stateID}`,
   GET_ORDERS: `${ADMIN_BASE}/order`,
 
   UPDATE_ORDER_STATUS: ({
