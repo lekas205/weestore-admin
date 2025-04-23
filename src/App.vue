@@ -12,6 +12,9 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute();
 const layout = computed(() => route.meta.layout ?? 'public');
+
+console.log(import.meta.env.DEV);
+
 </script>
 
 <style scoped>
