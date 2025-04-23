@@ -12,7 +12,7 @@ export const PHONE_NUMBER_REGEX = /^(?:\+?234|0)(?:\d{10})$/;
 export const ORDER_STATUS_OPTION = [
   { label: "Pending", value: "PENDING" },
   { label: "Processing", value: "PROCESSING" },
-  { label: "In Transit", value: "IN_TRANSIT" },
+  // { label: "In Transit", value: "IN_TRANSIT" },
   { label: "Decline", value: "DECLINED" },
   { label: "Delivered", value: "DELIVERED" },
   { label: "Completed", value: "COMPLETED" },

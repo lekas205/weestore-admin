@@ -101,6 +101,70 @@
           </v-row>
           <v-row>
             <v-col cols="12" md="3">
+              <p class="tw-text-lg tw-font-medium">WHP</p>
+            </v-col>
+            <v-col cols="12" md="9">
+              <AppInput
+                v-model:value="formData.whp.value"
+                label="Sales Price"
+                type="number"
+                :disabled="isLoading"
+                @blur="validateFormData('whp')"
+                @input="validateFormData('whp')"
+              />
+              <p class="error-text">{{ formData.whp.errorMessage }}</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="3">
+              <p class="tw-text-lg tw-font-medium">Min Quantity</p>
+            </v-col>
+            <v-col cols="12" md="9">
+              <AppInput
+                v-model:value="formData.min_quantity.value"
+                label="Sales Price"
+                type="number"
+                :disabled="isLoading"
+                @blur="validateFormData('min_quantity')"
+                @input="validateFormData('min_quantity')"
+              />
+              <p class="error-text">{{ formData.min_quantity.errorMessage }}</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="3">
+              <p class="tw-text-lg tw-font-medium">Max Quantity</p>
+            </v-col>
+            <v-col cols="12" md="9">
+              <AppInput
+                v-model:value="formData.max_quantity.value"
+                label="Sales Price"
+                type="number"
+                :disabled="isLoading"
+                @blur="validateFormData('max_quantity')"
+                @input="validateFormData('max_quantity')"
+              />
+              <p class="error-text">{{ formData.max_quantity.errorMessage }}</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="3">
+              <p class="tw-text-lg tw-font-medium">Interest</p>
+            </v-col>
+            <v-col cols="12" md="9">
+              <AppInput
+                v-model:value="formData.interest.value"
+                label="Sales Price"
+                type="number"
+                :disabled="isLoading"
+                @blur="validateFormData('interest')"
+                @input="validateFormData('interest')"
+              />
+              <p class="error-text">{{ formData.interest.errorMessage }}</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="3">
               <p class="tw-text-lg tw-font-medium">Quantity In Stock</p>
             </v-col>
             <v-col cols="12" md="9">
@@ -335,6 +399,9 @@ const formData = ref({...defaultFormValue});
 // ============= WATCHER ============== //
 watch(selectedProduct, async (newValue) => {
   const data = { ...newValue };
+
+  console.log(data,'________');
+  
   formData.value.productId.value = data.product_id;
   formData.value.name.value = data.product_name;
   formData.value.description.value = data.description;
@@ -345,6 +412,10 @@ watch(selectedProduct, async (newValue) => {
   formData.value.state.value = data.state_id;
   formData.value.category.value = newValue.category_id;
   formData.value.manufacturer.value = newValue.manufacturer;
+  formData.value.whp .value = data.whp;
+  formData.value.interest.value = data.interest_percent;
+  formData.value.min_quantity.value = data.min_quantity;
+  formData.value.max_quantity.value = data.max_quantity;
 
   loadingWarehouse.value = true;
   warehouses.value = await warehouseStore.fetchWarehouseByState(data.state_id);
@@ -403,6 +474,8 @@ async function handleStateSelection(stateId: string) {
 
 async function validateFormData(field?: keyof UpdateProductDto, proceedOnSuccess = false) {
   const payload = await formValidator<UpdateProductDto>(formData, UpdateProductSchema, field);
+  console.log(payload, 'payload');
+  
   if (payload && proceedOnSuccess) {
     isLoading.value = true;
     editProductPayload.value = payload;
@@ -417,13 +490,17 @@ function handleFileUploadSuccess(urls: Array<string> | null) {
     return;
   }
 
-  const { price, quantity } = editProductPayload.value;
+  const {whp, interest, max_quantity, min_quantity, price, quantity } = editProductPayload.value;
 
   editProductPayload.value.images = urls.map(
     url => ({image_url: url, s3_id: ''})
   );
   editProductPayload.value.price = price.toString() as any;
   editProductPayload.value.quantity = quantity.toString() as any;
+  editProductPayload.value.whp = whp.toString() as any;
+  editProductPayload.value.interest = interest.toString() as any;
+  editProductPayload.value.max_quantity = max_quantity.toString() as any;
+  editProductPayload.value.min_quantity = min_quantity.toString() as any;
 
   editProduct({...editProductPayload.value});
 }

@@ -25,7 +25,7 @@
                 <app-select
                     :value="item.status"
                     @update="updateStatus($event, item.id)"
-                    :options="actionOptions.slice(0, 4)"
+                    :options="actionOptions"
                     item-title="label"
                     item-value="value"
                     label="Select"

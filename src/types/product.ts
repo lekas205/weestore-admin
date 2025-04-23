@@ -103,7 +103,12 @@ export type Product = {
   manufacturer: string;
   published: boolean;
   price: number;
+  interest: number
+  whp:number
+  max_quantity: number;
+  min_quantity: number;
   stock_quantity: number;
+  interest_percent: number
   quantity_bought: number;
   stamp_user: string | null;
   status: string;
