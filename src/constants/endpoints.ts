@@ -45,4 +45,5 @@ export const ENDPOINTS = {
   PRODUCT_BY_ID: (id: any) => `${ADMIN_BASE}/product/${id}`,
   PUBLISH_PRODUCT: (id: any) => `${ADMIN_BASE}/product/${id}/publish`,
   UNPUBLISH_PRODUCT: (id: any) => `${ADMIN_BASE}/product/${id}/unpublish`,
+  WITHDRAWAL_REQUEST: `${ADMIN_BASE}/withdrawal/request`,
 };

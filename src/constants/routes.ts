@@ -199,4 +199,12 @@ export const ROUTES = {
     requiresAuth: true,
     title: "Payments",
   },
+  withdrawal: {
+    path: "/withdrawal",
+    name: "Withdrawal",
+    requiresAuth: true,
+    title: "Withdrawal Request",
+    canAccess: ["superadmin", "accountant", "customer_service"],
+
+  },
 };

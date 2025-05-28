@@ -264,6 +264,8 @@ export async function handleFileUpload(
     for (const payload of uploadPayloads) {
       const command = new PutObjectCommand(payload);
       try {
+        console.log(uploadPayloads)
+
         await bucket.send(command);        
         urls.push(`https://fajo-bc.s3.amazonaws.com/${payload.Key}`);
       } catch (error) {

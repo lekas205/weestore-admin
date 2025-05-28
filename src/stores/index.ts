@@ -10,3 +10,4 @@ export * from "./credit";
 export * from "./dashboard";
 export * from './users';
 export * from "./export";
+export * from "./withdrawal"

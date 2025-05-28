@@ -220,15 +220,16 @@ const sidebarLinks = ref<SidebarLink[]>([
     customClass: '',
     access: ["superadmin"],
   },
-  // {
-  //   id: 7,
-  //   title: 'Payments',
-  //   link: null,
-  //   isActive: false,
-  //   icon: PaymentsIcon,
-  //   activeIcon: PaymentsIconActive,
-  //   customClass: ''
-  // },
+  {
+    id: 7,
+    title: 'Withdrawal Requests',
+    link: ROUTES.withdrawal.name,
+    isActive: false,
+    icon: PaymentsIcon,
+    activeIcon: PaymentsIconActive,
+    customClass: '',
+    access: ["superadmin",  "accountant"],
+  },
 ]);
 
 const adminRole = computed(()=> localStorage.getItem(SAVED_ADMIN_ROLE))

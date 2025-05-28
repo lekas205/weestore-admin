@@ -9,6 +9,7 @@ import creditRoutes from "./credit.routes";
 import walletRoutes from "./wallet.route";
 import shipmentRoutes from "./shipment.route";
 import usersRoutes from "./user..route";
+import withdrawalRoutes  from "./withdrawal.routes";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +23,7 @@ const router = createRouter({
     ...walletRoutes,
     ...usersRoutes,
     ...shipmentRoutes,
+    ...withdrawalRoutes,
   ],
 });
 
