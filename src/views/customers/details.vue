@@ -102,6 +102,11 @@
                     @next="getCustomerTransactions($event)"
                 />
             </template>
+            <template #referrals>
+                <Referral 
+                    :items="customer.referrals"
+                />
+            </template>
         </app-tab>
 
         <EditCustomerModal 
@@ -119,6 +124,7 @@ import { ChevronLeft } from 'lucide-vue-next'
 import { ref, markRaw, onMounted, computed } from "vue";
 
 import AppTab from "@/components/AppTab.vue";
+import Referral from "./components/Referral.vue";
 import OrderHistoryTable from "./components/OrderHistoryTable.vue";
 import TransactionHistory from "./components/TransactionHistory.vue";
 import EditCustomerModal from "./components/EditCustomerModal.vue";
@@ -135,7 +141,7 @@ const { custommerDetails: customer, customerOrders, customerTransactions }:any =
 
 const loading = ref(false);
 const showEditCustomerModal = ref(false);
-const tabTitles =markRaw(["order history", "transaction history"]);
+const tabTitles =markRaw(["order history", "transaction history", "referrals"]);
 
 const customerId = computed<string>(()=> route.params.id as string);
 const orderhistoryData = computed(()=> {
