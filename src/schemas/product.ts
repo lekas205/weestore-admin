@@ -122,9 +122,6 @@ export const CreateProductSchema = z.object({
     .number({
       message: 'Interest is required',
       coerce: true
-    })
-    .min(1, {
-      message: 'Interest cannot be less than 1'
     }),
     whp: z
     .number({

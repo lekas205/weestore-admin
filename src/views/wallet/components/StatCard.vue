@@ -34,9 +34,15 @@
   const summaryData = computed(()=>{
     return  [
       {
-        title: ' Total Amount in Wallet',
+        title: ' Total Amount in Pocket',
         amount:  formatAsMoney(props.stats.totalAmountInWallet) ,
         color: 'tw-bg-primary',
+        link: null
+      },
+      {
+        title: ' Total Amount in Rewards',
+        amount:  formatAsMoney(props.stats.totalAmountInWallet) ,
+        color: 'tw-bg-orange',
         link: null
       },
       {
@@ -46,6 +52,7 @@
         link: "/wallets/topup-approval",
         sub_text: "Click Here to View Request"
       },
+
     ]
   });
   const canHandle = computed(()=>{  

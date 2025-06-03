@@ -44,7 +44,7 @@
                 </div>
             </v-col>
             <v-col col="6" :md="3">
-                <p>CASH POINTS</p>
+                <p>Rewards</p>
                 <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
                     {{ formatAsMoney(customer.cashpoint) }}
                 </div>

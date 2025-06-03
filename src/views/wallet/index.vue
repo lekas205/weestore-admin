@@ -24,7 +24,7 @@
                     <p @click="router.push('/customers/'+item.id)"  class=" tw-underline tw-cursor-pointer" >  {{item.name }}</p>
                 </template>
                 <template v-slot:item.amount="{ item }">
-                    <p> {{ formatAsMoney(item.wallet.balance) }} </p>
+                    <p> {{ formatAsMoney(item?.wallet?.balance) }} </p>
                 </template>
                 <template  v-slot:bottom>
                     <TableFooter v-bind="pagination"  @next="next($event)"/>
@@ -69,7 +69,8 @@ const headers = ref<any[]>([
     title: 'Client Name',
     },
     { key: 'phone_no', title: 'Phone Number' },
-    { key: 'amount', title: 'Amount In Account' },
+    { key: 'pocket', title: 'Amount In Pocket' },
+    { key: 'rewards', title: 'Amount In Rewards' },
 ])
 
 const pagination = computed(()=> customers.value?.pagination)
@@ -79,7 +80,8 @@ const items = computed<any[]>(() => {
             id: elm.customer_id,
             name: `${formatText(elm.first_name)} ${formatText(elm.last_name)}`,
             phone_no: elm.phone,
-            wallet: elm.wallets.find((x: any)=> x.wallet_type === "TOPUP")
+            rewards: formatAsMoney(elm.wallets.find((x: any)=> x.wallet_type === "REWARD")?.balance || 0),
+            pocket: formatAsMoney(elm.wallets.find((x: any)=> x.wallet_type === "POCKET")?.balance || 0),
         }
     })
 })
