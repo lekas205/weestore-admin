@@ -41,7 +41,7 @@
       },
       {
         title: ' Total Amount in Rewards',
-        amount:  formatAsMoney(props.stats.totalAmountInWallet) ,
+        amount:  formatAsMoney(props.stats.totalAmountInReward) ,
         color: 'tw-bg-orange',
         link: null
       },

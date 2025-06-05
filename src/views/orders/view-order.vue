@@ -13,7 +13,7 @@
 
             <div class="tw-flex tw-justify-between tw-mt-[100px] tw-mb-[70px]">
                 <div class="t">
-                    <h4 class="tw-font-bold">DATE</h4>
+                    <h4 class="tw-font-bold">PURCHASED DATE</h4>
                     <p> {{ formatDate(orderDetails.created_data) }} </p>
                 </div>
 
@@ -119,9 +119,11 @@ const headers = ref<any[]>([
     title: 'SR',
     },
     { key: 'product_name', title: 'Product Name' },
-    { key: 'quantity', title: 'Quantity' },
-    { key: 'price', title: 'Unit Price' },
-    { key: 'amount', title: 'Amount' },
+   { key: 'quantity', title: 'Units' },
+   { key: 'whp', title: 'WHP' },
+   { key: 'dividends', title: 'Dividends' },
+   { key: 'price', title: 'Unit Price' },
+   { key: 'amount', title: 'Amount' },
 ])
 
 const orderedItems = computed<any[]>(()=>{

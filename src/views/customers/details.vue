@@ -46,7 +46,7 @@
             <v-col col="6" :md="3">
                 <p>Rewards</p>
                 <div class="tw-bg-[#DFE0E0] py-4 px-3 tw-rounded-lg tw-h-[55px]">
-                    {{ formatAsMoney(customer.cashpoint) }}
+                    {{ formatAsMoney(customer.reward_wallet) }}
                 </div>
             </v-col>
         </v-row>

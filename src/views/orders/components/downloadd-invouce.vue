@@ -10,7 +10,7 @@
 
             <div class="tw-flex tw-justify-between tw-mt-[100px] tw-mb-[70px]">
                 <div class="t">
-                    <h4 class="tw-font-bold">DATE</h4>
+                    <h4 class="tw-font-bold">PURCHASED DATE</h4>
                     <p> {{ formatDate(orderDetails.created_data) }} </p>
                 </div>
 
@@ -37,7 +37,7 @@
                 </template>
             </v-data-table>
 
-        <div class="tw-flex tw-justify-between tw-bg-[#EFEEEE] tw-border tw-border-[#A4A9AE75] tw-py-[20px] tw-px-[60px] tw-mt-[40px]">
+            <div class="tw-flex tw-justify-between tw-bg-[#EFEEEE] tw-border tw-border-[#A4A9AE75] tw-py-[20px] tw-px-[60px] tw-mt-[40px]">
                 <div class="tw-text-center">
                     <h4 class="tw-font-bold tw-mb-2">PAYMENT METHOD</h4>
                     <p> {{PAYMENT_METHOD[orderDetails.payment_method]  }} </p>
@@ -83,7 +83,9 @@ const headers = ref<any[]>([
    title: 'SR',
    },
    { key: 'product_name', title: 'Product Name' },
-   { key: 'quantity', title: 'Quantity' },
+   { key: 'quantity', title: 'Units' },
+   { key: 'whp', title: 'WHP' },
+   { key: 'dividends', title: 'Dividends' },
    { key: 'price', title: 'Unit Price' },
    { key: 'amount', title: 'Amount' },
 ])

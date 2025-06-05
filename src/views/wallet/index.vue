@@ -6,7 +6,9 @@
             tableName="wallet"
             searchLabelText="Search by Name,email,phone" 
             class="tw-mt-[50px]" 
+            createBtnText="Topup"
             @search="search" 
+            @create="showTopup = true"
             @export="fetchCustomer($event)"
             @filter="fetchCustomer($event)"
         >
@@ -31,6 +33,8 @@
                 </template>
             </v-data-table>
         </app-table-wrapper>
+
+        <TopupModal :openModal="showTopup" @close="showTopup = false" />
     </section>
 </template>
 
@@ -38,13 +42,14 @@
 import { onMounted, ref, computed , watch} from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
-import { ChevronLeft } from 'lucide-vue-next'
+// import { ChevronLeft } from 'lucide-vue-next'
 
 import TableFooter from '@/components/AppTableFooter.vue';
 import AppTableWrapper from "@/components/AppTableWrapper.vue";
 import { useCustomersStore, useAuthStore, useWalletStore } from "@/stores";
 import StatCard from "./components/StatCard.vue";
 import { formatText, formatAsMoney } from "@/utils";
+import TopupModal from "./components/TopupModal.vue";
 
 
 const router = useRouter()
@@ -60,6 +65,8 @@ const payload = ref({
     page: 1,
     search: ""
 });
+
+const showTopup = ref(false)
 const loading = ref<boolean>(false)
 const headers = ref<any[]>([
     {

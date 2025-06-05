@@ -40,24 +40,24 @@ const summaryData = computed(()=>{
       color: 'tw-bg-blue',
       link: null
     },
-    {
-      title: 'Orders in Transit',
-      amount: props.stats.inTransitOrdersNo,
-      color: 'tw-bg-lime',
-      link: null
-    },
+    // {
+    //   title: 'Orders in Transit',
+    //   amount: props.stats.inTransitOrdersNo,
+    //   color: 'tw-bg-lime',
+    //   link: null
+    // },
     {
       title: 'Orders Completed',
       amount: props.stats.completedOrdersNo,
       color: 'tw-bg-wine',
       link: null
     },
-    {
-      title: 'Orders Returned',
-      amount: props.stats.returnedOrdersNo,
-      color: 'tw-bg-orange',
-      link: "/orders/returned-order"
-    },
+    // {
+    //   title: 'Orders Returned',
+    //   amount: props.stats.returnedOrdersNo,
+    //   color: 'tw-bg-orange',
+    //   link: "/orders/returned-order"
+    // },
   ]
 });
 
