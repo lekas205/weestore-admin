@@ -5,70 +5,22 @@
           <div class="title-container">
             <X class="tw-cursor-pointer" color="red" @click="closeModal()" />
             <div class="title">
-              <p class="tw-text-3xl tw-font-medium">Create Driver Account</p>
+              <p class="tw-text-3xl tw-font-medium">Wallet Topup</p>
             </div>
           </div>
           <div class="pa-5">
             <form class="create-form">
               <div class="mb-3">
                 <label for="warehouse-name" class="tw-text-lg tw-font-medium">
-                  Fist Name
-                </label>
-                <AppInput
-                  v-model:value="formData.firstName"
-                  id="warehouse-name"
-                  label="Enter first name"
-                  type="text"
-                />
-              </div>
-
-              <div class="mb-3">
-                <label for="warehouse-name" class="tw-text-lg tw-font-medium">
-                  Last Name
-                </label>
-                <AppInput
-                  v-model:value="formData.lastName"
-                  id="warehouse-name"
-                  label="Enter Last name"
-                  type="text"
-                />
-              </div>
-
-              <div class="mb-3">
-                <label for="warehouse-name" class="tw-text-lg tw-font-medium">
-                  Phone Number
-                </label>
-                <AppInput
-                  v-model:value="formData.phoneNo"
-                  id="warehouse-name"
-                  label="Enter phone number"
-                  type="number"
-                />
-              </div>
-
-              <div class="mb-3">
-                <label for="warehouse-name" class="tw-text-lg tw-font-medium">
-                    Driver License
-                </label>
-                <AppInput
-                  v-model:value="formData.license"
-                  id="warehouse-name"
-                  label="Driver license"
-                  type="text"
-                />
-              </div>
-
-              <div class="mb-3">
-                <label for="warehouse-name" class="tw-text-lg tw-font-medium">
-                  State
+                  Customer
                 </label>
                 <v-select
-                    v-model="formData.state"
-                    :items="stateList"
+                    v-model="formData.customerId"
+                    :items="customer_list"
                     variant="outlined"
                     density="compact"
                     item-title="name"
-                    item-value="code"
+                    item-value="value"
                     label="Select"
                     persistent-hint
                     single-line
@@ -78,22 +30,30 @@
 
               <div class="mb-3">
                 <label for="warehouse-name" class="tw-text-lg tw-font-medium">
-                  Warehose
+                  Wallet Type
                 </label>
                 <v-select
-                    v-model="formData.warehouse"
-                    :items="warehouseList"
+                    v-model="formData.productType"
+                    :items="walletOptions"
                     variant="outlined"
                     density="compact"
-                    item-title="warehouse_name"
-                    item-value="warehouse_id"
                     label="Select"
                     persistent-hint
                     single-line
                     hide-details
                 ></v-select>
               </div>
-
+              <div class="mb-3">
+                <label for="warehouse-name" class="tw-text-lg tw-font-medium">
+                  Amount
+                </label>
+                <AppInput
+                  v-model:value="formData.amount"
+                  id="amount"
+                  label="Enter Amount"
+                  type="number"
+                />
+              </div>
               <div class="btn-container">
                 <AppButton
                   class="mr-3"
@@ -102,7 +62,7 @@
                   :disabled="loading"
                   @click="submit"
                 >
-                  {{ !driver.driver_id  ? 'Create ' : "Update" }}
+                 Topup
                 </AppButton>
   
                 <AppButton @click="closeModal()" secondary type="button"  :disabled="loading">
@@ -118,11 +78,12 @@
   
   <script setup lang="ts">
   import { useRoute } from "vue-router";
+  import { storeToRefs } from "pinia";
   import { ref, computed, onMounted, watch } from 'vue'
   import { X } from 'lucide-vue-next'
   import { openToastNotification, formValidator,  } from '@/utils'
   import { CreateWarehouseSchema } from '@/schemas'
-  import { useWarehouseStore, useDriverStore } from '@/stores'
+  import { useWarehouseStore, useDriverStore  , useWalletStore, useCustomersStore} from '@/stores'
 
   // ============ COMPONENTS =================== //
   import AppSelect from "@/components/AppSelect.vue";
@@ -131,97 +92,71 @@
   
   const emit = defineEmits(['close', 'completed']);
   const props = defineProps({
-    action: {
-        type: String,
-        default: 'create',
-        description: "options are create and edit"
-    },
     openModal: {
       type: Boolean,
       default: false,
     },
-    driver: {
-      type: Object,
-      default: ()=>{
-        return {}
-      },
-    }
   });
   
   const route = useRoute();
   const driverStore = useDriverStore();
   const warehouseStore = useWarehouseStore();
+  const walletStore = useWalletStore()
+
+  const customerStore = useCustomersStore()
+
+  const { customers } = storeToRefs(customerStore);
+
 
   const showModal = ref(false);
   const loginData = ref<any>({});
   const loading = ref<boolean>(false);
   const formData = ref<any>({
-    firstName: "",
-    lastName: "",
-    phoneNo: "",
-    state: "",
-    address: "",
-    warehouse: "",
+    amount: '',
+    customerId: '',
+    productType: '',
   });
-  
-  const stateList = computed(() => warehouseStore.states ?? []);
-  const warehouseList = computed(() => warehouseStore.warehouseData.rows ?? []);
+
+  const walletOptions = ref(['Topup', 'Reward'])
+
+
+  const customer_list = computed(()=> {
+    return customers.value.data.map((elm)=>{
+     return{
+      name: `${elm.first_name} ${elm.last_name}`,
+      value : elm.customer_id,
+     }
+    })
+  })
   
   function closeModal() {
     if (loading.value === true) return;
     emit('close');
   }
-
-  watch( () => props.openModal, (newval)=>{
-    if(newval){
-        formData.value.firstName = props.driver.first_name;
-        formData.value.lastName = props.driver.last_name;
-        formData.value.email  = props.driver.email;
-        formData.value.phoneNo = props.driver.phone;
-        formData.value.license = props.driver.license;
-        formData.value.warehouse = props.driver.warehouse_id;
-        formData.value.state = props.driver.state_code;
-        formData.value.address = props.driver.address;
-    }
-  })
-
-  const updateWarehouse = (value?: any) => {
-    formData.value.warehouse_id = value
-  }
   
   const submit = async () => {
     loading.value = true
-    if(!props.driver.driver_id){
       var res:any;
-      res = await driverStore.createDriver(formData.value,)
-    }else{
-      res = await driverStore.updateDriver({
-        payload: formData.value,
-        driverId: props.driver.driver_id,
+      res = await walletStore.topupWallet({
+        ...formData.value,
+        productType: formData.value.productType.toUpperCase(),
       })
-    }
 
     loading.value = false
     if(res){
-      if(props.action === 'create'){        
-        loginData.value = res.payload
-        showModal.value = true
-
-      }else{
         openToastNotification({
-          message: `Driver profile has been ${props.action === 'create' ? 'created': 'updated'} successfully`,
+          message: `Customer's wallet topped up successfully`,
           variant: 'success'
         });
-      }
-        emit("completed")
         closeModal()
     }
    
   }
 
   onMounted(async()=>{
-    warehouseStore.fetchAllWarehouses()
-    warehouseStore.fetchStates()
+    customerStore.fetchCustomers({limit: 1000})
+    // warehouseStore.fetchAllWarehouses()
+    // warehouseStore.fetchStates()
   })
   
   </script>

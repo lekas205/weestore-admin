@@ -14,7 +14,7 @@ export const ORDER_STATUS_OPTION = [
   { label: "Processing", value: "PROCESSING" },
   // { label: "In Transit", value: "IN_TRANSIT" },
   // { label: "Decline", value: "DECLINED" },
-  // { label: "Delivered", value: "DELIVERED" },
+  { label: "Delivered", value: "DELIVERED" },
   { label: "Completed", value: "COMPLETED" },
   // { label: "Return Order", value: "RETURN_ORDER" },
 ];

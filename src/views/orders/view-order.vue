@@ -133,6 +133,8 @@ const orderedItems = computed<any[]>(()=>{
             product_name: capitalizeFirstLeters(elm.product_name),
             price: formatAsMoney(elm.price),
             amount: formatAsMoney(elm.amount),
+            whp: elm.whp,
+            interest: elm.interest,
             quantity: elm.quantity
         }
     })

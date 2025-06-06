@@ -147,13 +147,13 @@ const tabTitles = computed(() =>{
   // "delivered orders",
   "orders returned", 
   "completed orders", 
-  // "declined orders"
+  "declined orders"
 ] : [ 
  "new orders" , 
   // "delivered orders",
   "orders returned", 
   "completed orders", 
-  // "declined orders"
+  "declined orders"
 ]
 })
 

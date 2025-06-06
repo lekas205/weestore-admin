@@ -46,4 +46,5 @@ export const ENDPOINTS = {
   PUBLISH_PRODUCT: (id: any) => `${ADMIN_BASE}/product/${id}/publish`,
   UNPUBLISH_PRODUCT: (id: any) => `${ADMIN_BASE}/product/${id}/unpublish`,
   WITHDRAWAL_REQUEST: `${ADMIN_BASE}/withdrawal/request`,
+  WALLET_TOPUP:  (customer_id: string) => `${ADMIN_BASE}/customer/${customer_id}/topup`,
 };

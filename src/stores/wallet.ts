@@ -54,9 +54,20 @@ export const useWalletStore = defineStore("wallet", () => {
     }
   };
 
+  const topupWallet = async (payload: any): Promise<boolean> => {
+    try {
+      const { data } = await http.post(ENDPOINTS.WALLET_TOPUP(payload.customerId), payload);
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
   return {
     pending_requests,
     dashboardStats,
+    topupWallet,
     getDashboardStats,
     fetchPendingRequest,
     approveDeclineRequest,

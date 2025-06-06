@@ -292,7 +292,7 @@ function handleSublinkNavigation(id: number, subId: number) {
 
 <style lang="scss" scoped>
 .sidebar-wrapper {
-  background-color: #FE0000;
+  background-color: #000000;
 }
 
 .sidebar-top {
@@ -300,8 +300,10 @@ function handleSublinkNavigation(id: number, subId: number) {
 }
 
 .sidebar-logo {
+width: 8rem;
   position: absolute;
-  top: 0;
+  top: 20px;
+  left: 10px;
 }
 
 .sidebar {

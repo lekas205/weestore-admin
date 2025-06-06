@@ -85,7 +85,7 @@ const headers = ref<any[]>([
    { key: 'product_name', title: 'Product Name' },
    { key: 'quantity', title: 'Units' },
    { key: 'whp', title: 'WHP' },
-   { key: 'dividends', title: 'Dividends' },
+   { key: 'interest', title: 'Dividends' },
    { key: 'price', title: 'Unit Price' },
    { key: 'amount', title: 'Amount' },
 ])
@@ -96,6 +96,8 @@ const orderedItems = computed<any[]>(()=>{
            sr: index + 1,
            product_name: capitalizeFirstLeters(elm.product_name),
            price: formatAsMoney(elm.price),
+           whp: elm.whp,
+           interest: elm.interest,
            amount: formatAsMoney(elm.amount),
            quantity: elm.quantity
        }

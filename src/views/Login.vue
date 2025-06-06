@@ -1,7 +1,7 @@
 <template>
   <div class="login-wrapper">
     <div class="image-side">
-      <img src="@/assets/images/png/login-image.png" alt="">
+      <img src="@/assets/images/png/login-image.jpeg" alt="">
     </div>
     <div class="form-side">
       <div class="form-wrapper">
