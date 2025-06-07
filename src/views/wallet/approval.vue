@@ -69,7 +69,7 @@ const headers = ref<any[]>([
     sortable: false,
     title: 'Client Name',
     },
-    { key: 'phone_no', title: 'Phone Number' },
+    { key: 'topup_type', title: 'Topup Type' },
     { key: 'amount', title: 'Topup Amount' },
     { key: 'payment_proof', title: 'View Proof Of  Payment' },
     { key: 'action', title: 'Action' },
@@ -84,6 +84,7 @@ const items = computed<any[]>(()=> {
             name: `${formatText(elm.first_name)} ${formatText(elm.last_name)}`,
             amount: formatAsMoney(elm.amount),
             phone_no: elm.phone,
+            topup_type: elm.topup_type,
             payment_url: elm.paymentUrl
         }
     })

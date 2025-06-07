@@ -43,7 +43,7 @@
                     hide-details
                 ></v-select>
               </div>
-              <div class="mb-3">
+              <div class="mb-5">
                 <label for="warehouse-name" class="tw-text-lg tw-font-medium">
                   Amount
                 </label>
@@ -54,13 +54,26 @@
                   type="number"
                 />
               </div>
+              <div class=""  v-if="formData.productType === 'Topup'">
+                <label for="warehouse-name" class="tw-text-lg tw-font-medium">
+                    Proof of Payment
+                </label>
+                <AppFileUpload
+                  allowMultipleFiles
+                  :disabled="isLoading"
+                  :startUpload="startFileUpload"
+                  @savedFile="handleSavedFile"
+                  @fileError="handleFileError"
+                  @upload-completed="handleFileUploadSuccess"
+                />
+              </div>
               <div class="btn-container">
                 <AppButton
                   class="mr-3"
                   type="button"
                   :loading="loading"
                   :disabled="loading"
-                  @click="submit"
+                  @click="handleFormSubmit"
                 >
                  Topup
                 </AppButton>
@@ -69,6 +82,8 @@
                   Cancel
                 </AppButton>
               </div>
+
+            
             </form>
           </div>
         </v-card>
@@ -89,7 +104,8 @@
   import AppSelect from "@/components/AppSelect.vue";
   import AppInput from '@/components/AppInput.vue'
   import AppButton from '@/components/AppButton.vue'
-  
+  import AppFileUpload from '@/components/AppFileUpload.vue'
+
   const emit = defineEmits(['close', 'completed']);
   const props = defineProps({
     openModal: {
@@ -110,9 +126,12 @@
 
   const showModal = ref(false);
   const loginData = ref<any>({});
+  const isLoading = ref(false)
   const loading = ref<boolean>(false);
+    const startFileUpload = ref<boolean>(false);
   const formData = ref<any>({
     amount: '',
+    paymentUrl: '',
     customerId: '',
     productType: '',
   });
@@ -132,6 +151,14 @@
   function closeModal() {
     if (loading.value === true) return;
     emit('close');
+  }
+
+  const handleFormSubmit = () =>{
+    if(formData.value.productType === 'Topup'){
+      startFileUpload.value = true
+    }else{
+      submit()
+    }
   }
   
   const submit = async () => {
@@ -153,10 +180,29 @@
    
   }
 
+  function handleSavedFile(files: Array<File | string>) {
+  formData.value.paymentUrl = files[0];
+}
+function handleFileError(errorMessage: string | null) {
+  console.log(errorMessage);
+  
+  // formData.value.images.errorMessage = errorMessage;
+}
+
+function handleFileUploadSuccess(urls: Array<string> | null) {
+  startFileUpload.value = false;
+  if (!urls) {
+    isLoading.value = false;
+    return;
+  }
+
+  formData.value.paymentUrl = urls[0]
+
+  submit()
+}
+
   onMounted(async()=>{
     customerStore.fetchCustomers({limit: 1000})
-    // warehouseStore.fetchAllWarehouses()
-    // warehouseStore.fetchStates()
   })
   
   </script>

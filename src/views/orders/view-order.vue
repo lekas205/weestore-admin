@@ -121,7 +121,7 @@ const headers = ref<any[]>([
     { key: 'product_name', title: 'Product Name' },
    { key: 'quantity', title: 'Units' },
    { key: 'whp', title: 'WHP' },
-   { key: 'dividends', title: 'Dividends' },
+   { key: 'interest', title: 'Dividends' },
    { key: 'price', title: 'Unit Price' },
    { key: 'amount', title: 'Amount' },
 ])
