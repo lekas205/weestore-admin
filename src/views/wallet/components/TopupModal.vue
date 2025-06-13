@@ -35,6 +35,8 @@
                 <v-select
                     v-model="formData.productType"
                     :items="walletOptions"
+                    item-title="label"
+                    item-value="value"
                     variant="outlined"
                     density="compact"
                     label="Select"
@@ -136,8 +138,12 @@
     productType: '',
   });
 
-  const walletOptions = ref(['Topup', 'Reward'])
-
+  const walletOptions = ref([{
+    label: "Pocket",  value: "topup"
+ 
+  },{
+       label: "Reward", value: "reward"
+  }])
 
   const customer_list = computed(()=> {
     return customers.value.data.map((elm)=>{

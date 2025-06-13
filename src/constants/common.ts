@@ -45,9 +45,10 @@ export const ORDER_STATUS = {
 export const PAYMENT_METHOD = {
   WALLET: "Wallet",
   wallet: "Wallet",
-  manual: "Manual",
+  manual_payment: "Bank Transfer",
   PAY_ON_DELIVERY: "Pay on Delivery",
   TRANSFER: "Transfer",
+  paystack: "Paystack",
   PAY_NOW: "Pay Now",
   transfer: "Transfer",
   wallet_payment: "Wallet Payment",

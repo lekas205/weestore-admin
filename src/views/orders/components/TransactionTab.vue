@@ -145,13 +145,13 @@ const canHandle = computed(()=>{
 const tabTitles = computed(() =>{
   return !canHandle.value ? [ 
   // "delivered orders",
-  "orders returned", 
+  // "orders returned", 
   "completed orders", 
   "declined orders"
 ] : [ 
  "new orders" , 
   // "delivered orders",
-  "orders returned", 
+  // "orders returned", 
   "completed orders", 
   "declined orders"
 ]
