@@ -191,6 +191,7 @@ const productHistoryData = computed<any>(()=> {
             product_name: elm.product_name,
             warehouse_name: elm.warehouse_name,
             unit: elm.quantity,
+            whp:elm.whp,
             unit_amount: formatAsMoney(elm.price),
             total_amount: formatAsMoney(elm.total),
             interest: elm.interest,
