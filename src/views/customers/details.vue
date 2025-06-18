@@ -107,6 +107,15 @@
                     :items="customer.referrals"
                 />
             </template>
+
+            <template #products>
+                <ProductHistory 
+                    :loading="loading"
+                    :items="productHistoryData"
+                    :pagination="customerProducts?.pagination"
+                    @next="getCustomerProducts($event)"
+                />
+            </template>
         </app-tab>
 
         <EditCustomerModal 
@@ -128,6 +137,7 @@ import Referral from "./components/Referral.vue";
 import OrderHistoryTable from "./components/OrderHistoryTable.vue";
 import TransactionHistory from "./components/TransactionHistory.vue";
 import EditCustomerModal from "./components/EditCustomerModal.vue";
+import ProductHistory from "./components/ProductHistory.vue";
 
 import { PAYMENT_METHOD } from "@/constants/common";
 import { useCustomersStore, useAuthStore } from "@/stores";
@@ -137,11 +147,16 @@ const route = useRoute();
 const authStore = useAuthStore()
 const customerStore = useCustomersStore()
 
-const { custommerDetails: customer, customerOrders, customerTransactions }:any = storeToRefs(customerStore)
+const { 
+    custommerDetails: customer, 
+    customerOrders, 
+    customerTransactions, 
+    customerProducts
+ }:any = storeToRefs(customerStore)
 
 const loading = ref(false);
 const showEditCustomerModal = ref(false);
-const tabTitles =markRaw(["order history", "transaction history", "referrals"]);
+const tabTitles =markRaw(["order history", "transaction history", "referrals", 'products']);
 
 const customerId = computed<string>(()=> route.params.id as string);
 const orderhistoryData = computed(()=> {
@@ -169,6 +184,24 @@ const transactionistoryData = computed<any>(()=> {
     })
 });
 
+const productHistoryData = computed<any>(()=> {
+    return customerProducts.value.data?.map((elm:any)=> {
+        return   {
+            date:  elm.date,
+            product_name: elm.product_name,
+            warehouse_name: elm.warehouse_name,
+            unit: elm.quantity,
+            unit_amount: formatAsMoney(elm.price),
+            total_amount: formatAsMoney(elm.total),
+            interest: elm.interest,
+            end_date: elm.end_date,
+            start_date: elm.start_date,
+            category: elm.category
+        }
+    })
+});
+
+
 const getCustomerOrders = async (query?: any) => {
     loading.value = true;
     await customerStore.getCustomerOrders({customerId: customerId.value, query}),
@@ -180,6 +213,11 @@ const getCustomerTransactions = async (query?: any) => {
     await customerStore.getCustomerTransactions({customerId: customerId.value, query })
     loading.value = false;
 }
+const getCustomerProducts = async (query?: any) => {
+    loading.value = true;
+    await customerStore.getCustomerProducts({customerId: customerId.value, query })
+    loading.value = false;
+}
 
 
 const getCustomer = async () => {
@@ -187,9 +225,10 @@ const getCustomer = async () => {
     await Promise.all([
         customerStore.getSingleCustomer(customerId.value),
         customerStore.getCustomerOrders({customerId: customerId.value}),
-        customerStore.getCustomerTransactions({customerId: customerId.value})
+        customerStore.getCustomerTransactions({customerId: customerId.value}),
+        customerStore.getCustomerProducts({customerId: customerId.value})
     ])
-    authStore.toggleLoader();
+    authStore.toggleLoader();    
 }
 
 onMounted(async ()=>{

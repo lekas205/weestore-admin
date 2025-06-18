@@ -13,6 +13,7 @@ export const useCustomersStore = defineStore("customers", () => {
   const customers: any = ref({ ...STATE_PAYLOAD });
   const custommerDetails = ref({ ...STATE_PAYLOAD });
   const unverifiedCustomers = ref({ ...STATE_PAYLOAD });
+  const customerProducts = ref({...STATE_PAYLOAD})
 
   const customerOrders = ref({ ...STATE_PAYLOAD });
   const customerTransactions = ref({ ...STATE_PAYLOAD });
@@ -131,6 +132,33 @@ export const useCustomersStore = defineStore("customers", () => {
     }
   };
 
+  const getCustomerProducts = async ({
+    customerId,
+    query,
+  }: {
+    customerId: string;
+    query?: any;
+  }): Promise<boolean> => {
+    try {
+      const { data } = await http.get(
+        ENDPOINTS.GET_CUSTOMERS + `/${customerId}/products`,
+        {
+          params: { ...query },
+        }
+      );
+
+      const { paging, rows } = data.payload;
+      customerProducts.value = {
+        data: rows,
+        pagination: paging,
+      };
+      return true;
+    } catch (error) {
+      handleStoreRequestError(error);
+      return false;
+    }
+  };
+
   const verifyCustomer = async (id?: string): Promise<boolean> => {
     try {
       await http.patch(ENDPOINTS.GET_CUSTOMERS + `/${id}/verify`);
@@ -192,12 +220,14 @@ export const useCustomersStore = defineStore("customers", () => {
     deleteCustomer,
     custommerDetails,
     customerOrders,
+    customerProducts,
     customerTransactions,
     getCustomerOrders,
     getSingleCustomer,
     getDashboardStats,
     disableAllCustomers,
     unverifiedCustomers,
+    getCustomerProducts,
     getUnverifiedCustomer,
     getCustomerTransactions,
   };

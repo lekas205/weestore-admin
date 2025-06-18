@@ -151,7 +151,6 @@ onMounted(async () => {
       const data = docSnap.data();
       if (data.updated_at) {
         const val = dayjs(data.updated_at.toDate()).format('ddd MMM DD YYYY HH:mm:ss A');
-        console.log(data.updated_at.toDate())
         openToastNotification({
           message: `Last realtime update at: ${val}`,
           variant: 'success',

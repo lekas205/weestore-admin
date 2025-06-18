@@ -398,10 +398,7 @@ const formData = ref({...defaultFormValue});
 
 // ============= WATCHER ============== //
 watch(selectedProduct, async (newValue) => {
-  const data = { ...newValue };
-
-  console.log(data,'________');
-  
+  const data = { ...newValue };  
   formData.value.productId.value = data.product_id;
   formData.value.name.value = data.product_name;
   formData.value.description.value = data.description;
@@ -413,7 +410,7 @@ watch(selectedProduct, async (newValue) => {
   formData.value.category.value = newValue.category_id;
   formData.value.manufacturer.value = newValue.manufacturer;
   formData.value.whp .value = data.whp;
-  formData.value.interest.value = data.interest_percent;
+  formData.value.interest.value = data.interest;
   formData.value.min_quantity.value = data.min_quantity;
   formData.value.max_quantity.value = data.max_quantity;
 

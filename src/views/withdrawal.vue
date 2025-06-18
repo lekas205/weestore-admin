@@ -93,10 +93,7 @@ const view = (image_url: string) => {
 
 const fetcheData = async (query?: any) => {
     loading.value = true
-    await withdrawalStore.fetchPendingRequest(query)
-
-    console.log(pending_requests, "___________________");
-    
+    await withdrawalStore.fetchPendingRequest(query)    
     loading.value = false
 };
 
