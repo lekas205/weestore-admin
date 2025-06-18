@@ -54,8 +54,8 @@ const headers = ref<any[]>([
     { key: 'category', title: 'Category' },
     { key: 'start_date', title: 'Purchase Date' },
     { key: 'end_date', title: 'Withdrawal Date' },
-    { key: 'withdrawable', title: 'Withdrawable AMT' },
-    { key: 'transferable', title: 'Transferrable AMT' },
+    // { key: 'withdrawable', title: 'Withdrawable AMT' },
+    // { key: 'transferable', title: 'Transferrable AMT' },
 
 ])
 </script>
