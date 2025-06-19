@@ -21,8 +21,9 @@
                 </template>
                 <template v-slot:item.action="{ item }">
                     <div class="tw-flex tw-items-center tw-gap-4">
-                        <v-btn color="green-200" @click="procceed('approve', item.id)"> Approve </v-btn>
-                        <v-btn color="#F65901" @click="procceed('reject', item.id)"> Decline </v-btn>
+                        <v-btn color="green-200" @click=" confirmPayment(item)" > Approve </v-btn>
+                        <!-- procceed('approve', item.id) -->
+                        <v-btn color="#F65901" @click="proceed('reject', item.id)"> Decline </v-btn>
                     </div>
                 </template>
 
@@ -31,6 +32,8 @@
                 </template>
             </v-data-table>
         </app-table-wrapper>
+
+        <ConfrmWithdrawalModal :bank-details="customerDetails?.bank" :amount="customerDetails?.amount" v-model:openModal="openModal" @proceed="proceed('approve', customerDetails?.id)"/>
     </section>
 </template>
 
@@ -46,6 +49,7 @@ import AppTableWrapper from "@/components/AppTableWrapper.vue";
 
 import { useWithdrawalStore, useAuthStore } from "@/stores";
 import { formatText, formatAsMoney, openToastNotification } from "@/utils";
+import ConfrmWithdrawalModal from "@/components/ConfrmWithdrawalModal.vue";
 
 const withdrawalStore = useWithdrawalStore()
 const authStore = useAuthStore()
@@ -60,6 +64,7 @@ const payload = ref({
     search: ""
 });
 const loading = ref(false)
+const openModal = ref(false)
 const headers = ref<any[]>([
     {
     align: 'start',
@@ -74,6 +79,8 @@ const headers = ref<any[]>([
 
 ])
 
+const customerDetails = ref()
+
 const pagination = computed(()=> pending_requests.value?.pagination)
 const items = computed<any[]>(()=> {
     return pending_requests.value?.data?.map((elm:any)=> {
@@ -87,6 +94,12 @@ const items = computed<any[]>(()=> {
     })
 })
 
+
+const confirmPayment = (customer: any) => {
+    openModal.value = true;
+    customerDetails.value = customer
+}
+
 const view = (image_url: string) => {    
     window.open(image_url, "_blank");
 }
@@ -97,7 +110,7 @@ const fetcheData = async (query?: any) => {
     loading.value = false
 };
 
-const procceed = async(action: string, requestId: string) => {
+const proceed = async(action: string, requestId: string) => {
     loading.value = true;
     let res =  await  withdrawalStore.approveDeclineRequest({
         action,

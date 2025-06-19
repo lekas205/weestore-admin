@@ -5,11 +5,11 @@
             <h2 class="tw-text-[32px] tw-font-bold tw-mr-auto"> {{ formatText(customer.first_name) }} {{ formatText(customer.last_name) }}  </h2>
             <v-btn color="primary" @click="showEditCustomerModal = true"> Edit </v-btn>
 
-            <!-- <div class="tw-bg-[#FF0F00AD] tw-text-white pa-4 tw-w-[300px] tw-ml-[40px] rounded-lg">
+            <div class="tw-bg-[#FF0F00AD] tw-text-white pa-4 tw-w-[300px] tw-ml-[40px] rounded-lg" v-if="customer.bankDetails"> 
                 <h4 class="tw-text-[24px] tw-underline" >Bank Details</h4>
                 <div class="tw-flex tw-justify-between mb-2">
                     <p class="tw-text-[20px]">Bank Name</p>
-                    <p class="tw-text-[20px]"> {{customer.bankDetails.bank_name }} </p>
+                    <p class="tw-text-[20px]"> {{customer?.bankDetails?.bank_name }} </p>
                 </div>
                 <div class="tw-flex tw-justify-between mb-2"> 
                     <p class="tw-text-[20px]">Acct Name</p>
@@ -19,7 +19,7 @@
                     <p class="tw-text-[20px]">Acct Number</p>
                     <p class="tw-text-[20px]"> {{ customer.bankDetails.acct_no }} </p>
                 </div>
-            </div> -->
+            </div>
         </div>
 
         <!-- customer personal data -->

@@ -31,7 +31,7 @@
     </div>
    
     <div class="dashboard-banner tw-text-lg mb-3 mt-3">
-      At MoreBuy, we Pride ourselves to excellent customer satisfaction.
+      We Pride ourselves to excellent customer satisfaction.
     </div>
     <summary-cards :stats="dashboardStats" />
     <stat-cards :stats="dashboardStats" />
