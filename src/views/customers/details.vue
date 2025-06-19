@@ -156,7 +156,7 @@ const {
 
 const loading = ref(false);
 const showEditCustomerModal = ref(false);
-const tabTitles =markRaw(["order history", "transaction history", "referrals", 'products']);
+const tabTitles =markRaw(["order history", "transaction history", "referrals", 'product Subscriptions']);
 
 const customerId = computed<string>(()=> route.params.id as string);
 const orderhistoryData = computed(()=> {
