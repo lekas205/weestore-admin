@@ -1,6 +1,6 @@
 <template>
     <section class="tw-p-[30px]">
-        <v-btn color="primary" @click="$router.back()"> <ChevronLeft/> Back </v-btn>
+        <v-btn color="black" @click="$router.back()"> <ChevronLeft/> Back </v-btn>
         <app-table-wrapper searchLabelText="Search by Name" class="tw-mt-[50px]" @search="search" @filter="fetcheData($event)">
             <v-data-table 
                 hide-default-footer 

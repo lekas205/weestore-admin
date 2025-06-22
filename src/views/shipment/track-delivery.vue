@@ -1,7 +1,7 @@
 <template>
   <div class="mt-5">
     <div class="pl-5">
-      <v-btn color="primary" @click="$router.back()" class="mb-5"> <ChevronLeft/> Back </v-btn>
+      <v-btn color="black" @click="$router.back()" class="mb-5"> <ChevronLeft/> Back </v-btn>
     </div>
     <GoogleMap
       style="width: 100%; height: 90vh"

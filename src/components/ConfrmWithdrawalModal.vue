@@ -5,17 +5,17 @@
            <div class=" pa-4 rounded-lg"> 
                 <div class="tw-flex tw-justify-between mb-2">
                     <p class="tw-text-[20px]">Bank Name:</p>
-                    <p class="tw-text-[20px]"> {{bankDetails?.bank_name }} </p>
+                    <p class="tw-text-[20px]"> {{details?.bank?.bankName }} </p>
                 </div>
                 <div class="tw-flex tw-justify-between mb-2"> 
                     <p class="tw-text-[20px]">Acct Name:</p>
-                    <p class="tw-text-[20px]"> {{ bankDetails.acct_name }} </p>
+                    <p class="tw-text-[20px]"> {{ details?.bank?.accountName }} </p>
                 </div>
                 <div class="tw-flex tw-justify-between">
                     <p class="tw-text-[20px]">Acct Number:</p>
-                    <p class="tw-text-[20px]"> {{ bankDetails.acct_no }} </p>
+                    <p class="tw-text-[20px]"> {{ details?.bank?.accountNumber }} </p>
                 </div>
-                <p class="mt-6">Note: By clicking proceed you approve the sum of <b> {{ formatAsMoney(amount) }} </b> to be paid into  {{ bankDetails.acct_name }}'s bank account'</p>
+                <p class="mt-6">Note: By clicking proceed you approve  the sum of <b> {{ details.amount }} </b> to be paid into  {{ details?.bank?.accountName }}'s bank account</p>
             </div>
 
            <div class="tw-flex tw-gap-2 tw-justify-end tw-mt-[40px]">
@@ -40,14 +40,18 @@
      type: Boolean,
      default: false,
    },
-   bankDetails: {
-     type: Object,
-     default: () => ({})
-   },
-   amount:{
-    type: Number,
-    default: 0
+   details: {
+    type: Object,
+    default: () => ({})
    }
+//    bankDetails: {
+//      type: Object,
+//      default: () => ({})
+//    },
+//    amount:{
+//     type: Number,
+//     default: 0
+//    }
 })
 
 const start_date = ref("");

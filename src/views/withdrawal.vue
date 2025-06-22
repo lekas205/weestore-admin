@@ -21,7 +21,7 @@
                 </template>
                 <template v-slot:item.action="{ item }">
                     <div class="tw-flex tw-items-center tw-gap-4">
-                        <v-btn color="green-200" @click=" confirmPayment(item)" > Approve </v-btn>
+                        <v-btn color="green-200" @click="confirmPayment(item)" > Approve </v-btn>
                         <!-- procceed('approve', item.id) -->
                         <v-btn color="#F65901" @click="proceed('reject', item.id)"> Decline </v-btn>
                     </div>
@@ -33,7 +33,7 @@
             </v-data-table>
         </app-table-wrapper>
 
-        <ConfrmWithdrawalModal :bank-details="customerDetails?.bank" :amount="customerDetails?.amount" v-model:openModal="openModal" @proceed="proceed('approve', customerDetails?.id)"/>
+        <ConfrmWithdrawalModal :details="customerDetails" v-model:openModal="openModal" @proceed="proceed('approve', customerDetails?.id)"/>
     </section>
 </template>
 

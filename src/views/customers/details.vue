@@ -1,23 +1,23 @@
 <template>
     <div class="pa-5">
-        <v-btn color="primary" @click="$router.back()"> <ChevronLeft/> Back </v-btn>
+        <v-btn color="black" @click="$router.back()"> <ChevronLeft/> Back </v-btn>
         <div class="tw-flex mt-3">
             <h2 class="tw-text-[32px] tw-font-bold tw-mr-auto"> {{ formatText(customer.first_name) }} {{ formatText(customer.last_name) }}  </h2>
-            <v-btn color="primary" @click="showEditCustomerModal = true"> Edit </v-btn>
+            <v-btn color="black" @click="showEditCustomerModal = true"> Edit </v-btn>
 
-            <div class="tw-bg-[#FF0F00AD] tw-text-white pa-4 tw-w-[300px] tw-ml-[40px] rounded-lg" v-if="customer.bankDetails"> 
-                <h4 class="tw-text-[24px] tw-underline" >Bank Details</h4>
-                <div class="tw-flex tw-justify-between mb-2">
-                    <p class="tw-text-[20px]">Bank Name</p>
-                    <p class="tw-text-[20px]"> {{customer?.bankDetails?.bank_name }} </p>
+            <div class="tw-bg-[#000000] tw-text-white pa-4 tw-w-[420px] tw-ml-[40px] rounded-lg" v-if="customer.bank"> 
+                <h4 class="tw-text-[24px] tw-underline mb-5" >Bank Details</h4>
+                <div class="tw-flex mb-2 tw-gap-3">
+                    <p class="tw-text-[20px]">Bank Name:</p>
+                    <p class="tw-text-[20px]"> {{customer?.bank?.bankName }} </p>
                 </div>
-                <div class="tw-flex tw-justify-between mb-2"> 
-                    <p class="tw-text-[20px]">Acct Name</p>
-                    <p class="tw-text-[20px]"> {{ customer.bankDetails.acct_name }} </p>
+                <div class="tw-flex mb-2 tw-gap-3"> 
+                    <p class="tw-text-[20px]">Acct Name:</p>
+                    <p class="tw-text-[20px]"> {{ customer.bank.accountName }} </p>
                 </div>
-                <div class="tw-flex tw-justify-between">
-                    <p class="tw-text-[20px]">Acct Number</p>
-                    <p class="tw-text-[20px]"> {{ customer.bankDetails.acct_no }} </p>
+                <div class="tw-flex tw-gap-3">
+                    <p class="tw-text-[20px]">Acct Number:</p>
+                    <p class="tw-text-[20px]"> {{ customer.bank.accountNumber }} </p>
                 </div>
             </div>
         </div>

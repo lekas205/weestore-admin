@@ -1,6 +1,6 @@
 <template>
     <section class="tw-p-[30px]">
-        <v-btn color="primary" @click="$router.back()"> <ChevronLeft/> Back </v-btn>
+        <v-btn color="black" @click="$router.back()"> <ChevronLeft/> Back </v-btn>
 
         <app-table-wrapper 
             noExport
@@ -24,8 +24,8 @@
                 </template>
                 <template v-slot:item.action="{ item }">
                     <div class="tw-flex tw-items-center tw-gap-4">
-                        <v-btn color="primary" @click="verify(item.id)"> Verify </v-btn>
-                        <v-btn color="primary"> Delete </v-btn>
+                        <v-btn color="black" @click="verify(item.id)"> Verify </v-btn>
+                        <v-btn color="black"> Delete </v-btn>
                     </div>
                 </template>
 
