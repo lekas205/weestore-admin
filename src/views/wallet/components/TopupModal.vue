@@ -56,7 +56,7 @@
                   type="number"
                 />
               </div>
-              <div class=""  v-if="formData.productType === 'Topup'">
+              <div class=""  v-if="formData.productType === 'topup'">
                 <label for="warehouse-name" class="tw-text-lg tw-font-medium">
                     Proof of Payment
                 </label>

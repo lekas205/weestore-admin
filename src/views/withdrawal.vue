@@ -73,7 +73,7 @@ const headers = ref<any[]>([
     title: 'Client Name',
     },
     { key: 'phone_no', title: 'Phone Number' },
-    { key: 'amount', title: 'Topup Amount' },
+    { key: 'amount', title: 'Withdrawal Amount' },
     { key: 'payment_proof', title: 'View Proof Of  Payment' },
     { key: 'action', title: 'Action' },
 

@@ -108,7 +108,7 @@
                 />
             </template>
 
-            <template #products>
+            <template #product_subscriptions>
                 <ProductHistory 
                     :loading="loading"
                     :items="productHistoryData"
