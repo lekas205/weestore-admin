@@ -160,7 +160,8 @@
   }
 
   const handleFormSubmit = () =>{
-    if(formData.value.productType === 'Topup'){
+    if(formData.value.productType === 'topup'){
+      loading.value = true
       startFileUpload.value = true
     }else{
       submit()
@@ -202,8 +203,15 @@ function handleFileUploadSuccess(urls: Array<string> | null) {
     return;
   }
 
-  formData.value.paymentUrl = urls[0]
+  if(!urls.length) {
+    openToastNotification({
+      message: 'File upload failed',
+      variant: 'error'
+    });
+    return loading.value = false
+  }
 
+  formData.value.paymentUrl = urls[0]
   submit()
 }
 

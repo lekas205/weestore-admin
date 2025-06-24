@@ -5,17 +5,17 @@
            <div class=" pa-4 rounded-lg"> 
                 <div class="tw-flex tw-justify-between mb-2">
                     <p class="tw-text-[20px]">Bank Name:</p>
-                    <p class="tw-text-[20px]"> {{details?.bank?.bankName }} </p>
+                    <p class="tw-text-[20px]"> {{bankDetails?.bankName }} </p>
                 </div>
                 <div class="tw-flex tw-justify-between mb-2"> 
                     <p class="tw-text-[20px]">Acct Name:</p>
-                    <p class="tw-text-[20px]"> {{ details?.bank?.accountName }} </p>
+                    <p class="tw-text-[20px]"> {{ bankDetails.accountName }} </p>
                 </div>
                 <div class="tw-flex tw-justify-between">
                     <p class="tw-text-[20px]">Acct Number:</p>
-                    <p class="tw-text-[20px]"> {{ details?.bank?.accountNumber }} </p>
+                    <p class="tw-text-[20px]"> {{ bankDetails.accountNumber }} </p>
                 </div>
-                <p class="mt-6">Note: By clicking proceed you approve  the sum of <b> {{ details.amount }} </b> to be paid into  {{ details?.bank?.accountName }}'s bank account</p>
+                <p class="mt-6">Note: By clicking proceed you approve  the sum of <b> {{ details.amount }} </b> to be paid into  {{ bankDetails.accountName }}'s bank account</p>
             </div>
 
            <div class="tw-flex tw-gap-2 tw-justify-end tw-mt-[40px]">
@@ -68,6 +68,10 @@ const setShow = computed({
    set(newValue) {
        emits("update:openModal", newValue);
    },
+})
+
+const bankDetails = computed(() => {
+   return props.details?.bank || {};
 })
 
 const disableBtn = computed(()=> !(form.value.start_date.length  && form.value.end_date.length))

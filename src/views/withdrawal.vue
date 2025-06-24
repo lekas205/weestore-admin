@@ -89,7 +89,8 @@ const items = computed<any[]>(()=> {
             name: `${formatText(elm.first_name)} ${formatText(elm.last_name)}`,
             amount: formatAsMoney(elm.amount),
             phone_no: elm.phone,
-            payment_url: elm.paymentUrl
+            payment_url: elm.paymentUrl,
+            bank: elm.bank
         }
     })
 })
