@@ -140,7 +140,6 @@
 
   const walletOptions = ref([{
     label: "Pocket",  value: "topup"
- 
   },{
        label: "Reward", value: "reward"
   }])
@@ -170,11 +169,14 @@
   
   const submit = async () => {
     loading.value = true
+
+    const fd = new FormData()
+    fd.append('amount', formData.value?.amount)
+    fd.append('paymentUrl', formData.value?.paymentUrl)
+    fd.append('productType', formData.value?.productType.toUpperCase())
+
       var res:any;
-      res = await walletStore.topupWallet({
-        ...formData.value,
-        productType: formData.value.productType.toUpperCase(),
-      })
+      res = await walletStore.topupWallet(formData.value?.customerId,  fd )
 
     loading.value = false
     if(res){
@@ -184,7 +186,6 @@
         });
         closeModal()
     }
-   
   }
 
   function handleSavedFile(files: Array<File | string>) {

@@ -106,12 +106,12 @@ watch(() => props.startUpload, async (upload) => {
   }
   else {
     console.log('calling upload');  
-    const urls = await handleFileUpload([...files.value]);
-    console.log(urls)
-    if (urls) {
+    // const urls = await handleFileUpload([...files.value]);
+    // console.log(urls)
+    if (files.value.length) {
       emit('uploadCompleted', [
         ...internalExistingImages.value,
-        ...urls,
+        ...files.value,
       ]);
     }
     else {

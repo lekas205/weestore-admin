@@ -3,10 +3,10 @@ import { SAVED_AUTH_TOKEN_KEY } from '@/constants'
 
 const http = axios.create({
   baseURL: import.meta.env.VITE_API_URL_BASE,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  timeout: 40000,
+  // headers: {
+  //   'Content-Type': 'application/json',
+  // },
+  // timeout: 40000,
 });
 
 // Add an interceptor to set the token in the request headers
