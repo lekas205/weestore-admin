@@ -465,22 +465,37 @@ function handleFileUploadSuccess(urls: Array<string> | null) {
     return;
   }
 
-  const {whp, interest, max_quantity, min_quantity,  price, quantity } = createProductPayload.value;
+  const {whp, interest, max_quantity, min_quantity, name, warehouse, sizes, state, price, quantity, manufacturer, category, description } = createProductPayload.value;
 
-  createProductPayload.value.images = urls.map(
-    url => ({image_url: url, s3_id: ''})
-  );
+  // createProductPayload.value.images = urls
   
-  createProductPayload.value.price = price.toString() as any;
-  createProductPayload.value.quantity = quantity.toString() as any;
-  createProductPayload.value.quantity = quantity.toString() as any;
-  createProductPayload.value.whp = whp.toString() as any;
-  createProductPayload.value.interest = interest.toString() as any;
-  createProductPayload.value.max_quantity = max_quantity.toString() as any;
-  createProductPayload.value.min_quantity = min_quantity.toString() as any;
+  // createProductPayload.value.price = price.toString() as any;
+  // createProductPayload.value.quantity = quantity.toString() as any;
+  // createProductPayload.value.quantity = quantity.toString() as any;
+  // createProductPayload.value.whp = whp.toString() as any;
+  // createProductPayload.value.interest = interest.toString() as any;
+  // createProductPayload.value.max_quantity = max_quantity.toString() as any;
+  // createProductPayload.value.min_quantity = min_quantity.toString() as any;
 
-  // console.log(createProductPayload.value)
-  createProduct({...createProductPayload.value});
+  const formData = new FormData()
+
+  formData.append('price', price.toString())
+  formData.append('quantity', quantity.toString())
+  formData.append('whp', whp.toString())
+  formData.append('interest', interest.toString())
+  formData.append('max_quantity', max_quantity.toString())
+  formData.append('min_quantity', min_quantity.toString())
+  formData.append('images', urls[0])
+  formData.append('images', urls[1])
+  formData.append('manufacturer', manufacturer.toString())
+  formData.append('warehouse', warehouse.toString())
+  formData.append('state', state.toString())
+  formData.append('sizes', sizes.toString())
+  formData.append('name', name.toString())
+  formData.append('description', description.toString())
+  formData.append('category', category.toString())
+
+  createProduct(formData);
 }
 
 function updateSize(value: string) {
@@ -520,7 +535,7 @@ async function validateFormData(field?: keyof CreateProductDto, proceedOnSuccess
   }
 }
 
-async function createProduct(payload: CreateProductDto) {
+async function createProduct(payload: any) {
   isLoading.value = true;
   try {
     // payload.price = payload.price.toString() as any;

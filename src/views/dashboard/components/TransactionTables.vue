@@ -85,7 +85,7 @@ const tabTitles = ref([ "sales inflow", "cash inflow", "cash outflow"])
 const salesTableData = computed<any[]>(() => {
   return sales_inflow.value.data.map((elm:any)=>{
     return {
-        "Reswller Name": elm.resellerName,
+        "Client Name": elm.resellerName,
         "Number": elm.phone,
         "Order Amount": formatAsMoney(elm.orderAmount),
         "Amount Paid": formatAsMoney(elm.amountPaid),
@@ -101,7 +101,7 @@ const salesTableData = computed<any[]>(() => {
 const cashInflowTableData = computed<any[]>(() => {
   return cash_inflow.value.data.map((elm:any)=>{
     return {
-        "Reseller Name": elm.resellerName,
+        "Client Name": elm.resellerName,
         "Number": elm.phone,
         // "Product": "Nivea Roll on",
         "Amount": formatAsMoney(elm.amount),
@@ -115,7 +115,7 @@ const cashInflowTableData = computed<any[]>(() => {
 const cashOutflowTableData = computed<any[]>(() => {
   return cash_outflow.value.data.map((elm:any)=>{
     return {
-        "Reseller Name": elm.resellerName,
+        "Client Name": elm.resellerName,
         "Number": elm.phone,
         // "Product": "Nivea Roll on",
         "Amount": formatAsMoney(elm.amount),

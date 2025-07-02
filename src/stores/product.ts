@@ -50,7 +50,7 @@ export const useProductStore = defineStore("product", {
   actions: {
     async createProduct(payload: CreateProductDto): Promise<boolean> {
       try {
-        await http.post<CreateProductRes>(ENDPOINTS.PRODUCT, payload);
+        await http.post<CreateProductRes>(ENDPOINTS.CREATE_PRODUCTS, payload);
         return true;
       } catch (error) {
         handleStoreRequestError(error);
@@ -113,7 +113,7 @@ export const useProductStore = defineStore("product", {
     },
     async updateProduct(payload: UpdateProductDto): Promise<boolean> {
       try {
-        await http.patch<ApiResponseDto>(ENDPOINTS.PRODUCT, payload);
+        await http.patch<ApiResponseDto>(ENDPOINTS.CREATE_PRODUCTS, payload);
         return true;
       } catch (error) {
         handleStoreRequestError(error);

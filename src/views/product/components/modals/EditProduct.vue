@@ -487,22 +487,43 @@ function handleFileUploadSuccess(urls: Array<string> | null) {
     return;
   }
 
-  const {whp, interest, max_quantity, min_quantity, price, quantity } = editProductPayload.value;
+  const {whp, interest, max_quantity, min_quantity, productId, name, warehouse, sizes, state, price, quantity, manufacturer, category, description } = editProductPayload.value;
 
-  editProductPayload.value.images = urls.map(
-    url => ({image_url: url, s3_id: ''})
-  );
-  editProductPayload.value.price = price.toString() as any;
-  editProductPayload.value.quantity = quantity.toString() as any;
-  editProductPayload.value.whp = whp.toString() as any;
-  editProductPayload.value.interest = interest.toString() as any;
-  editProductPayload.value.max_quantity = max_quantity.toString() as any;
-  editProductPayload.value.min_quantity = min_quantity.toString() as any;
 
-  editProduct({...editProductPayload.value});
+  // editProductPayload.value.images = urls.map(
+  //   url => ({image_url: url, s3_id: ''})
+  // );
+  // editProductPayload.value.price = price.toString() as any;
+  // editProductPayload.value.quantity = quantity.toString() as any;
+  // editProductPayload.value.whp = whp.toString() as any;
+  // editProductPayload.value.interest = interest.toString() as any;
+  // editProductPayload.value.max_quantity = max_quantity.toString() as any;
+  // editProductPayload.value.min_quantity = min_quantity.toString() as any;
+
+  const formData = new FormData()
+
+    formData.append('price', price.toString())
+    formData.append('quantity', quantity.toString())
+    formData.append('whp', whp.toString())
+    formData.append('interest', interest.toString())
+    formData.append('max_quantity', max_quantity.toString())
+    formData.append('min_quantity', min_quantity.toString())
+    formData.append('images', urls[0])
+    formData.append('images', urls[1])
+    formData.append('manufacturer', manufacturer.toString())
+    formData.append('warehouse', warehouse.toString())
+    formData.append('state', state.toString())
+    formData.append('sizes', sizes.toString())
+    formData.append('name', name.toString())
+    formData.append('description', description.toString())
+    formData.append('category', category.toString())
+    formData.append('productId', productId.toString())
+
+
+  editProduct(formData);
 }
 
-async function editProduct(payload: UpdateProductDto) {
+async function editProduct(payload: any) {
   isLoading.value = true;
   try {
     const success = await productStore.updateProduct(payload);

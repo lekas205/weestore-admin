@@ -13,8 +13,8 @@ export const ORDER_STATUS_OPTION = [
   { label: "Pending", value: "PENDING" },
   { label: "Processing", value: "PROCESSING" },
   // { label: "In Transit", value: "IN_TRANSIT" },
-  // { label: "Decline", value: "DECLINED" },
-  { label: "Delivered", value: "DELIVERED" },
+  { label: "Decline", value: "DECLINED" },
+  // { label: "Delivered", value: "DELIVERED" },
   { label: "Completed", value: "COMPLETED" },
   // { label: "Return Order", value: "RETURN_ORDER" },
 ];
@@ -45,15 +45,19 @@ export const ORDER_STATUS = {
 export const PAYMENT_METHOD = {
   WALLET: "Wallet",
   wallet: "Wallet",
+  BANK: 'Bank Transfer',
+  PAYSTACK: "Paystack",
   manual_payment: "Bank Transfer",
   PAY_ON_DELIVERY: "Pay on Delivery",
   TRANSFER: "Transfer",
   paystack: "Paystack",
   PAY_NOW: "Pay Now",
   transfer: "Transfer",
+  pocket_wallet: "Wallet",
+  paystack_transfer: "Paystack",
   wallet_payment: "Wallet Payment",
-  cashpoint_wallet: "Cashpoint",
-  credit_wallet: "Cashpoint",
+  reward_wallet: "Rewards",
+
 };
 
 export const DEFAULT_PAGINATION: Pagination = {

@@ -10,9 +10,9 @@ export const ENDPOINTS = {
   WAREHOUSE: `/v1${ADMIN_BASE}/store`,
   WAREHOUSE_BY_ID: (id: any) => `/v1${ADMIN_BASE}/store/${id}`,
   PRODUCT: `/v1${ADMIN_BASE}/product`,
-  GET_STATES: "/utility/states",
+  GET_STATES: "V1/utility/states",
   GET_WAREHOUSE_BY_STATE: (stateID: string) =>
-    `/utility/state/store/${stateID}`,
+    `V1/utility/state/store/${stateID}`,
   GET_ORDERS: `/v1${ADMIN_BASE}/order`,
 
   UPDATE_ORDER_STATUS: ({
@@ -41,6 +41,7 @@ export const ENDPOINTS = {
   PAID_LOAN_REQUEST: `/v1${ADMIN_BASE}/loan/paid`,
   LOAN_REPAYMENT_REQUEST: `/v1${ADMIN_BASE}/credit/repayment/request`,
   PRODUCTS: `/v1${ADMIN_BASE}/product`,
+  CREATE_PRODUCTS: `/v2${ADMIN_BASE}/product`,
   PRODUCT_METRICS: `/v1${ADMIN_BASE}/product/metrics`,
   PRODUCT_BY_ID: (id: any) => `/v1${ADMIN_BASE}/product/${id}`,
   PUBLISH_PRODUCT: (id: any) => `/v1${ADMIN_BASE}/product/${id}/publish`,
