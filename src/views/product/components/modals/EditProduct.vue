@@ -501,23 +501,36 @@ function handleFileUploadSuccess(urls: Array<string> | null) {
   // editProductPayload.value.min_quantity = min_quantity.toString() as any;
 
   const formData = new FormData()
+  const prevImages = urls.filter((elm) => typeof elm === 'string');
 
-    formData.append('price', price.toString())
-    formData.append('quantity', quantity.toString())
-    formData.append('whp', whp.toString())
-    formData.append('interest', interest.toString())
-    formData.append('max_quantity', max_quantity.toString())
-    formData.append('min_quantity', min_quantity.toString())
-    formData.append('images', urls[0])
-    formData.append('images', urls[1])
-    formData.append('manufacturer', manufacturer.toString())
-    formData.append('warehouse', warehouse.toString())
-    formData.append('state', state.toString())
-    formData.append('sizes', sizes.toString())
-    formData.append('name', name.toString())
-    formData.append('description', description.toString())
-    formData.append('category', category.toString())
-    formData.append('productId', productId.toString())
+  const deletedImages =  selectedProduct.value.images.filter((elm)=>{
+    return !prevImages.includes(elm.imageUrl);
+  })?.map((item:any)=> item.id)
+
+  console.log(deletedImages)
+
+  if(deletedImages.length) formData.append('deleteimages', deletedImages.toString());
+
+  urls.forEach((elm)=> {
+    if(typeof elm !== 'string') {
+      formData.append('images', elm);
+    }
+  })
+
+  formData.append('price', price.toString())
+  formData.append('quantity', quantity.toString())
+  formData.append('whp', whp.toString())
+  formData.append('interest', interest.toString())
+  formData.append('max_quantity', max_quantity.toString())
+  formData.append('min_quantity', min_quantity.toString())
+  formData.append('manufacturer', manufacturer.toString())
+  formData.append('warehouse', warehouse.toString())
+  formData.append('state', state.toString())
+  formData.append('sizes', sizes.toString())
+  formData.append('name', name.toString())
+  formData.append('description', description.toString())
+  formData.append('category', category.toString())
+  formData.append('productId', productId.toString())
 
 
   editProduct(formData);

@@ -479,14 +479,17 @@ function handleFileUploadSuccess(urls: Array<string> | null) {
 
   const formData = new FormData()
 
+
+  urls.forEach((elm)=> {
+      formData.append('images', elm);
+  })
+
   formData.append('price', price.toString())
   formData.append('quantity', quantity.toString())
   formData.append('whp', whp.toString())
   formData.append('interest', interest.toString())
   formData.append('max_quantity', max_quantity.toString())
   formData.append('min_quantity', min_quantity.toString())
-  formData.append('images', urls[0])
-  formData.append('images', urls[1])
   formData.append('manufacturer', manufacturer.toString())
   formData.append('warehouse', warehouse.toString())
   formData.append('state', state.toString())
