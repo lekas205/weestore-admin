@@ -176,30 +176,30 @@ const sidebarLinks = ref<SidebarLink[]>([
       "business_development_manager",
     ],
   },
-  {
-    id: 4,
-    title: 'Shipment',
-    link: null,
-    isActive: false,
-    icon: ShipmentIcon,
-    activeIcon: ShipmentIconActive,
-    customClass: '',
-    access: ["superadmin", "business_development_manager"],
-    subLinks: [
-      {
-        id: 0,
-        title: 'Fleet',
-        link: ROUTES.fleet.name,
-        isActive: false,
-      },
-      {
-        id: 1,
-        title: 'Drivers',
-        link: ROUTES.driver.name,
-        isActive: false,
-      },
-    ]
-  },
+  // {
+  //   id: 4,
+  //   title: 'Shipment',
+  //   link: null,
+  //   isActive: false,
+  //   icon: ShipmentIcon,
+  //   activeIcon: ShipmentIconActive,
+  //   customClass: '',
+  //   access: ["superadmin", "business_development_manager"],
+  //   subLinks: [
+  //     {
+  //       id: 0,
+  //       title: 'Fleet',
+  //       link: ROUTES.fleet.name,
+  //       isActive: false,
+  //     },
+  //     {
+  //       id: 1,
+  //       title: 'Drivers',
+  //       link: ROUTES.driver.name,
+  //       isActive: false,
+  //     },
+  //   ]
+  // },
   {
     id: 5,
     title: 'Wallets',

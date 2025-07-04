@@ -490,16 +490,6 @@ function handleFileUploadSuccess(urls: Array<string> | null) {
   const {whp, interest, max_quantity, min_quantity, productId, name, warehouse, sizes, state, price, quantity, manufacturer, category, description } = editProductPayload.value;
 
 
-  // editProductPayload.value.images = urls.map(
-  //   url => ({image_url: url, s3_id: ''})
-  // );
-  // editProductPayload.value.price = price.toString() as any;
-  // editProductPayload.value.quantity = quantity.toString() as any;
-  // editProductPayload.value.whp = whp.toString() as any;
-  // editProductPayload.value.interest = interest.toString() as any;
-  // editProductPayload.value.max_quantity = max_quantity.toString() as any;
-  // editProductPayload.value.min_quantity = min_quantity.toString() as any;
-
   const formData = new FormData()
   const prevImages = urls.filter((elm) => typeof elm === 'string');
 

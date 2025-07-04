@@ -467,15 +467,6 @@ function handleFileUploadSuccess(urls: Array<string> | null) {
 
   const {whp, interest, max_quantity, min_quantity, name, warehouse, sizes, state, price, quantity, manufacturer, category, description } = createProductPayload.value;
 
-  // createProductPayload.value.images = urls
-  
-  // createProductPayload.value.price = price.toString() as any;
-  // createProductPayload.value.quantity = quantity.toString() as any;
-  // createProductPayload.value.quantity = quantity.toString() as any;
-  // createProductPayload.value.whp = whp.toString() as any;
-  // createProductPayload.value.interest = interest.toString() as any;
-  // createProductPayload.value.max_quantity = max_quantity.toString() as any;
-  // createProductPayload.value.min_quantity = min_quantity.toString() as any;
 
   const formData = new FormData()
 
