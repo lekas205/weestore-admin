@@ -13,16 +13,7 @@ export const CreateCategorySchema = z.object({
   })
   .min(2, {
     message: 'Description is required'
-  }),
-  icon: z
-    .array(
-      z.any(),
-      { message: 'Category Image is required'}
-    )
-    .min(1, { message: 'Category Image is required' })
-    .or(
-      z.string({ message: 'Category Image is required' })
-    ),
+  })
 })
 
 export const UpdateCategorySchema = CreateCategorySchema.extend({

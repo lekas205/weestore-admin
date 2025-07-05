@@ -38,7 +38,7 @@
               />
               <p class="error-text">{{ formData.description.errorMessage }}</p>
             </div>
-            <div class="mb-5">
+            <!-- <div class="mb-5">
               <label for="app-images" class="tw-text-lg tw-font-medium">
                 Category Image
               </label>
@@ -50,7 +50,7 @@
                 @upload-completed="handleFileUploadSuccess"
               />
               <p class="error-text">{{ formData.icon.errorMessage }}</p>
-            </div>
+            </div> -->
             <div class="btn-container">
               <AppButton
                 class="mr-3"
@@ -108,10 +108,7 @@ const formData = ref<CustomFormData>({
     value: null,
     errorMessage: null,
   },
-  icon: {
-    value: [],
-    errorMessage: null,
-  },
+
 });
 
 // =============== METHODS ============== //
@@ -123,10 +120,6 @@ function clearFormData() {
     },
     description: {
       value: null,
-      errorMessage: null,
-    },
-    icon: {
-      value: [],
       errorMessage: null,
     },
   }
@@ -165,7 +158,9 @@ async function validateFormData(field?: keyof CreateCategoryDto, proceedOnSucces
   if (payload && proceedOnSuccess) {
     isLoading.value = true;
     createCategoryPayload.value = payload;
-    startFileUpload.value = true;
+    // startFileUpload.value = true;
+
+    createCategory(payload);
   }
 }
 
