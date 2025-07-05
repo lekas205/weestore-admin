@@ -38,7 +38,7 @@
               />
               <p class="error-text">{{ formData.description.errorMessage }}</p>
             </div>
-            <div class="mb-5">
+            <!-- <div class="mb-5">
               <label for="app-images" class="tw-text-lg tw-font-medium">
                 Category Image
               </label>
@@ -52,7 +52,7 @@
                 @upload-completed="handleFileUploadSuccess"
               />
               <p class="error-text">{{ formData.icon.errorMessage }}</p>
-            </div>
+            </div> -->
             <div class="btn-container">
               <AppButton
                 class="mr-3" type="button"
@@ -116,10 +116,6 @@ const formData = ref<CustomFormData>({
     value: null,
     errorMessage: null,
   },
-  icon: {
-    value: [],
-    errorMessage: null,
-  },
 });
 
 const data = computed(() => categoryStore.selectedCategory);
@@ -147,10 +143,6 @@ function clearFormData() {
       value: null,
       errorMessage: null,
     },
-    icon: {
-      value: [],
-      errorMessage: null,
-    },
   }
 }
 
@@ -168,23 +160,24 @@ function handleFileError(message: string | null) {
   formData.value.icon.errorMessage = message;
 }
 
-function handleFileUploadSuccess(urls: Array<string> | null) {
-  startFileUpload.value = false;
-  if (!urls) {
-    isLoading.value = false;
-    return;
-  }
+// function handleFileUploadSuccess(urls: Array<string> | null) {
+//   startFileUpload.value = false;
+//   if (!urls) {
+//     isLoading.value = false;
+//     return;
+//   }
 
-  editCategoryPayload.value.icon = urls[0];
-  editCategory(editCategoryPayload.value);
-}
+//   editCategoryPayload.value.icon = urls[0];
+//   editCategory(editCategoryPayload.value);
+// }
 
 async function validateFormData(field?: keyof UpdateCategoryDto, proceedOnSuccess = false) {
   const payload = await formValidator<UpdateCategoryDto>(formData, UpdateCategorySchema, field);
   if (payload && proceedOnSuccess) {
     isLoading.value = true;
     editCategoryPayload.value = payload;
-    startFileUpload.value = true;
+    editCategory(editCategoryPayload.value);
+    // startFileUpload.value = true;
   }
 }
 
@@ -194,7 +187,6 @@ async function editCategory(payload: UpdateCategoryDto) {
       {
         name: payload.name,
         description: payload.description,
-        icon: payload.icon
       },
       payload.id
     );
