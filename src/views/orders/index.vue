@@ -24,8 +24,8 @@
             await Promise.all([
                 orderStore.fetchNewOrders(), 
                 orderStore.fetchCompletedOrders(),
-                orderStore.fetchDeliveredOrders() ,
-                orderStore.fetchReturnedOrders(),
+                // orderStore.fetchDeliveredOrders() ,
+                // orderStore.fetchReturnedOrders(),
                 orderStore.fetchDeclinedOrders(),
                 orderStore.getDashboardStats(), 
             ])     

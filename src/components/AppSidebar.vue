@@ -201,7 +201,7 @@ const sidebarLinks = ref<SidebarLink[]>([
   //   ]
   // },
   {
-    id: 5,
+    id: 4,
     title: 'Wallets',
     link: ROUTES.wallet.name,
     isActive: false,
@@ -211,7 +211,7 @@ const sidebarLinks = ref<SidebarLink[]>([
     access: ["superadmin", "accountant", "internal_control_manager", "customer_service"],
   },
   {
-    id: 6,
+    id: 5,
     title: 'Users',
     link: ROUTES.users.name,
     isActive: false,
@@ -221,7 +221,7 @@ const sidebarLinks = ref<SidebarLink[]>([
     access: ["superadmin"],
   },
   {
-    id: 7,
+    id: 6,
     title: 'Withdrawal Requests',
     link: ROUTES.withdrawal.name,
     isActive: false,
