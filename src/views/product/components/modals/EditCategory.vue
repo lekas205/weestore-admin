@@ -124,7 +124,6 @@ watch(data, (newValue) => {
   formData.value.id.value = newValue.category_id;
   formData.value.name.value = newValue.category_name;
   formData.value.description.value = newValue.description;
-  formData.value.icon.value = [newValue.icon];
 },
 { deep: true });
 
