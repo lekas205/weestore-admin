@@ -167,7 +167,8 @@ const newOrdersTableData = computed(() => {
       warehouse: capitalizeFirstLeters(elm.warehouse_name),
       channel: PAYMENT_METHOD[elm.payment_method],
       amount: formatAsMoney(elm.amount) ,
-      status: elm.status,
+      action: elm.status,
+      status: elm.payment_status,
       payment_proof: elm.payment_proof,
     }
   })

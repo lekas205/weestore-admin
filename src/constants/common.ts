@@ -40,6 +40,10 @@ export const ORDER_STATUS = {
   RETURN_APPROVED: "Approved",
   AWAITING_APPROVAL: "Awaiting Approval",
   AWAITING_PROCESSING: "Awaiting processing",
+  'payment_processing': "Processing",
+  "failed": "Failed",
+  "paid": "Paid",
+  "awaiting_verification": "Awaiting Verification",
 };
 
 export const PAYMENT_METHOD = {

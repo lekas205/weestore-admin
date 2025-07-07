@@ -5,27 +5,29 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, markRaw } from "vue"
-import { ORDER_STATUS } from "@/constants/common.ts";
+    import { ref, markRaw } from "vue"
+    import { ORDER_STATUS } from "@/constants/common.ts";
 
-defineProps<{
-    status: string
-}>()
+    defineProps<{
+        status: string
+    }>()
 
-const statusConverter = ref(ORDER_STATUS)
-const chipColors = markRaw({
-    "pending": "yellow",
-    "in transit": "orange",
-    "processing": "purple",
-    "return order": 'red',
-    "delivered": "success",
-    "completed": 'success',
-    "declined": "primary",
-    "approved": "success",
-    "rejected": "red",
-    "awaiting approval": "yellow",
-    "awaiting proccessing": "grey"
-})
+    const statusConverter = ref(ORDER_STATUS)
+    const chipColors = markRaw({
+        "pending": "yellow",
+        "in transit": "orange",
+        "processing": "purple",
+        "return order": 'red',
+        "delivered": "success",
+        "completed": 'success',
+        "declined": "primary",
+        "approved": "success",
+        "rejected": "red",
+        "paid": "success",
+        "failed": 'red',
+        "awaiting approval": "yellow",
+        "awaiting processing": "grey",
+    })
 </script>
 
 <style lang="scss" scoped>

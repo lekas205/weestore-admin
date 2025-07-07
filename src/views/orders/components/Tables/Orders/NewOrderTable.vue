@@ -23,7 +23,7 @@
 
             <template v-slot:item.action="{ item }">
                 <app-select
-                    :value="item.status"
+                    :value="item.action"
                     @update="updateStatus($event, item.id)"
                     :options="actionOptions"
                     item-title="label"
