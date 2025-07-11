@@ -29,19 +29,19 @@
             </div>
 
             <v-data-table 
-                hide-default-footer 
-                :items="orderedItems" 
-                :loading="loading" 
-                :headers="headers"
-                loading-text="Loading... Please wait" 
-                class="elevation-1 custom-table"
-            >
-            <template v-slot:item.amount="{ item }">
-                <p class="tw-text=primary"> {{item.amount}} </p>
-            </template>
-        </v-data-table>
+                    hide-default-footer 
+                    :items="orderedItems" 
+                    :loading="loading" 
+                    :headers="headers"
+                    loading-text="Loading... Please wait" 
+                    class="elevation-1 custom-table"
+                >
+                <template v-slot:item.amount="{ item }">
+                    <p class="tw-text=primary"> {{item.amount}} </p>
+                </template>
+            </v-data-table>
 
-        <div class="tw-flex tw-justify-between tw-bg-[#EFEEEE] tw-border tw-border-[#A4A9AE75] tw-py-[20px] tw-px-[60px] tw-mt-[40px]">
+            <div class="tw-flex tw-justify-between tw-bg-[#EFEEEE] tw-border tw-border-[#A4A9AE75] tw-py-[20px] tw-px-[60px] tw-mt-[40px]">
                 <div class="tw-text-center">
                     <h4 class="tw-font-bold tw-mb-2">PAYMENT METHOD</h4>
                     <p> {{PAYMENT_METHOD[orderDetails.payment_method]  }} </p>
@@ -51,6 +51,12 @@
                     <h4 class="tw-font-bold tw-mb-2">TOTAL AMOUNT</h4>
                     <p class="tw-text-primary tw-font-[500]"> {{ formatAsMoney(orderDetails.amount) }} </p>
                 </div>
+            </div>
+            <div class="tw-mt-4">
+                Kindly Pay into this account number  <br>
+               <b> More MarketPlace Ltd </b> <br>
+              <u>  1311174774 </u> <br>
+                Zenith Bank
             </div>
         </div>
       </div>
