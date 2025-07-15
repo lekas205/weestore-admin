@@ -52,12 +52,6 @@
                     <p class="tw-text-primary tw-font-[500]"> {{ formatAsMoney(orderDetails.amount) }} </p>
                 </div>
             </div>
-            <div class="tw-mt-4">
-                Kindly Pay into this account number  <br>
-               <b> More MarketPlace Ltd </b> <br>
-              <u>  1311174774 </u> <br>
-                Zenith Bank
-            </div>
         </div>
       </div>
 
